@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Day 1 - Intro to Programming & Python | Django Backend Course</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge { background: #3b82f6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .month-badge { background: #8b5cf6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: bold; color: white; margin-left: 0.5rem; }
+        .class-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+        .duration { color: #94a3b8; font-size: 0.85rem; }
+        .day-nav-buttons { display: flex; gap: 0.8rem; }
+        .day-nav-btn {
+            background: #1e293b; border: 1px solid #3b82f6; padding: 0.4rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
+        }
+        .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
+
+        .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
+        .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
+        .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
+        .slide-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #E0F2FE, #7AA9FF); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.8rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .slide-title i { color: #60a5fa; font-size: 1.8rem; }
+        .slide-sub { color: #a0afc9; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .content-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+        .concept-box { flex: 1; min-width: 250px; background: #1a1f2e; border-radius: 1.5rem; padding: 1.3rem; border: 1px solid #334155; transition: all 0.2s; }
+        .concept-box:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+        .concept-box h3 i { color: #60a5fa; }
+        .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .highlight { color: #fbbf24; font-weight: 600; }
+        .tag { background: #1e293b; padding: 0.25rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-family: monospace; color: #b9d0ff; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
+        .code-block { background: #0a0e18; padding: 1rem; border-radius: 1rem; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #cbd5e6; margin: 0.8rem 0; border: 1px solid #334155; }
+        .code-block pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+        .two-column-split { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1rem 0; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem; }
+        .comparison-table th, .comparison-table td { border: 1px solid #334155; padding: 0.6rem; text-align: left; color: #e2e8f0; }
+        .comparison-table th { background: #1e293b; color: #fbbf24; }
+        .qa-section { margin-top: 1.5rem; background: #0f172a; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #334155; }
+        .qa-title { font-size: 1.3rem; font-weight: bold; color: #fbbf24; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .qa-item { background: #131b2e; border-radius: 1rem; margin-bottom: 0.8rem; overflow: hidden; border: 1px solid #2d3a5e; }
+        .qa-question { padding: 1rem 1.2rem; background: #1a2338; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #e2e8f0; transition: background 0.2s; }
+        .qa-question:hover { background: #25334d; }
+        .qa-question i { color: #60a5fa; transition: transform 0.3s; }
+        .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
+        .qa-answer.show { padding: 1rem 1.2rem; max-height: 500px; }
+        .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons { display: flex; gap: 1rem; }
+        button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
+        button:hover:not(:disabled) { background: #2d3a4e; transform: scale(0.97); border-color: #3b82f6; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .slide-counter { font-size: 0.9rem; background: #1a1f2c; padding: 0.4rem 1rem; border-radius: 2rem; color: #a5b4fc; }
+        .indicator-dots { display: flex; gap: 0.5rem; }
+        .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
+        .dot.active { background: #3b82f6; width: 22px; }
+        footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div>
+        <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 1 · DAY 1</span>
+        <span class="month-badge"><i class="fas fa-calendar-month"></i> MONTH 1 · PYTHON FUNDAMENTALS</span>
+    </div>
+    <div class="class-title"><i class="fab fa-python"></i> Introduction to Programming & Python</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 Hours · Foundations · Lesson Overview: Demystify programming, install Python & VS Code, run first program</div>
+    <div class="day-nav-buttons">
+        <a href="day2.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Day 2 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 14</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers · Assignment: Build Simple Calculator
+    </footer>
+</div>
+
+<script>
+    // ==================== DAY 1 SLIDES (Full Curriculum) ====================
+    const slides = [
+        { title: "<i class='fas fa-chalkboard-user'></i> Lesson Overview", subtitle: "Day One: Demystifying Programming", content: `<div class="insight-card"><i class="fas fa-heart"></i> Many students walk in nervous, unsure if they are 'smart enough' to code. Today we demystify programming: what it really is, where Python fits in, and why backend is exciting. Every student leaves with Python installed and their first program running.</div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-bullseye"></i> By end of class</h3><ul><li>✅ Understand what programming is</li><li>✅ Differentiate Frontend vs Backend</li><li>✅ Explain how websites work (high level)</li><li>✅ Install Python 3.x and VS Code</li><li>✅ Run first Python program</li><li>✅ Build a Simple Calculator</li></ul></div><div class="concept-box"><h3><i class="fas fa-road"></i> Topics Covered</h3><ul><li>What is Programming?</li><li>Frontend vs Backend</li><li>How Websites Work (Request/Response)</li><li>Python History & Philosophy</li><li>Python Career Paths</li><li>Python 2 vs Python 3</li><li>Installation & Setup</li></ul></div></div>` },
+        { title: "<i class='fas fa-code'></i> What is Programming?", subtitle: "Instructions that tell a computer what to do", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-lightbulb"></i> Programming = Writing Instructions</h3><p>Computers are powerful but <span class="highlight">completely literal</span> — they do exactly what you tell them. A program is a sequence of instructions written in a language the computer understands.</p></div><div class="concept-box"><h3><i class="fas fa-utensils"></i> Analogy: Recipe</h3><p>A recipe is a program for a human to cook food. A Python script is a program for a computer to process data, respond to requests, or automate tasks.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># This is a program</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Future Backend Developer!"</span>)</pre></div><div class="insight-card"><i class="fas fa-brain"></i> Programming is problem-solving. You break big problems into small, precise steps the computer can execute.</div>` },
+        { title: "<i class='fas fa-laptop-code'></i> Frontend vs Backend", subtitle: "The difference between what users see and server logic", content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-paintbrush"></i> Frontend</h3><p><strong>What users see and click</strong><br>HTML, CSS, JavaScript<br>Buttons, layouts, animations<br>Runs in the browser</p><div class="tag"><i class="fas fa-eye"></i> User-facing layer</div></div><div class="concept-box"><h3><i class="fas fa-server"></i> Backend</h3><p><strong>Server logic, data storage, APIs</strong><br>Python, Django, Databases<br>Authentication, business rules<br>Runs on servers</p><div class="tag"><i class="fas fa-cogs"></i> The engine</div></div></div><div class="insight-card"><i class="fas fa-twitter"></i> When you click 'Post Tweet' on Twitter, the backend stores it in a database and sends it to followers. <span class="highlight">This course teaches you to build that backend.</span></div>` },
+        { title: "<i class='fas fa-globe'></i> How Websites Work", subtitle: "Request/Response Cycle, DNS, Servers", content: `<div class="code-block"><pre>1. Type 'google.com' in browser
+2. DNS translates domain → IP address
+3. Browser sends HTTP Request to that IP
+4. Server receives request, processes it
+5. Server queries database (if needed)
+6. Server sends HTTP Response with data
+7. Browser renders response as webpage</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-exchange-alt"></i> Key Terms</h3><p><span class="highlight">DNS:</span> Internet's phonebook<br><span class="highlight">HTTP Request:</span> Ask for data<br><span class="highlight">HTTP Response:</span> Data + status<br><span class="highlight">Server:</span> Computer that responds</p></div><div class="concept-box"><h3><i class="fas fa-database"></i> Where We Fit</h3><p>Backend developers build the server-side logic: APIs, database models, authentication, business rules.</p></div></div>` },
+        { title: "<i class='fab fa-python'></i> What is Python?", subtitle: "History, philosophy, and why it dominates", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-history"></i> History</h3><p>Created by <span class="highlight">Guido van Rossum</span> in 1991. Named after Monty Python. Version 3 is current standard (Python 2 ended 2020).</p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Why Python Dominates</h3><p>✅ Backend Web (Django, FastAPI)<br>✅ Data Science & AI<br>✅ Automation & Scripting<br>✅ DevOps & Cloud<br>✅ Cybersecurity</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># The Zen of Python (excerpts)</span>
+<span style="color:#86efac;"># "Beautiful is better than ugly."</span>
+<span style="color:#86efac;"># "Explicit is better than implicit."</span>
+<span style="color:#86efac;"># "Simple is better than complex."</span>
+<span style="color:#86efac;"># "Readability counts."</span></pre></div><div class="insight-card"><i class="fas fa-building"></i> Used by: Instagram, Spotify, Netflix, Google, Facebook, NASA</div>` },
+        { title: "<i class='fas fa-code-branch'></i> Python 2 vs Python 3", subtitle: "Key differences every developer must know", content: `<div class="comparison-table"><table style="width:100%"><tr><th>Feature</th><th>Python 2</th><th>Python 3</th></tr><tr><td>print</td><td>print "Hello"</td><td>print("Hello")</td></tr><tr><td>Division</td><td>5/2 = 2</td><td>5/2 = 2.5 (true division)</td></tr><tr><td>Input</td><td>raw_input()</td><td>input()</td></tr><tr><td>Unicode</td><td>u"text" needed</td><td>All strings are Unicode</td></tr><tr><td>range()</td><td>Returns list</td><td>Returns iterator (memory efficient)</td></tr><tr><td>Exception</td><td>except Exception, e</td><td>except Exception as e</td></tr><tr><td>Status</td><td>End-of-life Jan 2020</td><td>Actively developed</td></tr></table></div><div class="insight-card"><i class="fas fa-question-circle"></i> <strong>Interview Question:</strong> Which version should you learn today? <span class="highlight">Answer: Python 3.</span> Python 2 is discontinued; modern frameworks (Django, FastAPI, TensorFlow) are built for Python 3.</div>` },
+        { title: "<i class='fas fa-download'></i> Installing Python & VS Code", subtitle: "Step-by-step setup for all operating systems", content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fab fa-windows"></i> Windows</h3><p>1. Visit python.org/downloads<br>2. Download Python 3.12+<br>3. ✅ CHECK "Add Python to PATH"<br>4. Click Install Now</p></div><div class="concept-box"><h3><i class="fab fa-apple"></i> Mac/Linux</h3><p>Mac: brew install python3<br>Linux: sudo apt install python3<br>Or download from python.org</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Verify installation (terminal/cmd)</span>
+python --version
+<span style="color:#86efac;"># Expected: Python 3.12.x</span>
+
+<span style="color:#7aa9ff;"># VS Code: Download from code.visualstudio.com</span>
+<span style="color:#7aa9ff;"># Install Python extension (ms-python.python)</span></pre></div><div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Pro tip:</strong> Always check "Add Python to PATH" on Windows — saves hours of troubleshooting!</div>` },
+        { title: "<i class='fas fa-terminal'></i> Running Python: REPL vs Scripts", subtitle: "Interactive mode and script mode", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-comment-dots"></i> Interactive Mode (REPL)</h3><p>Type <code>python</code> in terminal → write code line by line → immediate feedback.<br>Exit: <code>exit()</code> or Ctrl+Z (Win) / Ctrl+D (Mac).<br><span class="highlight">Great for testing small snippets.</span></p></div><div class="concept-box"><h3><i class="fas fa-file-code"></i> Script Mode</h3><p>Create a .py file, write code, run: <code>python myfile.py</code><br><span class="highlight">Used for real applications.</span></p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Create hello.py</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello from Python!"</span>)
+<span style="color:#7aa9ff;"># Run: python hello.py</span></pre></div>` },
+        { title: "<i class='fas fa-calculator'></i> Practical: Simple Calculator", subtitle: "Hands-on — your first real Python program", content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Build a Simple Calculator</h3><ul><li>✅ Ask for two numbers using input()</li><li>✅ Ask which operation (+, -, *, /)</li><li>✅ Display result clearly formatted</li><li>✅ Handle division by zero gracefully</li><li>✅ BONUS: Add modulus (%) and exponent (**)</li></ul></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Simple Calculator - starter code</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"=== Simple Calculator ==="</span>)
+
+num1 = float(input(<span style="color:#86efac;">"Enter first number: "</span>))
+num2 = float(input(<span style="color:#86efac;">"Enter second number: "</span>))
+
+addition = num1 + num2
+subtraction = num1 - num2
+multiplication = num1 * num2
+
+<span style="color:#fbbf24;">if</span> num2 != 0:
+    division = num1 / num2
+    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Division: {division}"</span>)
+<span style="color:#fbbf24;">else</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Cannot divide by zero!"</span>)
+
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Addition: {addition}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Subtraction: {subtraction}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Multiplication: {multiplication}"</span>)</pre></div><div class="insight-card"><i class="fas fa-star"></i> <strong>BONUS Challenge:</strong> Add modulus (%) and exponent (**) operations to your calculator!</div>` },
+        { title: "<i class='fas fa-briefcase'></i> Python Career Paths", subtitle: "Where Python can take you", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-server"></i> Backend Developer</h3><p>Build APIs, databases, server logic. Django, FastAPI, Flask. <span class="highlight">High demand, great salaries.</span></p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Data Scientist / AI Engineer</h3><p>Pandas, NumPy, TensorFlow, PyTorch. Analyze data, build ML models.</p></div><div class="concept-box"><h3><i class="fas fa-robot"></i> Automation / DevOps</h3><p>Write scripts to automate tasks, manage cloud infrastructure, CI/CD pipelines.</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> This course prepares you for <span class="highlight">Backend API Development</span> — one of the highest-paying and most in-demand Python careers.</div>` },
+        { title: "<i class='fab fa-django'></i> Why Python for Backend?", subtitle: "Django, FastAPI, Flask ecosystem", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fab fa-django"></i> Django</h3><p>Full-featured framework. Built-in admin, ORM, auth, security. Used by Instagram, Pinterest, Spotify.</p></div><div class="concept-box"><h3><i class="fas fa-bolt"></i> FastAPI</h3><p>Modern, fast for APIs. Automatic OpenAPI docs, async support, type hints.</p></div><div class="concept-box"><h3><i class="fas fa-flask"></i> Flask</h3><p>Minimal, flexible. Great for microservices and learning fundamentals.</p></div></div><div class="insight-card"><i class="fas fa-chart-line"></i> <strong>Our focus:</strong> Django + Django REST Framework (DRF) to build production-grade REST APIs.</div>` },
+        { title: "<i class='fas fa-play'></i> Your First Python Program", subtitle: "Hello World and Variables", content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Week 1 Day 1 - First Python Program</span>
+<span style="color:#86efac;"># 1. Hello World</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Django Backend World!"</span>)
+
+<span style="color:#86efac;"># 2. Variables (preview)</span>
+name = <span style="color:#86efac;">"Alex"</span>
+age = 25
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"My name is {name} and I am {age} years old"</span>)</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-cube"></i> What is a Variable?</h3><p>A named container that stores data. <span class="highlight">name = "Alex"</span> stores the string "Alex".</p></div><div class="concept-box"><h3><i class="fas fa-print"></i> print() function</h3><p>Displays output to the console. Your first debugging tool!</p></div></div>` },
+        { title: "<i class='fas fa-question-circle'></i> Knowledge Check", subtitle: "Test what you learned today", content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>` },
+        { title: "<i class='fas fa-clipboard-list'></i> Assignment", subtitle: "Complete before Day 2", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-double"></i> Required Homework</h3><ul><li>✅ Install Python 3.12+</li><li>✅ Install VS Code with Python extension</li><li>✅ Run python --version to verify</li><li>✅ Create calculator.py with the Simple Calculator program</li><li>✅ Add BONUS: modulus (%) and exponent (**) operations</li><li>✅ Run and test your calculator with different inputs</li></ul></div><div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3><p><strong>Day 2: Variables & Data Types</strong><br>Strings, Integers, Floats, Booleans, Type Conversion, and building an Age Calculator.</p><p>Don't skip the assignment — Day 2 builds directly on today's concepts!</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> "The only way to learn programming is by writing code. Type every example yourself!" — Instructor</div>` }
+    ];
+
+    // Q&A Data for knowledge check
+    const qaData = [
+        { q: "What is programming?", a: "Programming is writing precise instructions for a computer to follow. Computers are completely literal — they do exactly what you tell them. A program is a sequence of these instructions." },
+        { q: "What's the difference between Frontend and Backend?", a: "Frontend = what users see and click (HTML/CSS/JS, runs in browser). Backend = server logic, databases, APIs, authentication (runs on servers). This course teaches backend development." },
+        { q: "What does DNS do?", a: "DNS (Domain Name System) translates human-readable domain names (google.com) into IP addresses (142.250.190.78) that computers use to find each other on the internet." },
+        { q: "Why is Python so popular for backend development?", a: "Python is easy to learn, has powerful frameworks like Django and FastAPI, a huge ecosystem of libraries, great community support, and is used by major companies like Instagram and Spotify." },
+        { q: "What is the difference between Python 2 and Python 3?", a: "Python 3 has cleaner syntax (print as function, true division), better Unicode support, improved security, and is actively maintained. Python 2 reached end-of-life in January 2020." },
+        { q: "Why must you check 'Add Python to PATH' during installation on Windows?", a: "It allows you to run 'python' from any terminal/command prompt location without typing the full path to the Python executable." },
+        { q: "What is the difference between interactive mode (REPL) and script mode?", a: "Interactive mode executes code line by line immediately (good for testing). Script mode runs entire .py files (used for real applications)." },
+        { q: "What are some career paths for Python developers?", a: "Backend Developer, Data Scientist, AI/ML Engineer, DevOps Engineer, Automation Engineer, Cybersecurity Analyst." },
+        { q: "Name three Python web frameworks.", a: "Django (full-featured), FastAPI (modern APIs), Flask (minimal/flexible)." },
+        { q: "What is the assignment for this class?", a: "Build a Simple Calculator that takes two numbers and an operation (+, -, *, /), handles division by zero, and displays results. BONUS: Add modulus (%) and exponent (**)." }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">${slide.content}</div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        if (index === 12) renderQA(); // Knowledge check at index 12
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

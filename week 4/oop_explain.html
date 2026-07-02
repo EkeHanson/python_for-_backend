@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOP · 4 Pillars with Python Examples</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .slide-deck {
+            max-width: 1200px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .progress-track {
+            flex: 1;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 12.5%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .slide-counter {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .slide-content {
+            min-height: 400px;
+            padding: 0.5rem 0;
+        }
+        .slide-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #475569;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-bottom: 1rem;
+        }
+        .slide-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: #0f172a;
+        }
+        .slide-title i {
+            color: #3b82f6;
+            margin-right: 0.6rem;
+        }
+        .slide-desc {
+            font-size: 1.05rem;
+            color: #334155;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 0.8rem;
+            padding: 1rem 1.2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            margin: 0.75rem 0 0.5rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+        .code-block .c { color: #94a3b8; }
+        .code-block .k { color: #60a5fa; }
+        .code-block .s { color: #34d399; }
+        .code-block .f { color: #fbbf24; }
+        .code-block .n { color: #a78bfa; }
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .pillar-card {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            border: 1px solid #e2e8f0;
+        }
+        .pillar-card .icon {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            margin-bottom: 0.3rem;
+        }
+        .pillar-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .pillar-card p {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+        .feature-list li {
+            padding: 0.25rem 0;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .feature-list li i {
+            color: #3b82f6;
+            width: 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #475569;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-btn:hover { border-color: #3b82f6; color: #0f172a; background: #f8fafc; }
+        .nav-btn.primary {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
+        .nav-btn.primary:hover { background: #2563eb; border-color: #2563eb; }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .dot-indicators {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dot.active {
+            background: #3b82f6;
+            width: 28px;
+            border-radius: 20px;
+        }
+        .extra-text {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+        .extra-text i {
+            color: #3b82f6;
+            margin-right: 0.5rem;
+        }
+        .abstraction-section {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-left: 4px solid #3b82f6;
+        }
+        .abstraction-section h5 {
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .abstraction-section h5 i {
+            color: #3b82f6;
+            margin-right: 0.5rem;
+        }
+        .abstraction-section p, .abstraction-section ul {
+            font-size: 0.9rem;
+            color: #334155;
+        }
+        .abstraction-section ul {
+            padding-left: 1.2rem;
+            margin: 0.3rem 0;
+        }
+        .abstraction-section ul li {
+            margin-bottom: 0.2rem;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+        .comparison-box {
+            background: #f8fafc;
+            border-radius: 0.8rem;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        .comparison-box h5 {
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .comparison-box h5 i {
+            color: #3b82f6;
+            margin-right: 0.5rem;
+        }
+        .comparison-box ul {
+            padding-left: 1.2rem;
+            margin: 0.3rem 0;
+        }
+        .comparison-box ul li {
+            font-size: 0.85rem;
+            color: #334155;
+            margin-bottom: 0.2rem;
+        }
+        @media (max-width: 700px) {
+            .slide-deck { padding: 1.2rem; }
+            .slide-title { font-size: 1.6rem; }
+            .slide-desc { font-size: 0.95rem; }
+            .code-block { font-size: 0.7rem; padding: 0.8rem; }
+            .pillar-grid { grid-template-columns: 1fr 1fr; }
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 450px) {
+            .pillar-grid { grid-template-columns: 1fr; }
+            .slide-title { font-size: 1.3rem; }
+            .slide-deck { padding: 0.8rem; }
+            .nav-btn { padding: 0.4rem 1rem; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="slide-deck">
+    <div class="progress-row">
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="slide-counter" id="slideCounter">1 / 15</span>
+    </div>
+    <div class="slide-content" id="slideContent"></div>
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn"><i class="fas fa-arrow-left"></i> Back</button>
+        <div class="dot-indicators" id="dotContainer"></div>
+        <button class="nav-btn primary" id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<script>
+// All slide data - Abstraction now has multiple slides like Inheritance
+var slides = [
+    {
+        tag: 'Introduction',
+        title: 'The Four Pillars of OOP',
+        desc: 'Object-Oriented Programming is built on four fundamental concepts that help structure code in a clean, reusable, and scalable way.',
+        type: 'grid',
+        items: [
+            { icon: 'fa-sitemap', label: 'Inheritance', desc: 'Reuse code via parent-child relationships.' },
+            { icon: 'fa-eye-slash', label: 'Abstraction', desc: 'Hide complexity, expose essentials.' },
+            { icon: 'fa-shapes', label: 'Polymorphism', desc: 'Many forms, same interface.' },
+            { icon: 'fa-lock', label: 'Encapsulation', desc: 'Bundle data & methods, restrict access.' }
+        ]
+    },
+    {
+        tag: 'Pillar #1',
+        title: 'Inheritance',
+        desc: 'Creating a new class (child) based on an existing class (parent) to reuse code and establish relationships.',
+        icon: 'fa-sitemap',
+        extra: 'Promotes code reuse, extensibility, and hierarchical classification.',
+        code: 'class Animal:\n    alive = True\n\n    def eat(self):\n        print("All animals eat")\n\n    def sleep(self):\n        print("All Animals Sleep!")\n\nclass Rabbit(Animal):\n    pass  # Inherits everything from Animal\n\nrabbit = Rabbit()\nrabbit.eat()      # Output: All animals eat\nrabbit.sleep()    # Output: All Animals Sleep!\n\nif rabbit.alive:\n    print("The rabbit is alive!")'
+    },
+    {
+        tag: 'Inheritance Example',
+        title: 'Vehicle Inheritance',
+        desc: 'Demonstrating inheritance with Vehicle, Car, Keke, and Bicycle classes.',
+        icon: 'fa-car',
+        code: 'class Vehicle:\n    num_of_tyres = 4\n    \n    def brake(self):\n        print("I just applied the brake")\n    \n    def speed(self):\n        print("Overspeeding is not allowed")\n\nclass Car(Vehicle):\n    pass\n\nclass Keke(Vehicle):\n    pass\n\nclass Bicycle(Vehicle):\n    num_of_tyres = 2\n\ncar = Car()\nkeke = Keke()\nbicycle = Bicycle()\n\ncar.speed()\ncar.brake()\nprint(car.num_of_tyres)\n\nkeke.speed()\nkeke.brake()\nprint(keke.num_of_tyres)\n\nbicycle.speed()\nbicycle.brake()\nprint(bicycle.num_of_tyres)'
+    },
+    {
+        tag: 'Multi-Level Inheritance',
+        title: 'Multi-Level Inheritance',
+        desc: 'When a derived class inherits from another derived class, creating a chain of inheritance.',
+        icon: 'fa-sitemap',
+        features: [
+            'Organism → Animal → Dog (three levels)',
+            'Each level adds more specific functionality',
+            'Child inherits from all ancestors',
+            'Enables hierarchical classification'
+        ],
+        code: 'class Organism:\n    plant_animal = True\n    alive = True\n\nclass Animal(Organism):\n    def eat(self):\n        print("Every Animal will eat")\n\nclass Dog(Animal):\n    def bark(self):\n        print("Every dog should bark")\n\ndog = Dog()\n\nprint(dog.plant_animal)\ndog.eat()\ndog.bark()'
+    },
+    {
+        tag: 'Multiple Inheritance',
+        title: 'Multiple Inheritance',
+        desc: 'When a child class is derived from more than one parent class.',
+        icon: 'fa-code-branch',
+        features: [
+            'A class can inherit from multiple parent classes',
+            'Combines features from all parent classes',
+            'Useful for mixing functionality',
+            'Python supports multiple inheritance'
+        ],
+        code: 'class Predator:\n    def hunt(self):\n        print("This animal hunts for a living")\n\nclass Prey:\n    def flee(self):\n        print("This animal always flees for its life")\n\nclass Rabbit(Prey):\n    pass\n\nclass Hawk(Predator):\n    pass\n\nclass Fish(Predator, Prey):\n    pass\n\nrabbit = Rabbit()\nhawk = Hawk()\nfish = Fish()\n\nrabbit.flee()\nhawk.hunt()\nfish.flee()\nfish.hunt()'
+    },
+    {
+        tag: 'The self Keyword',
+        title: 'Understanding the self Keyword',
+        desc: 'The self keyword refers to the particular object calling the method.',
+        icon: 'fa-user',
+        code: 'class Vehicle:\n    def __init__(self, brand, year):\n        self.brand = brand\n        self.year = year\n\n    def start(self):\n        return f"{self.brand} engine started first in {self.year}"\n\ncar1 = Vehicle("Corvet", "2026")\ncar2 = Vehicle("Camry", "2021")\n\nprint(car1.start())\nprint(car2.start())'
+    },
+    // ============ ABSTRACTION SLIDES START HERE ============
+    {
+        tag: 'Pillar #2',
+        title: 'Abstraction',
+        desc: 'Hiding complex implementation details and showing only the essential features to the outside world.',
+        icon: 'fa-eye-slash',
+        features: [
+            'Hides complex implementation details',
+            'Shows only essential features',
+            'Provides a clear, simple interface',
+            'Keeps internal workings hidden'
+        ],
+        extra: 'Abstraction is one of the four fundamental pillars of object-oriented programming.'
+    },
+    {
+        tag: 'Why Abstraction?',
+        title: 'Benefits of Abstraction',
+        desc: 'Understanding why abstraction is important in software development.',
+        icon: 'fa-question-circle',
+        features: [
+            'Reduces complexity – users only need to know the high-level interface',
+            'Promotes maintainability – internal implementation can change without affecting code',
+            'Encourages reusability – abstract classes define common behaviors',
+            'Enforces design contracts – abstract methods force subclasses to provide specific functionality'
+        ]
+    },
+    {
+        tag: 'Abstract Base Classes',
+        title: 'Implementing Abstraction with abc',
+        desc: 'Python provides the abc module to define abstract base classes.',
+        icon: 'fa-cogs',
+        features: [
+            'Cannot be instantiated directly',
+            'May contain abstract methods (decorated with @abstractmethod)',
+            'Abstract methods must be implemented by subclasses',
+            'Can contain concrete methods shared by all subclasses'
+        ],
+        code: 'from abc import ABC, abstractmethod\n\nclass PaymentProcessor(ABC):\n    @abstractmethod\n    def process_payment(self, amount):\n        pass\n\nclass CreditCardProcessor(PaymentProcessor):\n    def process_payment(self, amount):\n        return f"Processing ${amount} via credit card"\n\nclass PayPalProcessor(PaymentProcessor):\n    def process_payment(self, amount):\n        return f"Processing ${amount} via PayPal"\n\ndef make_payment(processor, amount):\n    print(processor.process_payment(amount))\n\nmake_payment(CreditCardProcessor(), 100)\nmake_payment(PayPalProcessor(), 50)'
+    },
+    {
+        tag: 'Duck Typing',
+        title: 'Abstraction Without ABC – Duck Typing',
+        desc: 'Python also supports duck typing: "If it walks like a duck and quacks like a duck, then it\'s a duck."',
+        icon: 'fa-duck',
+        features: [
+            'Objects can be used based on their behavior (methods) rather than their exact type',
+            'Does not require explicit inheritance from an abstract class',
+            'Provides more flexibility at the cost of weaker type enforcement',
+            'Code can work with any object that has the required methods'
+        ],
+        code: 'class Bike:\n    def start_engine(self):\n        print("Pedal to start!")\n\n    def stop_engine(self):\n        print("Stop pedaling.")\n\ndef start_anything(thing):\n    # Assumes thing has a start_engine() method\n    thing.start_engine()\n\nbike = Bike()\nstart_anything(bike)  # Works even without inheritance'
+    },
+    {
+        tag: 'ABC vs Duck Typing',
+        title: 'ABC vs Duck Typing',
+        desc: 'When to use each approach for abstraction in Python.',
+        icon: 'fa-balance-scale',
+        type: 'comparison',
+        comparisons: [
+            {
+                title: 'Abstract Base Classes (ABC)',
+                icon: 'fa-cogs',
+                points: [
+                    'Enforces a clear contract',
+                    'Useful for large frameworks or libraries',
+                    'Prevents instantiation of incomplete classes',
+                    'Provides explicit documentation'
+                ]
+            },
+            {
+                title: 'Duck Typing',
+                icon: 'fa-duck',
+                points: [
+                    'Maximum flexibility',
+                    'Good for small, self-contained code',
+                    'Relies on implicit assumptions',
+                    'Gives runtime errors if methods are missing'
+                ]
+            }
+        ]
+    },
+    {
+        tag: 'Abstract Properties',
+        title: 'Abstract Properties and Static Methods',
+        desc: 'You can also declare abstract properties and static/class methods in abstract classes.',
+        icon: 'fa-cube',
+        features: [
+            'Use @abstractproperty for abstract property definitions',
+            'Use @abstractmethod for abstract methods',
+            'Subclasses must implement all abstract members',
+            'Abstract classes can have both abstract and concrete members'
+        ],
+        code: 'from abc import ABC, abstractmethod, abstractproperty\n\nclass Shape(ABC):\n    @abstractproperty\n    def area(self):\n        """Area of the shape."""\n        pass\n\n    @abstractmethod\n    def draw(self):\n        pass\n\nclass Circle(Shape):\n    def __init__(self, radius):\n        self.radius = radius\n    \n    @property\n    def area(self):\n        return 3.14159 * self.radius ** 2\n    \n    def draw(self):\n        print(f"Drawing a circle with area {self.area}")'
+    },
+    {
+        tag: 'Best Practices',
+        title: 'Abstraction Best Practices',
+        desc: 'Guidelines for using abstraction effectively in your Python projects.',
+        icon: 'fa-star',
+        features: [
+            'Design by contract – define abstract methods that represent the core responsibilities',
+            'Keep interfaces small – favor many small, focused abstract classes over one giant one',
+            'Document abstract methods – use docstrings to explain what the method should do',
+            'Use @abstractmethod carefully – subclasses must implement all abstract methods or remain abstract',
+            'Balance abstraction with practicality – don\'t over-engineer simple solutions'
+        ]
+    },
+    // ============ END OF ABSTRACTION SLIDES ============
+    {
+        tag: 'Pillar #3',
+        title: 'Polymorphism',
+        desc: 'The ability of objects of different types to respond to the same interface or method call in their own way.',
+        icon: 'fa-shapes',
+        extra: 'Enables flexibility, extensibility, and cleaner code through interfaces.',
+        code: 'class Shape:\n    def area(self):\n        pass\n\nclass Circle(Shape):\n    def __init__(self, radius):\n        self.radius = radius\n    def area(self):\n        return 3.14 * self.radius ** 2\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n    def area(self):\n        return self.side ** 2\n\nshapes = [Circle(5), Square(4)]\nfor shape in shapes:\n    print(f"{shape.__class__.__name__}: {shape.area()}")'
+    },
+    {
+        tag: 'Pillar #4',
+        title: 'Encapsulation',
+        desc: 'Bundling data and methods that operate on that data within a single unit and restricting direct access to some components.',
+        icon: 'fa-lock',
+        extra: 'Prevents unintended interference, promotes modularity, and hides implementation details.',
+        code: 'class BankAccount:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.__balance = balance\n    \n    def get_balance(self):\n        return self.__balance\n    \n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return f"Deposited ${amount}. Balance: ${self.__balance}"\n        return "Invalid amount"\n\naccount = BankAccount("John", 1000)\nprint(account.get_balance())\nprint(account.deposit(500))'
+    }
+];
+
+var currentIndex = 0;
+var totalSlides = slides.length;
+
+function highlightPythonCode(code) {
+    var lines = code.split('\n');
+    var result = [];
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        var processed = line;
+        // Comments
+        processed = processed.replace(/^( +)?(#.*)$/, function(match, spaces, comment) {
+            return (spaces || '') + '<span class="c">' + comment + '</span>';
+        });
+        // Keywords
+        processed = processed.replace(/\b(class|def|if|else|elif|for|while|return|import|from|pass|super|print|and|or|not|in|is|lambda|yield|with|as|try|except|finally|raise|assert|True|False|None|self)\b/g, 
+            '<span class="k">$1</span>');
+        // Strings - handle double quotes
+        processed = processed.replace(/"(.*?)"/g, '<span class="s">"$1"</span>');
+        // Strings - handle single quotes
+        processed = processed.replace(/'(.*?)'/g, '<span class="s">\'$1\'</span>');
+        result.push(processed);
+    }
+    return result.join('\n');
+}
+
+function renderSlide(index) {
+    var slide = slides[index];
+    var contentDiv = document.getElementById('slideContent');
+    var progressFill = document.getElementById('progressFill');
+    var counterSpan = document.getElementById('slideCounter');
+    
+    var html = '';
+    
+    // Tag
+    html += '<div class="slide-tag">' + slide.tag + '</div>';
+    
+    // Title with icon
+    var title = slide.title;
+    if (slide.icon) {
+        title = '<i class="fas ' + slide.icon + '"></i> ' + slide.title;
+    }
+    html += '<div class="slide-title">' + title + '</div>';
+    
+    // Description
+    html += '<div class="slide-desc">' + slide.desc + '</div>';
+    
+    // Features list
+    if (slide.features && slide.features.length > 0) {
+        html += '<ul class="feature-list">';
+        for (var f = 0; f < slide.features.length; f++) {
+            html += '<li><i class="fas fa-check-circle"></i> ' + slide.features[f] + '</li>';
+        }
+        html += '</ul>';
+    }
+    
+    // Code block
+    if (slide.code) {
+        var highlighted = highlightPythonCode(slide.code);
+        html += '<div class="code-block">' + highlighted + '</div>';
+    }
+    
+    // Comparison grid for ABC vs Duck Typing
+    if (slide.type === 'comparison' && slide.comparisons) {
+        html += '<div class="comparison-grid">';
+        for (var c = 0; c < slide.comparisons.length; c++) {
+            var comp = slide.comparisons[c];
+            html += '<div class="comparison-box">';
+            html += '<h5><i class="fas ' + comp.icon + '"></i> ' + comp.title + '</h5>';
+            html += '<ul>';
+            for (var p = 0; p < comp.points.length; p++) {
+                html += '<li>' + comp.points[p] + '</li>';
+            }
+            html += '</ul>';
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    
+    // Grid items
+    if (slide.type === 'grid' && slide.items) {
+        html += '<div class="pillar-grid">';
+        for (var g = 0; g < slide.items.length; g++) {
+            var item = slide.items[g];
+            html += '<div class="pillar-card">';
+            html += '<div class="icon"><i class="fas ' + item.icon + '"></i></div>';
+            html += '<h4>' + item.label + '</h4>';
+            html += '<p>' + item.desc + '</p>';
+            html += '</div>';
+        }
+        html += '</div>';
+    }
+    
+    // Extra text
+    if (slide.extra && !slide.features && !slide.comparisons) {
+        html += '<div class="extra-text"><i class="fas fa-check-circle"></i> ' + slide.extra + '</div>';
+    }
+    
+    contentDiv.innerHTML = html;
+    
+    // Update progress
+    var progress = ((index + 1) / totalSlides) * 100;
+    progressFill.style.width = progress + '%';
+    counterSpan.textContent = (index + 1) + ' / ' + totalSlides;
+    
+    // Update dots
+    var dots = document.querySelectorAll('.dot');
+    for (var d = 0; d < dots.length; d++) {
+        dots[d].className = 'dot' + (d === index ? ' active' : '');
+    }
+    
+    // Update buttons
+    document.getElementById('prevBtn').disabled = (index === 0);
+    document.getElementById('nextBtn').disabled = (index === totalSlides - 1);
+    var nextBtn = document.getElementById('nextBtn');
+    if (index === totalSlides - 1) {
+        nextBtn.innerHTML = 'Done <i class="fas fa-check"></i>';
+    } else {
+        nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+    }
+    
+    currentIndex = index;
+}
+
+function goToSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= totalSlides) index = totalSlides - 1;
+    renderSlide(index);
+}
+
+function nextSlide() {
+    if (currentIndex < totalSlides - 1) {
+        goToSlide(currentIndex + 1);
+    }
+}
+
+function prevSlide() {
+    if (currentIndex > 0) {
+        goToSlide(currentIndex - 1);
+    }
+}
+
+// Initialize dots
+function initDots() {
+    var container = document.getElementById('dotContainer');
+    container.innerHTML = '';
+    for (var i = 0; i < totalSlides; i++) {
+        var dot = document.createElement('span');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = (function(idx) {
+            return function() {
+                goToSlide(idx);
+            };
+        })(i);
+        container.appendChild(dot);
+    }
+}
+
+// Set up event listeners
+document.getElementById('prevBtn').onclick = prevSlide;
+document.getElementById('nextBtn').onclick = nextSlide;
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+    }
+    if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+    }
+});
+
+// Initialize the presentation
+initDots();
+renderSlide(0);
+</script>
+</body>
+</html>

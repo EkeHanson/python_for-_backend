@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Day 2 - Variables & Data Types | Python Backend Course</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge {
+            background: #3b82f6;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        .duration {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .day-nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .day-nav-btn {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .day-nav-btn:hover {
+            background: #3b82f6;
+            transform: scale(0.98);
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2rem;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .slide-area {
+            min-height: 600px;
+            background: #0f1119;
+            padding: 2rem;
+        }
+        .slide-card {
+            background: rgba(22, 26, 38, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(72, 187, 255, 0.3);
+        }
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #E0F2FE, #7AA9FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1.2rem;
+        }
+        .slide-title i {
+            background: none;
+            color: #60a5fa;
+            font-size: 1.8rem;
+        }
+        .slide-sub {
+            color: #a0afc9;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1.2rem;
+        }
+        .content-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .concept-box {
+            flex: 1;
+            min-width: 240px;
+            background: #1a1f2e;
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .concept-box:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .concept-box h3 {
+            color: #7aa9ff;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .concept-box h3 i {
+            color: #60a5fa;
+        }
+        .concept-box p, .concept-box li {
+            color: #e2e8f0;
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .tag {
+            background: #1e293b;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #b9d0ff;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .insight-card {
+            margin-top: 1.2rem;
+            background: #0f172a;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: #e2e8f0;
+            border-left: 3px solid #3b82f6;
+        }
+        .code-block {
+            background: #0a0e18;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e6;
+            margin: 0.8rem 0;
+            border: 1px solid #334155;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .two-column-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .qa-section {
+            margin-top: 1.5rem;
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+        }
+        .qa-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qa-item {
+            background: #131b2e;
+            border-radius: 1rem;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #2d3a5e;
+        }
+        .qa-question {
+            padding: 1rem 1.2rem;
+            background: #1a2338;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: background 0.2s;
+        }
+        .qa-question:hover {
+            background: #25334d;
+        }
+        .qa-question i {
+            color: #60a5fa;
+            transition: transform 0.3s;
+        }
+        .qa-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: #0f172a;
+            color: #cbd5e6;
+            line-height: 1.5;
+        }
+        .qa-answer.show {
+            padding: 1rem 1.2rem;
+            max-height: 300px;
+        }
+        .nav-bar {
+            background: #0b0e16;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #2a2f3f;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        button {
+            background: #1e2a3a;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #334155;
+        }
+        button:hover:not(:disabled) {
+            background: #2d3a4e;
+            transform: scale(0.97);
+            border-color: #3b82f6;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            font-size: 0.9rem;
+            background: #1a1f2c;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: #a5b4fc;
+        }
+        .indicator-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .dot.active {
+            background: #3b82f6;
+            width: 22px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.7rem;
+            background: #07090f;
+            color: #8ca3c7;
+        }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div><span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 1 · DAY 2</span></div>
+    <div class="class-title"><i class="fas fa-database"></i> Variables & Data Types</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 hours · Core Fundamentals</div>
+    <div class="day-nav-buttons">
+        <a href="day1.html" class="day-nav-btn"><i class="fas fa-arrow-left"></i> Day 1</a>
+        <a href="day3.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Day 3 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 11</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers
+    </footer>
+</div>
+
+<script>
+    // ==================== DAY 2 SLIDES ====================
+    const slides = [
+        {
+            title: "<i class='fas fa-cube'></i> What are Variables?",
+            subtitle: "Naming and storing data in Python",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-tag"></i> Variable = Container</h3><p>A variable is like a labeled box that holds a value.<br><span class="highlight">name = "Alice"</span> stores the string "Alice".</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-rules"></i> Naming Rules</h3><p>✅ Can contain letters, numbers, underscores<br>✅ Must start with letter or underscore<br>❌ No spaces, no special chars<br>❌ Cannot be a keyword (if, for, while)</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Valid variable names</span>
+student_name = "John"
+age = 22
+_is_active = True
+course_name_2024 = "Python"
+
+<span style="color:#7aa9ff;"># Invalid (these would cause errors)</span>
+<span style="color:#f87171;"># 2nd_place = "bad"  (can't start with number)</span>
+<span style="color:#f87171;"># my-name = "bad"    (hyphen not allowed)</span></pre></div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> Use <span class="highlight">snake_case</span> for variable names in Python (e.g., user_age, is_logged_in).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-font'></i> Strings (str)",
+            subtitle: "Working with text in Python",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-quote-left"></i> What is a String?</h3><p>Sequence of characters surrounded by quotes.<br>Single quotes: <span class="highlight">'Hello'</span><br>Double quotes: <span class="highlight">"World"</span><br>Triple quotes: <span class="highlight">'''Multi-line'''</span></p></div>
+                    <div class="concept-box"><h3><i class="fas fa-link"></i> String Operations</h3><p><strong>Concatenation:</strong> "Hello" + " " + "World"<br><strong>Length:</strong> len("Python") → 6<br><strong>f-strings:</strong> f"My name is {name}"</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># String examples</span>
+first_name = "Alice"
+last_name = "Smith"
+full_name = first_name + " " + last_name
+<span style="color:#fbbf24;">print</span>(full_name)  <span style="color:#86efac;"># Alice Smith</span>
+
+<span style="color:#86efac;"># f-strings (Python 3.6+)</span>
+age = 25
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"{first_name} is {age} years old"</span>)</pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-hashtag'></i> Integers & Floats",
+            subtitle: "Working with numbers in Python",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-hashtag"></i> Integers (int)</h3><p>Whole numbers: <span class="highlight">10, -5, 0, 1000</span><br>No decimal point.</p><div class="code-block" style="margin-top:0.5rem;"><pre>age = 25<br>count = -3<br>year = 2024</pre></div></div>
+                    <div class="concept-box"><h3><i class="fas fa-chart-line"></i> Floats (float)</h3><p>Decimal numbers: <span class="highlight">3.14, -0.5, 2.0</span><br>Used for precise measurements.</p><div class="code-block" style="margin-top:0.5rem;"><pre>price = 19.99<br>pi = 3.14159<br>temperature = -2.5</pre></div></div>
+                </div>
+                <div class="insight-card"><i class="fas fa-calculator"></i> Python can do math: <span class="highlight">+, -, *, /, // (floor), % (modulo), ** (power)</span></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-toggle-on'></i> Booleans",
+            subtitle: "True / False — decision making in code",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Boolean Values</h3><p>Only two possible values:<br><span class="highlight">True</span> and <span class="highlight">False</span> (capital T and F!)</p><p>Used in conditions, loops, and flags.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-code-branch"></i> Comparison Operators</h3><p>== (equal), != (not equal)<br>>, <, >=, <=<br>These return Boolean values!</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Boolean examples</span>
+is_logged_in = True
+has_permission = False
+is_adult = age >= 18  <span style="color:#86efac;"># Returns True/False</span>
+
+<span style="color:#fbbf24;">print</span>(10 > 5)   <span style="color:#86efac;"># True</span>
+<span style="color:#fbbf24;">print</span>(10 == 5)  <span style="color:#86efac;"># False</span></pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-exchange-alt'></i> Type Conversion",
+            subtitle: "Converting between data types",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-arrows-spin"></i> Built-in Conversion Functions</h3><p><strong>int()</strong> → converts to integer<br><strong>float()</strong> → converts to float<br><strong>str()</strong> → converts to string<br><strong>bool()</strong> → converts to boolean</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-exclamation-triangle"></i> Common Use Case</h3><p>Converting user input (always string) to numbers for math.</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Type conversion examples</span>
+num_str = "42"
+num_int = int(num_str)     <span style="color:#86efac;"># 42 (integer)</span>
+
+price = 19.99
+price_str = str(price)     <span style="color:#86efac;"># "19.99"</span>
+
+age_input = input(<span style="color:#86efac;">"Enter age: "</span>)  <span style="color:#86efac;"># Returns string</span>
+age = int(age_input)        <span style="color:#86efac;"># Convert to integer for math</span></pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-keyboard'></i> User Input",
+            subtitle: "Getting data from the user",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-microphone-alt"></i> input() Function</h3><p>Prompts the user and returns whatever they type as a <span class="highlight">STRING</span>.</p>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Basic input</span>
+name = input(<span style="color:#86efac;">"What is your name? "</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Hello, {name}!"</span>)
+
+<span style="color:#7aa9ff;"># Input with type conversion</span>
+age_str = input(<span style="color:#86efac;">"Enter your age: "</span>)
+age = int(age_str)  <span style="color:#86efac;"># Convert to integer</span>
+years_to_100 = 100 - age
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You will be 100 in {years_to_100} years"</span>)</pre></div></div>
+                <div class="insight-card"><i class="fas fa-shield-alt"></i> Always validate user input! Users might enter text when you expect a number.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-laptop-code'></i> Practical: Student Registration App",
+            subtitle: "Hands-on exercise combining everything",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-tasks"></i> Build a Student Registration System</h3>
+                    <p>Create a program that:</p>
+                    <ul style="margin-left:1.5rem; color:#e2e8f0;">
+                        <li>✓ Asks for student's <span class="highlight">name</span> (string)</li>
+                        <li>✓ Asks for <span class="highlight">age</span> (integer)</li>
+                        <li>✓ Asks for <span class="highlight">GPA</span> (float)</li>
+                        <li>✓ Asks if student is <span class="highlight">enrolled</span> (True/False input)</li>
+                        <li>✓ Displays a summary using f-strings</li>
+                    </ul>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Starter code (complete it!)</span>
+name = input(<span style="color:#86efac;">"Student name: "</span>)
+age = int(input(<span style="color:#86efac;">"Age: "</span>))
+gpa = float(input(<span style="color:#86efac;">"GPA: "</span>))
+is_enrolled = input(<span style="color:#86efac;">"Enrolled? (yes/no): "</span>) == <span style="color:#86efac;">"yes"</span>
+
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"--- Student Record ---"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Name: {name}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Age: {age}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"GPA: {gpa}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Enrolled: {is_enrolled}"</span>)</pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-calculator'></i> Practical: Age Calculator",
+            subtitle: "Calculate birth year and years until 100",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-birthday-cake"></i> Challenge</h3>
+                        <p>Write a program that:</p>
+                        <ul><li>Asks for user's age</li><li>Calculates birth year (assume current year 2026)</li><li>Tells how many years until they turn 100</li><li>Displays results with f-strings</li></ul>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-code"></i> Solution Template</h3>
+                        <div class="code-block"><pre>age = int(input(<span style="color:#86efac;">"Enter your age: "</span>))
+birth_year = 2026 - age
+years_to_100 = 100 - age
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You were born in {birth_year}"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You'll be 100 in {years_to_100} years"</span>)</pre></div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-star"></i> <strong>Bonus:</strong> Add validation to ensure age is positive and reasonable (0-120).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-check-double'></i> Type Checking",
+            subtitle: "Using type() to see what you're working with",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-search"></i> type() Function</h3><p>Returns the data type of any value or variable.<br>Useful for debugging and validation.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-shield"></i> isinstance() Function</h3><p>Checks if a variable is of a specific type.<br><span class="highlight">isinstance(age, int)</span> → True/False</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Type checking examples</span>
+name = "Alice"
+age = 25
+price = 19.99
+is_active = True
+
+<span style="color:#fbbf24;">print</span>(type(name))    <span style="color:#86efac;"># <class 'str'></span>
+<span style="color:#fbbf24;">print</span>(type(age))     <span style="color:#86efac;"># <class 'int'></span>
+<span style="color:#fbbf24;">print</span>(type(price))   <span style="color:#86efac;"># <class 'float'></span>
+<span style="color:#fbbf24;">print</span>(type(is_active)) <span style="color:#86efac;"># <class 'bool'></span>
+
+<span style="color:#7aa9ff;"># Validation</span>
+<span style="color:#fbbf24;">if</span> isinstance(age, int):
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Age is an integer!"</span>)</pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test your understanding of variables and data types",
+            content: `
+                <div class="qa-section">
+                    <div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div>
+                    <div id="qa-container"></div>
+                </div>
+            `
+        },
+        {
+            title: "<i class='fas fa-clipboard-list'></i> Assignment & Next Steps",
+            subtitle: "Complete before Day 3",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-check-double"></i> Homework Tasks</h3>
+                        <ul style="margin-left:1.2rem;">
+                            <li>✅ Complete the Student Registration App from today's practical</li>
+                            <li>✅ Build an Age Calculator with input validation</li>
+                            <li>✅ Create a program that converts temperature (Celsius to Fahrenheit)</li>
+                            <li>✅ Practice using type() and isinstance()</li>
+                            <li>✅ Save all programs as .py files in your week1 folder</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3>
+                        <p>Day 3: <strong>Operators & Decision Making</strong> — Arithmetic, comparison, logical operators, and conditional statements (if/elif/else). We'll build a Grading System and ATM Simulation!</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-graduation-cap"></i> "Variables are the foundation of programming — master them and everything else gets easier!"</div>
+            `
+        }
+    ];
+
+    // Q&A Data
+    const qaData = [
+        { q: "What is a variable in Python?", a: "A variable is a named container that stores a value in memory. Example: name = 'John' stores the string 'John'." },
+        { q: "What are the four main data types in Python?", a: "String (str), Integer (int), Float (float), Boolean (bool)." },
+        { q: "What is the difference between an integer and a float?", a: "Integer is a whole number (10, -5, 0). Float has decimal points (3.14, -0.5, 2.0)." },
+        { q: "What does the input() function return?", a: "input() always returns a string, regardless of what the user types." },
+        { q: "How do you convert a string to an integer?", a: "Use int() function: int('42') → 42. If the string can't be converted, it raises a ValueError." },
+        { q: "What are valid variable names? Give examples.", a: "snake_case: user_age, is_logged_in, count_2024. Cannot start with a number or contain spaces/hyphens." },
+        { q: "What is an f-string and how is it used?", a: "f-string (formatted string literal) lets you embed variables directly in strings: f'Hello {name}'." },
+        { q: "What does type() function do?", a: "type() returns the data type of a value or variable, e.g., type(42) → <class 'int'>." },
+        { q: "What are Boolean values?", a: "Only two values: True and False (capital T and F). Used for conditions and decision making." },
+        { q: "How do you concatenate strings?", a: "Use the + operator: 'Hello' + ' ' + 'World' → 'Hello World'." }
+    ];
+
+    // Rendering logic
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">
+                    ${slide.title}
+                </div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">
+                    ${slide.content}
+                </div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        if (index === 9) renderQA(); // Knowledge check is slide 9 (0-index)
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

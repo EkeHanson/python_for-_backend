@@ -1,0 +1,3 @@
+This is a text file
+we ar e going to demonstrate reading from it
+

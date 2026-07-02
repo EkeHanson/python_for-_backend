@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 1: Django Introduction & Setup | DRF Bootcamp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e1b13;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1100;
+        }
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #0f766e, #0d9488);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Nav Bar */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            position: fixed;
+            top: 4px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        .logo a {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f766e, #0d9488);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .logo i {
+            color: #0d9488;
+            margin-right: 6px;
+        }
+        .slide-counter {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .slide-counter span {
+            color: #1e293b;
+            font-weight: 700;
+        }
+        .back-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .back-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 80px;
+            overflow: hidden;
+        }
+
+        .slides-wrapper {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 1.5rem 2.5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .slide::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 3px;
+        }
+
+        .slide-card {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            min-height: 100%;
+        }
+
+        .slide-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0f766e;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #0d9488;
+            padding-left: 1rem;
+        }
+        .slide-title i {
+            color: #0d9488;
+            margin-right: 8px;
+        }
+
+        .info-box {
+            background: #f0fdfa;
+            border-left: 4px solid #0d9488;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 0.8rem;
+        }
+        .info-box i {
+            color: #0d9488;
+        }
+
+        .highlight-box {
+            background: #fef9e7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 0.8rem;
+        }
+        .highlight-box i {
+            color: #f59e0b;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem 1.2rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+        }
+        .code-block .comment {
+            color: #94a3b8;
+        }
+        .code-block .keyword {
+            color: #c084fc;
+        }
+        .code-block .string {
+            color: #facc15;
+        }
+        .code-block .func {
+            color: #60a5fa;
+        }
+        .code-block .number {
+            color: #f472b6;
+        }
+        .code-block .var {
+            color: #34d399;
+        }
+        .code-block .tag {
+            color: #f87171;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 0.8rem 0;
+        }
+
+        .three-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin: 0.8rem 0;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8fafc;
+            border-radius: 0.8rem;
+            font-size: 0.9rem;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .comparison-table th {
+            background: #ccfbf1;
+            color: #0f766e;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.1rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+        .badge-success {
+            background: #10b98120;
+            color: #065f46;
+        }
+        .badge-warning {
+            background: #f59e0b20;
+            color: #b45309;
+        }
+
+        .output-demo {
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 0.6rem;
+            margin: 0.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* Quiz styles */
+        .quiz-question {
+            background: #fef9f2;
+            padding: 0.8rem 1rem;
+            margin: 0.8rem 0;
+            border-radius: 0.8rem;
+            border: 1px solid #fce4c1;
+        }
+        .quiz-question label {
+            display: block;
+            margin: 0.2rem 0;
+            font-size: 0.9rem;
+        }
+        .quiz-question input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .answer-key {
+            background: #f0fdfa;
+            padding: 1rem;
+            border-radius: 1rem;
+            display: none;
+            margin-top: 1rem;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key strong {
+            color: #0f766e;
+        }
+
+        .btn-toggle {
+            background: #0d9488;
+            color: white;
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-toggle:hover {
+            background: #0f766e;
+        }
+
+        /* Navigation Arrows */
+        .slide-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
+        }
+        .nav-btn {
+            background: #0d9488;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-btn:hover {
+            background: #0f766e;
+            transform: scale(1.02);
+        }
+        .nav-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .nav-btn:disabled:hover {
+            background: #cbd5e1;
+        }
+        .nav-btn-prev {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .nav-btn-prev:hover {
+            background: #e2e8f0;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            transition: 0.3s;
+        }
+        .dot.active {
+            background: #0d9488;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns,
+            .three-columns {
+                grid-template-columns: 1fr;
+            }
+            .slide {
+                padding: 1rem;
+            }
+            .slide-card {
+                padding: 1.2rem;
+            }
+            .slide-title {
+                font-size: 1.3rem;
+            }
+            .nav-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+            .slide-nav {
+                padding: 0 1rem;
+            }
+        }
+
+        .slide-content {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .slide-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .slide-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .slide-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+
+        .architecture-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 1rem;
+            margin: 0.8rem 0;
+        }
+        .arch-box {
+            background: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.6rem;
+            border: 2px solid #0d9488;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .arch-box small {
+            display: block;
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.7rem;
+        }
+        .arch-arrow {
+            font-size: 1.5rem;
+            color: #0d9488;
+        }
+
+        .cli-command {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.8rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .cli-command .prompt {
+            color: #34d399;
+        }
+        .cli-command .cmd {
+            color: #facc15;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-container"><div class="progress-bar" id="progressFill"></div></div>
+
+    <!-- Nav Bar -->
+    <div class="nav-bar">
+        <div class="logo"><a href="index.html"><i class="fas fa-server"></i> Django·DRF</a></div>
+        <div class="slide-counter">Slide <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">13</span></div>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Hub</a>
+    </div>
+
+    <!-- Slide Container -->
+    <div class="slide-container">
+        <div class="slides-wrapper" id="slidesWrapper">
+
+            <!-- ==================== SLIDE 1: Title ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div style="text-align:center; padding:2rem 0;">
+                            <i class="fab fa-python" style="font-size:4rem; color:#0d9488; background:#ccfbf1; padding:1.5rem; border-radius:50%;"></i>
+                            <h1 style="font-size:2.8rem; font-weight:900; margin:1.5rem 0 0.5rem; background:linear-gradient(135deg,#0f766e,#0d9488); background-clip:text; -webkit-background-clip:text; color:transparent;">Django DRF</h1>
+                            <h2 style="font-size:2rem; font-weight:700; color:#1e293b;">Day 1 · Introduction & Setup</h2>
+                            <p style="color:#64748b; font-size:1.1rem; margin:0.5rem 0 1.5rem;">What is Django? MVT Architecture, Installation & Your First Project</p>
+                            <div style="display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin:1rem 0;">
+                                <span style="background:#f1f5f9; padding:0.2rem 1rem; border-radius:40px; font-size:0.8rem;"><i class="far fa-clock"></i> 2 hours</span>
+                                <span style="background:#f1f5f9; padding:0.2rem 1rem; border-radius:40px; font-size:0.8rem;"><i class="fas fa-signal"></i> Beginner</span>
+                                <span style="background:#f1f5f9; padding:0.2rem 1rem; border-radius:40px; font-size:0.8rem;"><i class="fas fa-tools"></i> Python + Django</span>
+                            </div>
+                            <div class="info-box" style="text-align:left;">
+                                <i class="fas fa-arrow-right"></i> <strong>What you'll learn today:</strong>
+                                <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                                    <li>What is Django and why use it</li>
+                                    <li>The MVT (Model-View-Template) architecture</li>
+                                    <li>Setting up Python and Virtual Environment</li>
+                                    <li>Installing Django</li>
+                                    <li>Creating your first Django project</li>
+                                    <li>Understanding the project structure</li>
+                                </ul>
+                            </div>
+                            <p style="color:#94a3b8; font-size:0.85rem; margin-top:1rem;"><i class="fas fa-arrow-right"></i> Use the arrow buttons below to navigate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 2: What is Django? ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-globe"></i> What is Django?</div>
+                        <p><strong>Django</strong> is a Python framework that makes it easier to create web sites using Python.</p>
+                        <div class="info-box">
+                            <i class="fas fa-check-circle"></i> <strong>Key Features:</strong>
+                            <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                                <li><strong>Batteries-included:</strong> Comes with ready-to-use features like login system, database connection, and CRUD operations</li>
+                                <li><strong>DRY (Don't Repeat Yourself):</strong> Emphasizes reusability of components</li>
+                                <li><strong>Database-driven:</strong> Especially helpful for database driven websites</li>
+                                <li><strong>Secure:</strong> Built-in protection against common security threats</li>
+                            </ul>
+                        </div>
+                        <div class="highlight-box">
+                            <i class="fas fa-lightbulb"></i> <strong>Django History:</strong> Invented by Lawrence Journal-World in 2003 to meet short deadlines in the newspaper industry. Initial release to the public was in July 2005. Latest version is 5.1.7.
+                        </div>
+                        <div class="info-box" style="background:#f0fdfa;">
+                            <i class="fas fa-question-circle"></i> <strong>Why Django for APIs?</strong> Django REST Framework (DRF) extends Django to build powerful, flexible APIs with minimal code. We'll use DRF exclusively — no templates!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 3: How Does Django Work? (MVT) ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-sitemap"></i> How Does Django Work? (MVT)</div>
+                        <p>Django follows the <strong>MVT</strong> design pattern (Model - View - Template).</p>
+
+                        <div class="architecture-flow">
+                            <div class="arch-box">
+                                <i class="fas fa-database" style="color:#0d9488;"></i> Model
+                                <small>The data (database)</small>
+                            </div>
+                            <span class="arch-arrow">→</span>
+                            <div class="arch-box">
+                                <i class="fas fa-eye" style="color:#0d9488;"></i> View
+                                <small>Request handler</small>
+                            </div>
+                            <span class="arch-arrow">→</span>
+                            <div class="arch-box">
+                                <i class="fas fa-file-code" style="color:#0d9488;"></i> Template
+                                <small>Response layout (HTML)</small>
+                            </div>
+                        </div>
+
+                        <div class="three-columns">
+                            <div>
+                                <h4><i class="fas fa-database"></i> Model</h4>
+                                <p>The model provides data from the database. Django uses <strong>ORM</strong> (Object Relational Mapping) to make it easier to work with databases without complex SQL.</p>
+                                <div class="code-block" style="font-size:0.8rem;">
+                                    <span class="comment"># models.py</span><br>
+                                    <span class="keyword">class</span> <span class="func">Member</span>(models.Model):<br>
+                                    &nbsp;&nbsp;firstname = models.CharField(max_length=<span class="number">255</span>)
+                                </div>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-eye"></i> View</h4>
+                                <p>A view takes http requests, imports models, finds what data to send, and returns the final result.</p>
+                                <div class="code-block" style="font-size:0.8rem;">
+                                    <span class="comment"># views.py</span><br>
+                                    <span class="keyword">def</span> <span class="func">members</span>(request):<br>
+                                    &nbsp;&nbsp;<span class="keyword">return</span> HttpResponse(<span class="string">"Hello world!"</span>)
+                                </div>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-file-code"></i> Template</h4>
+                                <p>A template describes how the result should be represented (HTML with Django tags).</p>
+                                <div class="code-block" style="font-size:0.8rem;">
+                                    <span class="comment">&lt;!-- template.html --&gt;</span><br>
+                                    &lt;h1&gt;My Homepage&lt;/h1&gt;<br>
+                                    &lt;p&gt;My name is {{ firstname }}.&lt;/p&gt;
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-info-circle"></i> <strong>Note for DRF:</strong> In this course, we will use Django REST Framework which replaces templates with <strong>serializers</strong> and returns <strong>JSON</strong> responses instead of HTML.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 4: Request Flow ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-route"></i> Django Request Flow</div>
+                        <p>When a browser requests a URL, this is what happens:</p>
+
+                        <div class="architecture-flow" style="flex-direction:column; gap:0.3rem; align-items:stretch;">
+                            <div class="arch-box" style="border-color:#f59e0b;">
+                                <i class="fas fa-arrow-right" style="color:#f59e0b;"></i> 1. Browser requests URL → <strong>urls.py</strong> matches the URL pattern
+                            </div>
+                            <div class="arch-box" style="border-color:#0d9488;">
+                                <i class="fas fa-arrow-right" style="color:#0d9488;"></i> 2. <strong>views.py</strong> receives the request and calls the matching view
+                            </div>
+                            <div class="arch-box" style="border-color:#8b5cf6;">
+                                <i class="fas fa-arrow-right" style="color:#8b5cf6;"></i> 3. View imports relevant <strong>models</strong> from models.py
+                            </div>
+                            <div class="arch-box" style="border-color:#f472b6;">
+                                <i class="fas fa-arrow-right" style="color:#f472b6;"></i> 4. View sends data to a <strong>template</strong> (or serializer for DRF)
+                            </div>
+                            <div class="arch-box" style="border-color:#34d399;">
+                                <i class="fas fa-arrow-right" style="color:#34d399;"></i> 5. Template returns finished HTML/JSON back to the browser
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fas fa-code"></i> <strong>Key Files in a Django Project:</strong>
+                            <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                                <li><strong>urls.py</strong> — URL routing</li>
+                                <li><strong>views.py</strong> — Request handlers</li>
+                                <li><strong>models.py</strong> — Database tables</li>
+                                <li><strong>settings.py</strong> — Project configuration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 5: Python & PIP Check ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fab fa-python"></i> Python & PIP Check</div>
+                        <p>Django requires Python. Check if you have Python installed:</p>
+
+                        <div class="cli-command">
+                            <span class="prompt">$</span>
+                            <span class="cmd">python --version</span>
+                        </div>
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <strong>Expected output:</strong> <code>Python 3.13.2</code>
+                        </div>
+
+                        <p style="margin-top:1rem;">Check if PIP (Python package manager) is installed:</p>
+                        <div class="cli-command">
+                            <span class="prompt">$</span>
+                            <span class="cmd">pip --version</span>
+                        </div>
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <strong>Expected output:</strong> <code>pip 24.3.1 from ... (python 3.13)</code>
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-download"></i> <strong>Need Python?</strong> Download it for free from: <a href="https://www.python.org/" target="_blank" style="color:#0d9488;">python.org</a>
+                            <br>
+                            <i class="fas fa-download"></i> <strong>Need PIP?</strong> Download from: <a href="https://pypi.org/project/pip/" target="_blank" style="color:#0d9488;">pypi.org/project/pip</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 6: Virtual Environment ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-cube"></i> Create Virtual Environment</div>
+                        <p>It's suggested to have a dedicated virtual environment for each Django project.</p>
+
+                        <div class="info-box">
+                            <i class="fas fa-info-circle"></i> <strong>What is a virtual environment?</strong> An isolated Python environment that keeps project dependencies separate from other projects.
+                        </div>
+
+                        <p>Create a virtual environment using <code>venv</code> (included in Python):</p>
+                        <div class="cli-command">
+                            <span class="prompt">$</span>
+                            <span class="cmd">python -m venv myworld</span>
+                        </div>
+                        <p style="font-size:0.85rem; color:#64748b;">This creates a folder named "myworld" with subfolders and files.</p>
+
+                        <p style="margin-top:1rem;">Activate the virtual environment:</p>
+                        <div class="two-columns">
+                            <div>
+                                <h4>Windows</h4>
+                                <div class="cli-command" style="font-size:0.8rem;">
+                                    <span class="prompt">$</span>
+                                    <span class="cmd">myworld\Scripts\activate.bat</span>
+                                </div>
+                                <div class="output-demo">
+                                    <code>(myworld) C:\Users\Your Name></code>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>Unix/MacOS</h4>
+                                <div class="cli-command" style="font-size:0.8rem;">
+                                    <span class="prompt">$</span>
+                                    <span class="cmd">source myworld/bin/activate</span>
+                                </div>
+                                <div class="output-demo">
+                                    <code>(myworld) ... $</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> You must activate the virtual environment every time you work on your project.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 7: Install Django ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-download"></i> Install Django</div>
+                        <p>Now that we have created a virtual environment, we are ready to install Django.</p>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> Remember to install Django while you are in the virtual environment!
+                        </div>
+
+                        <p>Django is installed using pip:</p>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">python -m pip install Django</span>
+                        </div>
+
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <strong>Expected output:</strong>
+                            <pre style="background:#1e293b; color:#e2e8f0; padding:0.5rem; border-radius:0.5rem; margin-top:0.3rem; font-size:0.75rem; overflow-x:auto;">
+Collecting Django
+  Downloading Django-5.1.7-py3-none-any.whl (8.3 MB)
+Successfully installed Django-5.1.7 asgiref-3.8.1 sqlparse-0.5.3 tzdata-2025.1
+                            </pre>
+                        </div>
+
+                        <p style="margin-top:1rem;">Check if Django is installed:</p>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">django-admin --version</span>
+                        </div>
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <strong>Expected output:</strong> <code>5.1.7</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 8: Create Django Project ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-folder-open"></i> Create Django Project</div>
+                        <p>Navigate to where you want to store your project (in the virtual environment) and run:</p>
+
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">django-admin startproject my_tennis_club</span>
+                        </div>
+
+                        <p style="margin-top:1rem;">Django creates a folder with this structure:</p>
+                        <div class="code-block" style="font-size:0.8rem;">
+                            my_tennis_club/<br>
+                            &nbsp;&nbsp;&nbsp;manage.py<br>
+                            &nbsp;&nbsp;&nbsp;my_tennis_club/<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__init__.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;asgi.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;settings.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;urls.py<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wsgi.py
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fas fa-file"></i> <strong>Key Files:</strong>
+                            <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                                <li><strong>manage.py:</strong> Command-line utility for Django</li>
+                                <li><strong>settings.py:</strong> Project configuration</li>
+                                <li><strong>urls.py:</strong> URL routing</li>
+                                <li><strong>wsgi.py:</strong> For deployment (Web Server Gateway Interface)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 9: Run the Project ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-play"></i> Run the Django Project</div>
+                        <p>Navigate to the project folder and run the development server:</p>
+
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">cd my_tennis_club</span>
+                        </div>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">python manage.py runserver</span>
+                        </div>
+
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <strong>Expected output:</strong>
+                            <pre style="background:#1e293b; color:#e2e8f0; padding:0.5rem; border-radius:0.5rem; margin-top:0.3rem; font-size:0.75rem; overflow-x:auto;">
+Watching for file changes with StatReloader
+Performing system checks...
+System check identified no issues (0 silenced).
+March 19, 2025 - 14:19:38
+Django version 5.1.7, using settings 'my_tennis_club.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+                            </pre>
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-globe"></i> <strong>Visit:</strong> Open a browser and go to <a href="http://127.0.0.1:8000" target="_blank" style="color:#0d9488;">http://127.0.0.1:8000</a>
+                            <br>
+                            <i class="fas fa-stop"></i> <strong>Stop server:</strong> Press <kbd>CTRL</kbd> + <kbd>BREAK</kbd> or <kbd>CTRL</kbd> + <kbd>C</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 10: Create App ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-puzzle-piece"></i> Create Django App</div>
+                        <p>An app is a web application with specific meaning in your project (like a members database).</p>
+
+                        <p>Create an app named "members":</p>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">python manage.py startapp members</span>
+                        </div>
+
+                        <p style="margin-top:1rem;">Django creates a folder with this structure:</p>
+                        <div class="code-block" style="font-size:0.8rem;">
+                            members/<br>
+                            &nbsp;&nbsp;&nbsp;migrations/<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__init__.py<br>
+                            &nbsp;&nbsp;&nbsp;__init__.py<br>
+                            &nbsp;&nbsp;&nbsp;admin.py<br>
+                            &nbsp;&nbsp;&nbsp;apps.py<br>
+                            &nbsp;&nbsp;&nbsp;models.py<br>
+                            &nbsp;&nbsp;&nbsp;tests.py<br>
+                            &nbsp;&nbsp;&nbsp;views.py
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fas fa-file"></i> <strong>Key Files:</strong>
+                            <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                                <li><strong>models.py:</strong> Database tables</li>
+                                <li><strong>views.py:</strong> Request handlers</li>
+                                <li><strong>admin.py:</strong> Admin interface configuration</li>
+                                <li><strong>migrations/:</strong> Database change history</li>
+                            </ul>
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-lightbulb"></i> <strong>Note:</strong> You cannot have a web page created with Django without an app.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 11: Views & URLs ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-eye"></i> Views & URLs</div>
+
+                        <p><strong>Views</strong> are Python functions that take http requests and return http responses.</p>
+
+                        <p>Open <code>members/views.py</code> and add:</p>
+                        <div class="code-block">
+                            <span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render<br>
+                            <span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse<br>
+                            <br>
+                            <span class="keyword">def</span> <span class="func">members</span>(request):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> HttpResponse(<span class="string">"Hello world!"</span>)
+                        </div>
+
+                        <p style="margin-top:1rem;">Create <code>members/urls.py</code>:</p>
+                        <div class="code-block">
+                            <span class="keyword">from</span> django.urls <span class="keyword">import</span> path<br>
+                            <span class="keyword">from</span> . <span class="keyword">import</span> views<br>
+                            <br>
+                            urlpatterns = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path(<span class="string">'members/'</span>, views.members, name=<span class="string">'members'</span>),<br>
+                            ]
+                        </div>
+
+                        <p style="margin-top:1rem;">Update root <code>my_tennis_club/urls.py</code>:</p>
+                        <div class="code-block">
+                            <span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin<br>
+                            <span class="keyword">from</span> django.urls <span class="keyword">import</span> include, path<br>
+                            <br>
+                            urlpatterns = [<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path(<span class="string">''</span>, include(<span class="string">'members.urls'</span>)),<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;path(<span class="string">'admin/'</span>, admin.site.urls),<br>
+                            ]
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fas fa-globe"></i> <strong>Visit:</strong> <a href="http://127.0.0.1:8000/members/" target="_blank" style="color:#0d9488;">http://127.0.0.1:8000/members/</a> to see "Hello world!"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 12: Models & Migrations ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-database"></i> Models & Migrations</div>
+                        <p>A Django model is a table in your database.</p>
+
+                        <p>Create a Member model in <code>members/models.py</code>:</p>
+                        <div class="code-block">
+                            <span class="keyword">from</span> django.db <span class="keyword">import</span> models<br>
+                            <br>
+                            <span class="keyword">class</span> <span class="func">Member</span>(models.Model):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;firstname = models.CharField(max_length=<span class="number">255</span>)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;lastname = models.CharField(max_length=<span class="number">255</span>)
+                        </div>
+
+                        <p style="margin-top:1rem;">Create migration file:</p>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">python manage.py makemigrations members</span>
+                        </div>
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <code>Migrations for 'members': members\migrations\0001_initial.py - Create model Member</code>
+                        </div>
+
+                        <p style="margin-top:1rem;">Apply the migration to create the table:</p>
+                        <div class="cli-command">
+                            <span class="prompt">(myworld) $</span>
+                            <span class="cmd">python manage.py migrate</span>
+                        </div>
+                        <div class="output-demo">
+                            <i class="fas fa-terminal"></i> <code>Applying members.0001_initial... OK</code>
+                        </div>
+
+                        <div class="info-box">
+                            <i class="fas fa-database"></i> <strong>SQLite Database:</strong> Django creates <code>db.sqlite3</code> in your project root. All models become tables in this database.
+                        </div>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-lightbulb"></i> <strong>View SQL:</strong> <code>python manage.py sqlmigrate members 0001</code> shows the SQL statement that was executed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SLIDE 13: Quiz ==================== -->
+            <div class="slide">
+                <div class="slide-card">
+                    <div class="slide-content">
+                        <div class="slide-title"><i class="fas fa-clipboard-list"></i> Module 1 Quiz</div>
+                        <p>Test your understanding. Answer the questions below, then reveal the answer key.</p>
+
+                        <div class="quiz-question">
+                            <p><strong>Q1:</strong> True or False. To install Django, you must have Python installed.</p>
+                            <label><input type="radio" name="q1" value="true"> True</label>
+                            <label><input type="radio" name="q1" value="false"> False</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q2:</strong> What is the correct syntax to set up a virtual environment with venv?</p>
+                            <label><input type="radio" name="q2" value="A"> A) python using venv myworld</label>
+                            <label><input type="radio" name="q2" value="B"> B) python -m venv myworld</label>
+                            <label><input type="radio" name="q2" value="C"> C) venv myworld</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q3:</strong> What is the correct syntax for installing Django on a Windows machine?</p>
+                            <label><input type="radio" name="q3" value="A"> A) python -m pip get Django</label>
+                            <label><input type="radio" name="q3" value="B"> B) python -m pip load D-jango</label>
+                            <label><input type="radio" name="q3" value="C"> C) python -m pip install Django</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q4:</strong> What is the correct function for specifying urls inside the urlspatterns list?</p>
+                            <label><input type="radio" name="q4" value="A"> A) path()</label>
+                            <label><input type="radio" name="q4" value="B"> B) address()</label>
+                            <label><input type="radio" name="q4" value="C"> C) loc()</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q5:</strong> What does MVT stand for in Django?</p>
+                            <label><input type="radio" name="q5" value="A"> A) Model-View-Template</label>
+                            <label><input type="radio" name="q5" value="B"> B) Model-View-Controller</label>
+                            <label><input type="radio" name="q5" value="C"> C) Module-View-Test</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q6:</strong> What is the correct syntax for creating a migration?</p>
+                            <label><input type="radio" name="q6" value="A"> A) python manage.py migrate members</label>
+                            <label><input type="radio" name="q6" value="B"> B) python manage.py makemigrations members</label>
+                            <label><input type="radio" name="q6" value="C"> C) python manage.py create members</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q7:</strong> What is the command to run the Django development server?</p>
+                            <label><input type="radio" name="q7" value="A"> A) python manage.py start</label>
+                            <label><input type="radio" name="q7" value="B"> B) python manage.py runserver</label>
+                            <label><input type="radio" name="q7" value="C"> C) python manage.py serve</label>
+                        </div>
+
+                        <div class="quiz-question">
+                            <p><strong>Q8:</strong> Which file contains the URL routing configuration?</p>
+                            <label><input type="radio" name="q8" value="A"> A) views.py</label>
+                            <label><input type="radio" name="q8" value="B"> B) models.py</label>
+                            <label><input type="radio" name="q8" value="C"> C) urls.py</label>
+                        </div>
+
+                        <button class="btn-toggle" id="revealAnswersBtn"><i class="fas fa-key"></i> Reveal Answer Key</button>
+                        <div id="answerKey" class="answer-key">
+                            <i class="fas fa-check-double"></i> <strong>ANSWER KEY</strong><br>
+                            <strong>Q1:</strong> True<br>
+                            <strong>Q2:</strong> B) python -m venv myworld<br>
+                            <strong>Q3:</strong> C) python -m pip install Django<br>
+                            <strong>Q4:</strong> A) path()<br>
+                            <strong>Q5:</strong> A) Model-View-Template<br>
+                            <strong>Q6:</strong> B) python manage.py makemigrations members<br>
+                            <strong>Q7:</strong> B) python manage.py runserver<br>
+                            <strong>Q8:</strong> C) urls.py
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end slides-wrapper -->
+    </div><!-- end slide-container -->
+
+    <!-- Navigation -->
+    <div class="slide-nav">
+        <button class="nav-btn nav-btn-prev" id="prevBtn" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+        <div class="slide-dots" id="dotsContainer"></div>
+        <button class="nav-btn" id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <script>
+        // ============================================================
+        // Slide Navigation
+        // ============================================================
+        const wrapper = document.getElementById('slidesWrapper');
+        const slides = wrapper.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const currentNum = document.getElementById('currentSlideNum');
+        const totalNum = document.getElementById('totalSlidesNum');
+        const progressFill = document.getElementById('progressFill');
+
+        totalNum.textContent = totalSlides;
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.dataset.index = i;
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            currentSlide = index;
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.className = 'dot' + (i === currentSlide ? ' active' : '');
+            });
+
+            // Update buttons
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+
+            // Update counter
+            currentNum.textContent = currentSlide + 1;
+
+            // Update progress
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressFill.style.width = progress + '%';
+
+            // Scroll to top of slide content
+            const slideContent = slides[currentSlide].querySelector('.slide-content');
+            if (slideContent) slideContent.scrollTop = 0;
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                goToSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                goToSlide(currentSlide - 1);
+            }
+        });
+
+        // ============================================================
+        // Reveal Answer Key
+        // ============================================================
+        const revealBtn = document.getElementById('revealAnswersBtn');
+        const answerDiv = document.getElementById('answerKey');
+
+        if (revealBtn && answerDiv) {
+            revealBtn.addEventListener('click', () => {
+                answerDiv.classList.toggle('show');
+                revealBtn.innerHTML = answerDiv.classList.contains('show') ?
+                    '<i class="fas fa-eye-slash"></i> Hide Answer Key' :
+                    '<i class="fas fa-key"></i> Reveal Answer Key';
+            });
+        }
+
+        // ============================================================
+        // Auto-mark completion
+        // ============================================================
+        (function markDay1Complete() {
+            try {
+                const completed = JSON.parse(localStorage.getItem('djangoCourseCompleted') || '{}');
+                if (!completed[0]) completed[0] = {};
+                completed[0][0] = true;
+                localStorage.setItem('djangoCourseCompleted', JSON.stringify(completed));
+            } catch (e) {}
+        })();
+
+        console.log('🐍 Welcome to Django DRF Bootcamp — Day 1!');
+        console.log('📚 Use arrow keys or buttons to navigate slides.');
+        console.log('💡 Today: Django Intro, MVT, Setup, Project Creation');
+    </script>
+</body>
+</html>
+
+

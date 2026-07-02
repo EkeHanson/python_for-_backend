@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Day 3 - Operators & Decision Making | Python Backend Course</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge {
+            background: #3b82f6;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .month-badge {
+            background: #8b5cf6;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            margin-left: 0.5rem;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        .duration {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .day-nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .day-nav-btn {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .day-nav-btn:hover {
+            background: #3b82f6;
+            transform: scale(0.98);
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2rem;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .slide-area {
+            min-height: 600px;
+            background: #0f1119;
+            padding: 2rem;
+        }
+        .slide-card {
+            background: rgba(22, 26, 38, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(72, 187, 255, 0.3);
+        }
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #E0F2FE, #7AA9FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1.2rem;
+        }
+        .slide-title i {
+            background: none;
+            color: #60a5fa;
+            font-size: 1.8rem;
+        }
+        .slide-sub {
+            color: #a0afc9;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1.2rem;
+        }
+        .content-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .concept-box {
+            flex: 1;
+            min-width: 240px;
+            background: #1a1f2e;
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .concept-box:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .concept-box h3 {
+            color: #7aa9ff;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .concept-box h3 i {
+            color: #60a5fa;
+        }
+        .concept-box p, .concept-box li {
+            color: #e2e8f0;
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+        .concept-box ul {
+            padding-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .insight-card {
+            margin-top: 1.2rem;
+            background: #0f172a;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: #e2e8f0;
+            border-left: 3px solid #3b82f6;
+        }
+        .code-block {
+            background: #0a0e18;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e6;
+            margin: 0.8rem 0;
+            border: 1px solid #334155;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: inherit;
+        }
+        .two-column-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .qa-section {
+            margin-top: 1.5rem;
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+        }
+        .qa-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qa-item {
+            background: #131b2e;
+            border-radius: 1rem;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #2d3a5e;
+        }
+        .qa-question {
+            padding: 1rem 1.2rem;
+            background: #1a2338;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: background 0.2s;
+        }
+        .qa-question:hover {
+            background: #25334d;
+        }
+        .qa-question i {
+            color: #60a5fa;
+            transition: transform 0.3s;
+        }
+        .qa-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: #0f172a;
+            color: #cbd5e6;
+            line-height: 1.5;
+        }
+        .qa-answer.show {
+            padding: 1rem 1.2rem;
+            max-height: 400px;
+        }
+        .nav-bar {
+            background: #0b0e16;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #2a2f3f;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        button {
+            background: #1e2a3a;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #334155;
+        }
+        button:hover:not(:disabled) {
+            background: #2d3a4e;
+            transform: scale(0.97);
+            border-color: #3b82f6;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            font-size: 0.9rem;
+            background: #1a1f2c;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: #a5b4fc;
+        }
+        .indicator-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .dot.active {
+            background: #3b82f6;
+            width: 22px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.7rem;
+            background: #07090f;
+            color: #8ca3c7;
+        }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div>
+        <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 1 · DAY 3</span>
+        <span class="month-badge"><i class="fas fa-calendar-month"></i> MONTH 1 · PYTHON FUNDAMENTALS</span>
+    </div>
+    <div class="class-title"><i class="fas fa-code-branch"></i> Operators & Decision Making</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 hours · Logic & Control Flow</div>
+    <div class="day-nav-buttons">
+        <a href="day2.html" class="day-nav-btn"><i class="fas fa-arrow-left"></i> Day 2</a>
+        <a href="../week2/day1.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Week 2 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn" aria-label="Previous slide"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 13</span>
+            <button id="nextBtn" aria-label="Next slide">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers
+    </footer>
+</div>
+
+<script>
+    // ==================== DAY 3 SLIDES (13 total) ====================
+    const slides = [
+        {
+            title: "<i class='fas fa-calculator'></i> Arithmetic Operators",
+            subtitle: "Performing mathematical operations in Python",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-plus-circle"></i> Basic Operators</h3><p><span class="highlight">+</span> Addition: 5 + 3 = 8<br><span class="highlight">-</span> Subtraction: 10 - 4 = 6<br><span class="highlight">*</span> Multiplication: 6 * 7 = 42<br><span class="highlight">/</span> Division: 15 / 4 = 3.75 (always returns float)</p></div><div class="concept-box"><h3><i class="fas fa-percent"></i> Special Operators</h3><p><span class="highlight">//</span> Floor Division: 15 // 4 = 3<br><span class="highlight">%</span> Modulus: 17 % 5 = 2<br><span class="highlight">**</span> Exponentiation: 2 ** 3 = 8</p></div></div><div class="code-block"><pre>a, b = 15, 4<br>print(a + b)   # 19<br>print(a - b)   # 11<br>print(a * b)   # 60<br>print(a / b)   # 3.75<br>print(a // b)  # 3<br>print(a % b)   # 3<br>print(2 ** 3)  # 8</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-balance-scale'></i> Comparison Operators",
+            subtitle: "Comparing values (returns True or False)",
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-equals"></i> Equality & Inequality</h3><p><span class="highlight">==</span> equal to: 5 == 5 → True<br><span class="highlight">!=</span> not equal: 5 != 3 → True<br><span class="highlight">></span> greater than: 10 > 5 → True<br><span class="highlight">&lt;</span> less than: 3 &lt; 7 → True</p></div><div class="concept-box"><h3><i class="fas fa-greater-than"></i> Greater/Less or Equal</h3><p><span class="highlight">>=</span> greater or equal: 5 >= 5 → True<br><span class="highlight">&lt;=</span> less or equal: 4 &lt;= 3 → False</p></div></div><div class="code-block"><pre>score = 85<br>print(score > 90)   # False<br>print(score >= 85)  # True<br>print(score == 100) # False</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-gate'></i> Logical Operators",
+            subtitle: "Combining conditions: and, or, not",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-and"></i> AND</h3><p>True and True → True<br>True and False → False</p></div><div class="concept-box"><h3><i class="fas fa-or"></i> OR</h3><p>True or False → True<br>False or False → False</p></div><div class="concept-box"><h3><i class="fas fa-not"></i> NOT</h3><p>not True → False<br>not False → True</p></div></div><div class="code-block"><pre>age, has_license = 25, True<br>can_drive = age >= 18 and has_license  # True<br>is_weekend, is_holiday = False, True<br>go_party = is_weekend or is_holiday   # True</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-search'></i> Membership Operators",
+            subtitle: "Checking if something exists in a collection",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-circle"></i> in Operator</h3><p>Returns True if value exists in sequence</p><div class="code-block"><pre>print('a' in "hello")  # True<br>print('z' in "hello")  # False</pre></div></div><div class="concept-box"><h3><i class="fas fa-times-circle"></i> not in Operator</h3><p>Returns True if value does NOT exist</p><div class="code-block"><pre>print('x' not in "Python")  # True<br>print('P' not in "Python")  # False</pre></div></div></div><div class="insight-card"><i class="fas fa-lightbulb"></i> Useful for checking user input, validation, and searching.</div>`
+        },
+        {
+            title: "<i class='fas fa-code-branch'></i> if Statement",
+            subtitle: "Making decisions in code — the foundation of logic",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-diagram-project"></i> if Syntax</h3><div class="code-block"><pre>if condition:<br>    # runs if True<br>    print("Condition met!")</pre></div></div><div class="concept-box"><h3><i class="fas fa-exclamation-triangle"></i> Important Rules</h3><p>✅ Condition must be Boolean<br>✅ Colon (:) after condition<br>✅ Indentation REQUIRED (4 spaces)</p></div></div><div class="code-block"><pre>temperature = 30<br>if temperature > 25:<br>    print("It's a hot day!")<br>    print("Drink water!")</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-share-alt'></i> if-else Statement",
+            subtitle: "Two-way decision making",
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-code-branch"></i> if-else Syntax</h3><div class="code-block"><pre>if condition:<br>    # runs if True<br>else:<br>    # runs if False</pre></div></div><div class="concept-box"><h3><i class="fas fa-battery-full"></i> Real Example</h3><div class="code-block"><pre>age = 16<br>if age >= 18:<br>    print("Adult")<br>else:<br>    print("Minor")</pre></div></div></div>`
+        },
+        {
+            title: "<i class='fas fa-layer-group'></i> elif (Multiple Conditions)",
+            subtitle: "Checking many possibilities",
+            content: `<div class="concept-box"><h3><i class="fas fa-chart-simple"></i> elif = else if</h3><div class="code-block"><pre>if condition1:<br>    # condition1 True<br>elif condition2:<br>    # condition1 False AND condition2 True<br>elif condition3:<br>    # previous False, condition3 True<br>else:<br>    # all False</pre></div></div><div class="code-block"><pre>score = 85<br>if score >= 90: grade = "A"<br>elif score >= 80: grade = "B"<br>elif score >= 70: grade = "C"<br>else: grade = "F"<br>print(f"Grade: {grade}")  # Grade: B</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-star'></i> Practical: Grading System",
+            subtitle: "Build a complete grade calculator",
+            content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Grading System Requirements</h3><ul><li>✓ Ask for student's score (0-100)</li><li>✓ Validate input (between 0-100)</li><li>✓ Assign letter grade: A(90+), B(80-89), C(70-79), D(60-69), F(0-59)</li><li>✓ Display grade and feedback message</li></ul></div><div class="code-block"><pre>score = int(input("Enter score (0-100): "))<br><br>if score &lt; 0 or score &gt; 100:<br>    print("Invalid score!")<br>elif score >= 90: print("Grade: A - Excellent!")<br>elif score >= 80: print("Grade: B - Good job!")<br>elif score >= 70: print("Grade: C - Satisfactory")<br>elif score >= 60: print("Grade: D - Need improvement")<br>else: print("Grade: F - Failed")</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-university'></i> Practical: ATM Simulation",
+            subtitle: "Banking logic with if-elif-else",
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-money-bill-wave"></i> ATM Requirements</h3><ul><li>Start balance = $1000</li><li>1=Balance, 2=Withdraw, 3=Deposit, 4=Exit</li><li>Check sufficient funds for withdrawal</li></ul></div><div class="concept-box"><h3><i class="fas fa-code"></i> Starter Code</h3><div class="code-block"><pre>balance = 1000<br>choice = int(input("1.Balance 2.Withdraw 3.Deposit: "))<br><br>if choice == 1:<br>    print(f"Balance: \${balance}")<br>elif choice == 2:<br>    amount = float(input("Amount: "))<br>    if amount <= balance:<br>        balance -= amount<br>        print(f"New balance: \${balance}")<br>    else: print("Insufficient funds!")<br>elif choice == 3:<br>    amount = float(input("Deposit: "))<br>    balance += amount<br>    print(f"New balance: \${balance}")</pre></div></div></div>`
+        },
+        {
+            title: "<i class='fas fa-code'></i> Nested Conditions & Ternary Operator",
+            subtitle: "Advanced decision making",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-diagram-project"></i> Nested if</h3><div class="code-block"><pre>if age >= 18:<br>    if has_license:<br>        print("Can drive")<br>    else: print("Need license")<br>else: print("Too young")</pre></div></div><div class="concept-box"><h3><i class="fas fa-question"></i> Ternary Operator</h3><div class="code-block"><pre># value_if_true if condition else value_if_false<br>status = "Adult" if age >= 18 else "Minor"</pre></div></div></div>`
+        },
+        {
+            title: "<i class='fas fa-chalkboard'></i> Common Pitfalls & Best Practices",
+            subtitle: "Avoid these common mistakes",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-exclamation-triangle"></i> Common Mistakes</h3><ul><li>❌ Using = instead of == in conditions</li><li>❌ Forgetting the colon (:) after if/elif/else</li><li>❌ Inconsistent indentation</li><li>❌ Not converting input() from string</li></ul></div><div class="concept-box"><h3><i class="fas fa-check-circle"></i> Best Practices</h3><ul><li>✅ Use 4 spaces for indentation</li><li>✅ Keep conditions simple</li><li>✅ Validate user input first</li><li>✅ Use elif instead of nested ifs when possible</li></ul></div></div>`
+        },
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test your understanding of operators and conditionals",
+            content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>`
+        },
+        {
+            title: "<i class='fas fa-clipboard-list'></i> Assignment & Next Steps",
+            subtitle: "What to complete before Week 2",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-double"></i> Complete These Tasks</h3><ul><li>✅ Build the Grading System with input validation</li><li>✅ Create the ATM Simulation with all 4 options</li><li>✅ Write a program that determines if a year is a leap year</li><li>✅ Create a simple calculator with if statements</li><li>✅ Write a number guessing game</li></ul></div><div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Week 2 Preview</h3><p><strong>Week 2: Control Flow & Loops</strong><br>Day 4: while/for loops, range()<br>Day 5: break, continue, pass<br>Day 6: Error handling (try/except)</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> "Mastering conditionals is the first step toward writing intelligent, decision-making programs!"</div>`
+        }
+    ];
+
+    // Q&A Data
+    const qaData = [
+        { q: "What does the % operator do?", a: "The modulus operator (%) returns the remainder of division. Example: 17 % 5 = 2." },
+        { q: "What's the difference between = and ==?", a: "= is assignment (x = 5). == is comparison (x == 5 returns True/False)." },
+        { q: "What do logical operators AND, OR, NOT do?", a: "AND: both True → True. OR: at least one True → True. NOT: reverses Boolean value." },
+        { q: "What is the syntax of an if-elif-else statement?", a: "if condition1: block1; elif condition2: block2; elif condition3: block3; else: block4" },
+        { q: "Why is indentation important in Python?", a: "Indentation defines code blocks. Unlike other languages that use braces {}, Python uses indentation to group statements." },
+        { q: "What does the 'in' operator do?", a: "Checks if a value exists in a sequence (string, list, tuple). Returns True if found." },
+        { q: "How do you check if a number is even using modulus?", a: "number % 2 == 0 → True for even numbers, False for odd numbers." },
+        { q: "What is a ternary operator?", a: "A one-line if-else: value_if_true if condition else value_if_false" },
+        { q: "What happens if you forget the colon after an if statement?", a: "Python raises a SyntaxError. The colon is required to indicate the start of the indented block." },
+        { q: "How do you combine multiple conditions?", a: "Using logical operators: and, or. Example: if age >= 18 and has_license: print('Can drive')" }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                if (answerDiv) {
+                    answerDiv.classList.toggle('show');
+                    if (icon) {
+                        icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+                    }
+                }
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">${slide.content}</div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        
+        if (index === 11) {
+            renderQA();
+        }
+        
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        if (prevBtn) prevBtn.disabled = (index === 0);
+        if (nextBtn) nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { 
+        if (currentIndex < totalSlides - 1) { 
+            currentIndex++; 
+            renderSlide(currentIndex); 
+        } 
+    }
+    
+    function prevSlide() { 
+        if (currentIndex > 0) { 
+            currentIndex--; 
+            renderSlide(currentIndex); 
+        } 
+    }
+    
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { 
+            e.preventDefault(); 
+            nextSlide(); 
+        } else if (e.key === 'ArrowLeft') { 
+            e.preventDefault(); 
+            prevSlide(); 
+        }
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    
+    renderSlide(0);
+</script>
+</body>
+</html>

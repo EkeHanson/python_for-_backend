@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Django Backend Dev | 3-Month API Course</title>
+    <!-- Font Awesome 6 (free) - no hardcoded icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            color: #eef2ff;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+        }
+
+        .hero-section {
+            background: radial-gradient(ellipse at 70% 30%, rgba(37, 99, 235, 0.15), transparent);
+            border-radius: 2.5rem;
+            padding: 2rem 2rem 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(2px);
+        }
+        .course-badge {
+            display: inline-flex;
+            gap: 0.6rem;
+            background: #1e293b;
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            border: 1px solid #334155;
+        }
+        .course-badge i {
+            color: #fbbf24;
+        }
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(115deg, #fff, #7aa9ff, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .hero-sub {
+            font-size: 1.1rem;
+            color: #9ca3cf;
+            max-width: 75%;
+            margin-bottom: 2rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .stat-card {
+            background: #0f172ad9;
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #2d3a5e;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .stat-card i {
+            font-size: 1.8rem;
+            color: #60a5fa;
+        }
+        .stat-card span {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #fbbf24;
+        }
+        .stat-card p {
+            font-size: 0.8rem;
+            color: #cbd5e6;
+        }
+
+        .week-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 0.5rem;
+        }
+        .week-btn {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .week-btn i {
+            font-size: 1rem;
+        }
+        .week-btn.active {
+            background: #1e293b;
+            color: #60a5fa;
+            border-bottom: 2px solid #3b82f6;
+        }
+        .week-btn:hover:not(.active) {
+            background: #1e2a3a;
+            color: #cbd5e6;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.8rem;
+            margin: 1.5rem 0 2rem;
+        }
+        .day-card {
+            background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+            border-radius: 1.8rem;
+            border: 1px solid #2d3a5e;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .day-card:hover {
+            transform: translateY(-6px);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.5);
+            background: #131c2e;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .week-badge {
+            background: #2563eb20;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #7aa9ff;
+            border: 1px solid #3b82f670;
+        }
+        .day-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #e2e8f0;
+        }
+        .day-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0.5rem 0 0.4rem;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+        .topics-preview {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin: 0.8rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .topic-tag {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.7rem;
+            font-family: monospace;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            border-top: 1px solid #1e293b;
+            padding-top: 0.8rem;
+        }
+        .btn-launch {
+            background: #1e2a3a;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: 0.2s;
+        }
+        .btn-launch i {
+            font-size: 0.7rem;
+        }
+        .day-card:hover .btn-launch {
+            background: #3b82f6;
+            color: white;
+        }
+        .duration-badge {
+            font-size: 0.7rem;
+            color: #7e8aae;
+        }
+
+        .progress-area {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1rem 1.8rem;
+            margin: 2rem 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #2d3a5e;
+        }
+        .progress-text {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .progress-bar-bg {
+            background: #1e293b;
+            border-radius: 30px;
+            height: 8px;
+            width: 200px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            width: 0%;
+            height: 100%;
+            border-radius: 30px;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.75rem;
+            color: #6c7a9e;
+            border-top: 1px solid #1a2538;
+            margin-top: 1rem;
+        }
+        footer i {
+            color: #f97316;
+        }
+
+        @media (max-width: 780px) {
+            .container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .hero-sub {
+                max-width: 100%;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-card span {
+                font-size: 1.2rem;
+            }
+        }
+
+        .info-message {
+            background: #0f172a;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            border-left: 5px solid #fbbf24;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .info-message i {
+            margin-right: 0.5rem;
+            color: #fbbf24;
+        }
+        
+        .folder-path-hint {
+            background: #1a2338;
+            border-radius: 0.8rem;
+            padding: 0.5rem 1rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #7aa9ff;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero-section">
+        <div class="course-badge">
+            <i class="fas fa-code-branch"></i> Full-stack API Engineer Track
+            <i class="fas fa-certificate"></i> 108h
+        </div>
+        <h1><i class="fas fa-dragon"></i> Python Django Backend<br>API Development</h1>
+        <div class="hero-sub">
+            From absolute beginner to production-ready REST APIs. Master Django, DRF, JWT, PostgreSQL, and deployment.
+            <strong>3 Months · 3 days/week · 3h/day</strong>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card"><i class="fas fa-calendar-week"></i><div><span>12</span><p>Weeks</p></div></div>
+            <div class="stat-card"><i class="fas fa-chalkboard-user"></i><div><span>36</span><p>Live Classes</p></div></div>
+            <div class="stat-card"><i class="fas fa-laptop-code"></i><div><span>108h</span><p>Total Training</p></div></div>
+            <div class="stat-card"><i class="fas fa-microchip"></i><div><span>DRF + JWT</span><p>Professional Stack</p></div></div>
+        </div>
+    </div>
+
+    <!-- Week Tabs (showing first 2 weeks as requested) -->
+    <div class="week-tabs">
+        <button class="week-btn active" data-week="week1"><i class="fas fa-calendar-week"></i> Week 1 · Python Foundations</button>
+        <button class="week-btn" data-week="week2"><i class="fas fa-calendar-week"></i> Week 2 · Control Flow & Loops</button>
+        <button class="week-btn" data-week="week3"><i class="fas fa-calendar-week"></i> Week 3 · Data Structures</button>
+        <button class="week-btn" data-week="week4"><i class="fas fa-calendar-week"></i> Week 4 · Intermediate Python</button>
+    </div>
+
+    <div id="classesGrid" class="courses-grid"></div>
+
+    <div class="progress-area">
+        <div class="progress-text"><i class="fas fa-chart-simple"></i> Course completion</div>
+        <div class="progress-bar-bg"><div class="progress-fill" id="globalProgressFill" style="width:0%"></div></div>
+        <div><span id="completedCount">0</span> / <span id="totalClassesCount">36</span> classes visited</div>
+        <div><i class="fas fa-info-circle"></i> Click any card → opens day's class</div>
+    </div>
+
+    <div class="info-message">
+        <i class="fas fa-folder-open"></i> <strong>Current folder structure:</strong>
+        <div class="folder-path-hint">
+            📁 Python/<br>
+            &nbsp;&nbsp;📄 index.html (this file)<br>
+            &nbsp;&nbsp;📁 week 1/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;📄 day1.html &nbsp;📄 day2.html &nbsp;📄 day3.html<br>
+            &nbsp;&nbsp;📁 week 2/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;📄 day1.html &nbsp;📄 day2.html
+        </div>
+        <br>
+        <i class="fas fa-arrow-right-to-bracket"></i> <strong>Navigation:</strong> Click any class card to open the corresponding HTML file. Each day's page will have progressive slides and toggleable Q&A.
+    </div>
+    <footer>
+        <i class="fas fa-chalkboard"></i> 3-Month Django Backend Curriculum · Progressive slides · Toggleable quizzes<br>
+        <i class="fas fa-mobile-alt"></i> Fully responsive · Direct navigation to week 1 & week 2 class files
+    </footer>
+</div>
+
+<script>
+    // Complete curriculum data with EXACT paths matching your folder structure
+    const classesData = [
+        // WEEK 1 - Python Foundations (Days 1-3)
+        { id:1, dayNum:1, title:"Python & Backend Intro", week:"week1", weekDisplay:"Week 1", dayFolder:"week 1", filename:"day1.html", topics:["Python install","VS Code","Hello World","Variables"] },
+        { id:2, dayNum:2, title:"Variables & Data Types", week:"week1", weekDisplay:"Week 1", dayFolder:"week 1", filename:"day2.html", topics:["Strings","Integers","Type conversion","User input"] },
+        { id:3, dayNum:3, title:"Operators & Conditionals", week:"week1", weekDisplay:"Week 1", dayFolder:"week 1", filename:"day3.html", topics:["Arithmetic","Comparison","if/elif/else","Grading system"] },
+        
+        // WEEK 2 - Control Flow & Loops (Days 1-2 as per your files)
+        { id:4, dayNum:1, title:"Loops (while/for)", week:"week2", weekDisplay:"Week 2", dayFolder:"week 2", filename:"day1.html", topics:["while loop","for loop","break/continue","range()"] },
+        { id:5, dayNum:2, title:"Functions & Scope", week:"week2", weekDisplay:"Week 2", dayFolder:"week 2", filename:"day2.html", topics:["Parameters","Return values","Scope","Calculator app"] },
+        
+        // Additional classes for future weeks (paths will be created later)
+        { id:6, dayNum:3, title:"Error Handling", week:"week2", weekDisplay:"Week 2", dayFolder:"week 2", filename:"day3.html", topics:["try/except","finally","Robust code"], isPlaceholder:true },
+        { id:7, dayNum:1, title:"Lists & Methods", week:"week3", weekDisplay:"Week 3", dayFolder:"week 3", filename:"day1.html", topics:["Indexing","Slicing","List methods"], isPlaceholder:true },
+        { id:8, dayNum:2, title:"Tuples, Sets, Dicts", week:"week3", weekDisplay:"Week 3", dayFolder:"week 3", filename:"day2.html", topics:["Contact book","Dictionary methods"], isPlaceholder:true },
+        { id:9, dayNum:3, title:"Nested Data Structures", week:"week3", weekDisplay:"Week 3", dayFolder:"week 3", filename:"day3.html", topics:["JSON-like","Employee DB"], isPlaceholder:true },
+        { id:10, dayNum:1, title:"Modules & Packages", week:"week4", weekDisplay:"Week 4", dayFolder:"week 4", filename:"day1.html", topics:["pip","import","Utility lib"], isPlaceholder:true },
+        { id:11, dayNum:2, title:"OOP: Classes & Objects", week:"week4", weekDisplay:"Week 4", dayFolder:"week 4", filename:"day2.html", topics:["Attributes","Methods","Bank system"], isPlaceholder:true },
+        { id:12, dayNum:3, title:"Advanced OOP", week:"week4", weekDisplay:"Week 4", dayFolder:"week 4", filename:"day3.html", topics:["Inheritance","Polymorphism"], isPlaceholder:true },
+    ];
+
+    // Get visited classes from localStorage
+    function getVisitedSet() {
+        const visited = localStorage.getItem("django_course_visited");
+        if(visited) return new Set(JSON.parse(visited));
+        return new Set();
+    }
+    
+    function markVisited(classId) {
+        const visited = getVisitedSet();
+        visited.add(classId);
+        localStorage.setItem("django_course_visited", JSON.stringify([...visited]));
+        updateProgressUI();
+    }
+    
+    function updateProgressUI() {
+        const visited = getVisitedSet();
+        const total = classesData.length;
+        const completed = visited.size;
+        const percent = (completed / total) * 100;
+        const fillBar = document.getElementById("globalProgressFill");
+        if(fillBar) fillBar.style.width = percent + "%";
+        const completedSpan = document.getElementById("completedCount");
+        if(completedSpan) completedSpan.innerText = completed;
+        const totalSpan = document.getElementById("totalClassesCount");
+        if(totalSpan) totalSpan.innerText = total;
+    }
+
+    let currentFilter = "week1";
+
+    function getClassPath(cls) {
+        // Build the exact path based on your folder structure
+        // Example: "week 1/day1.html" or "week 2/day2.html"
+        if (cls.isPlaceholder) {
+            return null; // Placeholder for future content
+        }
+        return `${cls.dayFolder}/${cls.filename}`;
+    }
+
+    function renderGrid() {
+        const gridContainer = document.getElementById("classesGrid");
+        if(!gridContainer) return;
+        
+        const filtered = classesData.filter(cls => cls.week === currentFilter);
+        if(filtered.length === 0) {
+            gridContainer.innerHTML = `<div class="info-message" style="grid-column:1/-1"><i class="fas fa-layer-group"></i> No classes available for this week yet.</div>`;
+            return;
+        }
+        
+        const visitedSet = getVisitedSet();
+        let html = "";
+        
+        filtered.forEach(cls => {
+            const isVisited = visitedSet.has(cls.id);
+            const filePath = getClassPath(cls);
+            const isClickable = filePath !== null;
+            const topicsHtml = cls.topics.map(t => `<span class="topic-tag"><i class="fas fa-code"></i> ${t}</span>`).join("");
+            
+            html += `
+                <div class="day-card" data-class-id="${cls.id}" data-file-path="${filePath || ''}" data-clickable="${isClickable}">
+                    <div class="card-header">
+                        <span class="week-badge"><i class="far fa-calendar-alt"></i> ${cls.weekDisplay} · Day ${cls.dayNum}</span>
+                        <span class="day-number"><i class="fas fa-hashtag"></i> Class ${cls.id}</span>
+                    </div>
+                    <div class="day-title">${escapeHtml(cls.title)}</div>
+                    <div class="topics-preview">
+                        ${topicsHtml}
+                    </div>
+                    <div class="card-footer">
+                        <span class="duration-badge"><i class="far fa-clock"></i> 3 hours</span>
+                        <div class="btn-launch">
+                            ${isVisited ? '<i class="fas fa-check-circle"></i> Review' : '<i class="fas fa-play"></i> Launch class'}
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    ${isVisited ? '<div style="font-size:10px; margin-top:6px; color:#60a5fa;"><i class="fas fa-flag-checkered"></i> previously visited</div>' : ''}
+                    ${!isClickable && !cls.isPlaceholder ? '<div style="font-size:10px; margin-top:6px; color:#f97316;"><i class="fas fa-clock"></i> Coming soon</div>' : ''}
+                </div>
+            `;
+        });
+        
+        gridContainer.innerHTML = html;
+
+        // Attach click event to cards
+        document.querySelectorAll('.day-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const classId = parseInt(card.getAttribute('data-class-id'));
+                const filePath = card.getAttribute('data-file-path');
+                const isClickable = card.getAttribute('data-clickable') === 'true';
+                
+                if(isClickable && filePath) {
+                    // Mark as visited
+                    markVisited(classId);
+                    // Navigate to the HTML file
+                    window.location.href = filePath;
+                } else {
+                    alert(`📅 ${card.querySelector('.day-title')?.innerText || 'Class'} will be available soon!\n\nFile path: ${filePath}\nPlease create the HTML file at this location to enable navigation.`);
+                }
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Week tabs interaction
+    function initTabs() {
+        const btns = document.querySelectorAll('.week-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const week = btn.getAttribute('data-week');
+                if(week) {
+                    currentFilter = week;
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderGrid();
+                }
+            });
+        });
+    }
+
+    // Initial load
+    function init() {
+        updateProgressUI();
+        renderGrid();
+        initTabs();
+        
+        // Log available paths for debugging
+        console.log("Available class paths:");
+        classesData.forEach(cls => {
+            const path = getClassPath(cls);
+            if(path) console.log(`✅ ${cls.title} → ${path}`);
+            else if(cls.isPlaceholder) console.log(`⏳ ${cls.title} → (placeholder - create ${cls.dayFolder}/${cls.filename})`);
+        });
+    }
+
+    init();
+</script>
+</body>
+</html>
