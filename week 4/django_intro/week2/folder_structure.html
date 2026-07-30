@@ -1,0 +1,817 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Django · Folder Structure & Files Explained</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0b1a1f 0%, #0f2129 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .curriculum-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0d1f26 0%, #1a2f38 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #2b4a55;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5);
+        }
+        .badge {
+            background: #0f7b8c;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #e0f2fe;
+            letter-spacing: 0.3px;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #d4edf5;
+        }
+        .duration {
+            color: #8bb4c2;
+            font-size: 0.85rem;
+        }
+
+        .class-nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-left: auto;
+        }
+        .class-nav-btn {
+            background: #1a2f38;
+            border: 1px solid #2f7a8a;
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .class-nav-btn:hover {
+            background: #0f7b8c;
+            transform: scale(0.97);
+            border-color: #5bb5cc;
+        }
+        .class-nav-btn i {
+            font-size: 0.8rem;
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 22, 28, 0.7);
+            border-radius: 2rem;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.6), 0 0 0 1px rgba(70, 180, 200, 0.2);
+            overflow: hidden;
+        }
+
+        .slide-area {
+            min-height: 600px;
+            background: #0b1a1f;
+            padding: 2rem;
+        }
+
+        .slide-card {
+            background: rgba(15, 32, 40, 0.96);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+            border: 1px solid rgba(45, 140, 160, 0.4);
+        }
+
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #b5e6f0, #6ec8e0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-left: 5px solid #2f9eb0;
+            padding-left: 1.2rem;
+        }
+
+        .slide-title i {
+            background: none;
+            -webkit-background-clip: unset;
+            color: #5bb5cc;
+            font-size: 1.8rem;
+        }
+
+        .slide-sub {
+            color: #a2cbd8;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-left: 5px solid #2f9eb0;
+            padding-left: 1.2rem;
+        }
+
+        .content-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .concept-box {
+            flex: 1;
+            min-width: 240px;
+            background: #112a32;
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            border: 1px solid #2a5563;
+            transition: all 0.2s;
+        }
+        .concept-box:hover {
+            border-color: #3ba6bb;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,40,50,0.5);
+        }
+
+        .concept-box h3 {
+            color: #7ecfdf;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .concept-box h3 i {
+            color: #54b7cc;
+        }
+
+        .concept-box p, .concept-list, .concept-box li {
+            color: #d6eaf0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: #f7d44a;
+            font-weight: 600;
+        }
+
+        .tag {
+            background: #1a3a44;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #b9e2ed;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .insight-card {
+            margin-top: 1.2rem;
+            background: #0f242b;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: #d6eaf0;
+            border-left: 3px solid #2f9eb0;
+        }
+
+        .two-column-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .col {
+            flex: 1;
+            background: #112a32;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border: 1px solid #2b5b6a;
+        }
+        .col h4 {
+            color: #f7d44a;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+        .col h4 i {
+            margin-right: 0.5rem;
+        }
+        .col p, .col li {
+            color: #d6eaf0;
+        }
+
+        .extensions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 0.8rem 0;
+        }
+        .ext-card {
+            background: #0f242b;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            border-left: 3px solid #2f9eb0;
+            flex: 1;
+            min-width: 200px;
+            color: #d6eaf0;
+        }
+        .ext-card strong {
+            color: #f7d44a;
+        }
+        .ext-card i {
+            margin-right: 0.5rem;
+            color: #54b7cc;
+        }
+
+        pre {
+            background: #0a1a20;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            color: #d6eaf0;
+            margin: 0.8rem 0;
+            border: 1px solid #2a5563;
+            font-family: 'Fira Code', monospace;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #c6e2ed;
+        }
+
+        .folder-structure {
+            background: #0f242b;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #aedae8;
+            border: 1px solid #2a5563;
+            line-height: 1.7;
+        }
+        .folder-structure i {
+            color: #5bb5cc;
+            width: 1.5rem;
+        }
+
+        .shortcut-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+        }
+        .shortcut {
+            background: #1a3a44;
+            border-radius: 0.8rem;
+            padding: 0.5rem 1rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #f7d44a;
+            border: 1px solid #2f7a8a;
+        }
+
+        .qa-section {
+            margin-top: 1.5rem;
+            background: #0f242b;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #2a5563;
+        }
+        .qa-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f7d44a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qa-item {
+            background: #112a32;
+            border-radius: 1rem;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #2a5563;
+        }
+        .qa-question {
+            padding: 1rem 1.2rem;
+            background: #1a3a44;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #d6eaf0;
+            transition: background 0.2s;
+        }
+        .qa-question:hover {
+            background: #234f5c;
+        }
+        .qa-question i {
+            color: #54b7cc;
+            transition: transform 0.3s;
+        }
+        .qa-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: #0f242b;
+            color: #c6e2ed;
+            line-height: 1.5;
+        }
+        .qa-answer.show {
+            padding: 1rem 1.2rem;
+            max-height: 300px;
+        }
+        .qa-answer p {
+            margin: 0;
+            color: #c6e2ed;
+        }
+
+        .nav-bar {
+            background: #09181e;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #1d3f4a;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            background: #1a3a44;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            color: #d6eaf0;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #2a5563;
+        }
+
+        button i {
+            font-size: 0.9rem;
+        }
+
+        button:hover:not(:disabled) {
+            background: #2a5f6e;
+            transform: scale(0.97);
+            border-color: #3ba6bb;
+        }
+
+        button:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            background: #112a32;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: #aedae8;
+        }
+
+        .indicator-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #2a5563;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .dot.active {
+            background: #3ba6bb;
+            width: 22px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.7rem;
+            background: #071317;
+            color: #8bb4c2;
+        }
+        footer i {
+            color: #54b7cc;
+        }
+        footer a {
+            color: #54b7cc;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .two-column-split { flex-direction: column; }
+            .class-nav-buttons { margin-left: 0; margin-top: 0.5rem; }
+            .curriculum-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="curriculum-header">
+    <div><span class="badge"><i class="fas fa-database"></i> DJANGO · CORE CONCEPTS</span></div>
+    <div class="class-title"><i class="fab fa-python"></i> Django Folder Structure & Files</div>
+    <div class="duration"><i class="far fa-clock"></i> 1h 30min · Understand every file</div>
+    <div class="class-nav-buttons">
+        <a href="#" class="class-nav-btn"><i class="fas fa-arrow-left"></i> Prev</a>
+        <a href="#" class="class-nav-btn"><i class="fas fa-arrow-right"></i> Next →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 10</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-folder-open"></i> Django project root · manage.py · settings.py · urls.py · wsgi.py · asgi.py
+        <span style="margin-left: 1rem;">| <a href="#"><i class="fas fa-arrow-left"></i> Prev</a> | <a href="#">Next <i class="fas fa-arrow-right"></i></a></span>
+    </footer>
+</div>
+
+<script>
+    const slides = [
+        {
+            title: "<i class='fab fa-django'></i> Django Project Anatomy",
+            subtitle: "What's inside a Django project? Let's decode every file.",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-sitemap"></i> Project vs App</h3>
+                        <p><span class="highlight">Project</span> = entire website configuration.<br>
+                        <span class="highlight">App</span> = a module that does one thing (blog, auth, polls).</p>
+                        <p>A project can have many apps.</p>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-folder-tree"></i> Default Structure</h3>
+                        <p>After <code>django-admin startproject myproject</code>:</p>
+                        <div class="folder-structure" style="margin-top:6px; font-size:0.8rem;">
+                            <i class="fas fa-folder-open"></i> myproject/<br>
+                            <i class="fas fa-file-code"></i> ├── manage.py<br>
+                            <i class="fas fa-folder"></i> └── myproject/<br>
+                            <i class="fas fa-file-code"></i>     ├── __init__.py<br>
+                            <i class="fas fa-file-code"></i>     ├── settings.py<br>
+                            <i class="fas fa-file-code"></i>     ├── urls.py<br>
+                            <i class="fas fa-file-code"></i>     ├── asgi.py<br>
+                            <i class="fas fa-file-code"></i>     └── wsgi.py
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-info-circle"></i> <span class="tag">key insight</span> <span>Everything in Django is explicit — every file has a clear purpose.</span></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-cog'></i> manage.py — The Control Center",
+            subtitle: "Your Swiss Army knife for Django commands",
+            content: `
+                <div class="two-column-split">
+                    <div class="col"><h4><i class="fas fa-terminal"></i> What it does</h4>
+                        <ul style="margin-left:1.2rem;">
+                            <li><span class="highlight">Run server:</span> <code>python manage.py runserver</code></li>
+                            <li><span class="highlight">Create app:</span> <code>python manage.py startapp polls</code></li>
+                            <li><span class="highlight">Migrate DB:</span> <code>python manage.py migrate</code></li>
+                            <li><span class="highlight">Shell:</span> <code>python manage.py shell</code></li>
+                            <li><span class="highlight">Superuser:</span> <code>python manage.py createsuperuser</code></li>
+                        </ul>
+                    </div>
+                    <div class="col"><h4><i class="fas fa-magic"></i> Why it matters</h4>
+                        <p><span class="highlight">Central entry point</span> — all administrative tasks go through manage.py.</p>
+                        <p>It sets the DJANGO_SETTINGS_MODULE environment variable.</p>
+                        <p>Never edit this file — it's auto-generated.</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-star"></i> <strong>Pro tip:</strong> Use <code>python manage.py --help</code> to see all available commands.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-sliders-h'></i> settings.py — The Heart of Django",
+            subtitle: "Every configuration lives here",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-database"></i> Key sections</h3>
+                        <ul style="margin-left:1.2rem;">
+                            <li><span class="highlight">SECRET_KEY</span> — cryptographic signing (keep secret!)</li>
+                            <li><span class="highlight">DEBUG</span> — True in dev, False in production</li>
+                            <li><span class="highlight">ALLOWED_HOSTS</span> — domain names allowed</li>
+                            <li><span class="highlight">INSTALLED_APPS</span> — all apps in project</li>
+                            <li><span class="highlight">DATABASES</span> — SQLite default, can use PostgreSQL, MySQL</li>
+                            <li><span class="highlight">TEMPLATES</span> — template engine config</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-shield-alt"></i> Security & Environment</h3>
+                        <p>Use <span class="highlight">python-dotenv</span> to keep SECRET_KEY, DB passwords in .env file.</p>
+                        <p><span class="highlight">DEBUG=True</span> shows error pages with tracebacks — never in production.</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> Never commit settings.py with production secrets to version control!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-link'></i> urls.py — The Router",
+            subtitle: "URL dispatcher — maps URLs to views",
+            content: `
+                <div class="two-column-split">
+                    <div class="col"><h4><i class="fas fa-map-signs"></i> How it works</h4>
+                        <pre style="font-size:0.75rem;">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('about/', views.about, name='about'),
+    path('blog/<int:id>/', views.detail, name='detail'),
+]</pre>
+                    </div>
+                    <div class="col"><h4><i class="fas fa-sitemap"></i> Included in project</h4>
+                        <p>The project's main <span class="highlight">urls.py</span> can include app URLs:</p>
+                        <pre style="font-size:0.75rem;">path('polls/', include('polls.urls'))</pre>
+                        <p>This keeps URL routing modular.</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-route"></i> <strong>Naming:</strong> Always use <code>name='...'</code> for reverse URL lookups (DRY principle).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-file-code'></i> __init__.py — Package Marker",
+            subtitle: "Makes Python treat directories as packages",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-cube"></i> What it does</h3>
+                        <p>An empty <span class="highlight">__init__.py</span> file tells Python that the directory should be treated as a package.</p>
+                        <p>Without it, you cannot import modules from that folder.</p>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-code-branch"></i> In Django</h3>
+                        <p>Django uses it to register <span class="highlight">AppConfig</span> for apps.</p>
+                        <p>You can also put package-level initialization code here.</p>
+                        <pre style="font-size:0.7rem;"># __init__.py
+default_app_config = 'polls.apps.PollsConfig'</pre>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> <span>Always keep __init__.py even if empty — it's the Pythonic way.</span></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-cloud'></i> wsgi.py — Web Server Gateway Interface",
+            subtitle: "Entry point for WSGI servers (Apache, Gunicorn, etc.)",
+            content: `
+                <div class="two-column-split">
+                    <div class="col"><h4><i class="fas fa-server"></i> What is WSGI?</h4>
+                        <p>WSGI is a standard interface between web servers and Python web applications.</p>
+                        <p>It's used in <span class="highlight">production</span> to serve Django.</p>
+                        <p>Gunicorn, uWSGI, mod_wsgi all use wsgi.py.</p>
+                    </div>
+                    <div class="col"><h4><i class="fas fa-cogs"></i> wsgi.py content</h4>
+                        <pre style="font-size:0.7rem;">import os
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+application = get_wsgi_application()</pre>
+                        <p>The <span class="highlight">application</span> callable is what the server uses.</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-rocket"></i> <strong>Deployment:</strong> For production, point your WSGI server to this file.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-bolt'></i> asgi.py — ASGI for Async & Channels",
+            subtitle: "ASGI server entry point (Django 3.0+)",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-sync-alt"></i> ASGI vs WSGI</h3>
+                        <p><span class="highlight">ASGI</span> is asynchronous — supports WebSockets, long-polling, HTTP/2.</p>
+                        <p>WSGI is synchronous — traditional request-response.</p>
+                        <p>Use <span class="highlight">asgi.py</span> for Django Channels or async views.</p>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-plug"></i> When to use</h3>
+                        <ul style="margin-left:1.2rem;">
+                            <li>Real-time apps (chat, notifications)</li>
+                            <li>Background tasks with async</li>
+                            <li>If you need WebSockets</li>
+                        </ul>
+                        <p>For most projects, wsgi.py is sufficient.</p>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-clock"></i> <strong>Note:</strong> asgi.py is optional for many projects, but it's there when you need it.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-folder'></i> App Structure — Inside an App",
+            subtitle: "Every Django app has its own files",
+            content: `
+                <div class="folder-structure">
+                    <i class="fas fa-folder-open"></i> polls/  (your app)<br>
+                    <i class="fas fa-file-code"></i> ├── __init__.py<br>
+                    <i class="fas fa-file-code"></i> ├── admin.py       <span style="color:#7ecfdf;">← Register models for admin</span><br>
+                    <i class="fas fa-file-code"></i> ├── apps.py         <span style="color:#7ecfdf;">← App configuration</span><br>
+                    <i class="fas fa-file-code"></i> ├── models.py       <span style="color:#7ecfdf;">← Database models</span><br>
+                    <i class="fas fa-file-code"></i> ├── views.py        <span style="color:#7ecfdf;">← View functions/classes</span><br>
+                    <i class="fas fa-folder"></i> ├── migrations/<br>
+                    <i class="fas fa-file-code"></i> │   └── __init__.py<br>
+                    <i class="fas fa-folder"></i> ├── templates/<br>
+                    <i class="fas fa-folder"></i> │   └── polls/<br>
+                    <i class="fas fa-file-code"></i> │       └── index.html<br>
+                    <i class="fas fa-file-code"></i> └── urls.py         <span style="color:#7ecfdf;">← App-specific URLs</span>
+                </div>
+                <div class="insight-card"><i class="fas fa-folder-open"></i> <strong>Tip:</strong> Keep each app focused — one app per feature (auth, blog, shop).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check — Django Files",
+            subtitle: "Test your understanding",
+            content: `
+                <div class="qa-section">
+                    <div class="qa-title"><i class="fas fa-question-circle"></i> Click to reveal answers</div>
+                    <div id="qa-container"></div>
+                </div>
+                <div class="insight-card"><i class="fas fa-graduation-cap"></i> <strong>Review:</strong> These questions consolidate your knowledge of the Django file structure.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-check-circle'></i> Quick Summary",
+            subtitle: "Every file's role in one view",
+            content: `
+                <div class="two-column-split">
+                    <div class="col"><h4><i class="fas fa-file-alt"></i> Project Root</h4>
+                        <ul style="margin-left:1.2rem;">
+                            <li><span class="highlight">manage.py</span> — CLI entry point</li>
+                            <li><span class="highlight">myproject/</span> — main package</li>
+                        </ul>
+                        <h4 style="margin-top:0.8rem;"><i class="fas fa-cog"></i> Inside myproject/</h4>
+                        <ul style="margin-left:1.2rem;">
+                            <li><span class="highlight">__init__.py</span> — package marker</li>
+                            <li><span class="highlight">settings.py</span> — all config</li>
+                            <li><span class="highlight">urls.py</span> — URL routing</li>
+                            <li><span class="highlight">wsgi.py</span> — production entry</li>
+                            <li><span class="highlight">asgi.py</span> — async entry</li>
+                        </ul>
+                    </div>
+                    <div class="col"><h4><i class="fas fa-puzzle-piece"></i> App Files</h4>
+                        <ul style="margin-left:1.2rem;">
+                            <li><span class="highlight">models.py</span> — database tables</li>
+                            <li><span class="highlight">views.py</span> — business logic</li>
+                            <li><span class="highlight">urls.py</span> — app routes</li>
+                            <li><span class="highlight">admin.py</span> — admin interface</li>
+                            <li><span class="highlight">apps.py</span> — app config</li>
+                            <li><span class="highlight">migrations/</span> — schema changes</li>
+                            <li><span class="highlight">templates/</span> — HTML files</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-thumbs-up"></i> <strong>You now know:</strong> The purpose of every core file in a Django project!</div>
+            `
+        }
+    ];
+
+    const qaData = [
+        { q: "What is the purpose of manage.py in a Django project?", a: "manage.py is a command-line utility that lets you interact with your Django project. It runs the development server, creates apps, applies migrations, and more." },
+        { q: "What does settings.py contain?", a: "settings.py holds all project configuration: SECRET_KEY, DEBUG, ALLOWED_HOSTS, INSTALLED_APPS, DATABASES, TEMPLATES, middleware, and static/media settings." },
+        { q: "What is the difference between wsgi.py and asgi.py?", a: "wsgi.py is the entry point for synchronous WSGI servers (like Gunicorn) used in production. asgi.py is for asynchronous ASGI servers, used for WebSockets, async views, and Django Channels." },
+        { q: "What is the purpose of __init__.py in Django folders?", a: "__init__.py marks a directory as a Python package so it can be imported. In Django, it's also used for app configuration (AppConfig) in some cases." },
+        { q: "Where are URL routes defined in Django?", a: "URL routes are defined in urls.py files. The project's main urls.py includes app-specific urls.py files using include()." },
+        { q: "What files are typically inside a Django app?", a: "An app contains __init__.py, admin.py, apps.py, models.py, views.py, migrations/, templates/, and often urls.py. These handle models, views, admin, and URL routing for that app." },
+        { q: "Why is DEBUG set to False in production?", a: "When DEBUG=True, Django shows detailed error pages with tracebacks and sensitive settings. This is a security risk and should never be enabled on a live site." },
+        { q: "What is the role of migrations/ folder?", a: "migrations/ stores database schema change files generated by makemigrations. They are applied to the database using migrate and track changes to models." },
+        { q: "What does the 'include()' function do in urls.py?", a: "include() allows you to reference other URLconfs (urls.py files) from apps, making URL routing modular and clean." },
+        { q: "What is the DJANGO_SETTINGS_MODULE environment variable?", a: "It tells Django which settings module to use. It's set by manage.py and wsgi.py to point to your project's settings.py file." }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">
+                    ${slide.title}
+                </div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">
+                    ${slide.content}
+                </div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        if (index === 8) renderQA(); // slide with QA
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>
