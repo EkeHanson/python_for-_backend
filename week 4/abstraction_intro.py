@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
-
 # Abstract class
 class Vehicle(ABC):
-    
     @abstractmethod
     def start_engine(self):
         """Every vehicle must
@@ -42,7 +40,6 @@ class ElectricCar(Vehicle):
     def stop_engine(self):
         print("Electric car motor deactivated.")
 
-
 # Using the abstractions
 def operate_vehicle(vehicle: Vehicle):
     vehicle.start_engine()
@@ -55,13 +52,3 @@ ev = ElectricCar()
 operate_vehicle(car)
 operate_vehicle(ev)
 
-
-
-
-# docstring
-
-name = "Philip"
-
-sentence = """Philip hsdbsdj sdhfvbsfdhivk
-                         sdchsdbvk 
-    hdbvhvch hsdbhsdfvbhds sdhjbvsdhjkvb"""

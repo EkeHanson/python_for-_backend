@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JSON Handling | Python Backend Course</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge {
+            background: #10b981;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        .duration {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .day-nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .day-nav-btn {
+            background: #1e293b;
+            border: 1px solid #10b981;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .day-nav-btn:hover {
+            background: #10b981;
+            transform: scale(0.98);
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2rem;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .slide-area {
+            min-height: 600px;
+            background: #0f1119;
+            padding: 2rem;
+        }
+        .slide-card {
+            background: rgba(22, 26, 38, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #D1FAE5, #6EE7B7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-left: 5px solid #10b981;
+            padding-left: 1.2rem;
+        }
+        .slide-title i {
+            background: none;
+            color: #34d399;
+            font-size: 1.8rem;
+        }
+        .slide-sub {
+            color: #a0afc9;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-left: 5px solid #10b981;
+            padding-left: 1.2rem;
+        }
+        .content-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .concept-box {
+            flex: 1;
+            min-width: 240px;
+            background: #1a1f2e;
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .concept-box:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+        .concept-box h3 {
+            color: #6EE7B7;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .concept-box h3 i {
+            color: #34d399;
+        }
+        .concept-box p, .concept-box li {
+            color: #e2e8f0;
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .tag {
+            background: #1e293b;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #b9d0ff;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .insight-card {
+            margin-top: 1.2rem;
+            background: #0f172a;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: #e2e8f0;
+            border-left: 3px solid #10b981;
+        }
+        .code-block {
+            background: #0a0e18;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e6;
+            margin: 0.8rem 0;
+            border: 1px solid #334155;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .two-column-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .qa-section {
+            margin-top: 1.5rem;
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+        }
+        .qa-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qa-item {
+            background: #131b2e;
+            border-radius: 1rem;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #2d3a5e;
+        }
+        .qa-question {
+            padding: 1rem 1.2rem;
+            background: #1a2338;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: background 0.2s;
+        }
+        .qa-question:hover {
+            background: #25334d;
+        }
+        .qa-question i {
+            color: #34d399;
+            transition: transform 0.3s;
+        }
+        .qa-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: #0f172a;
+            color: #cbd5e6;
+            line-height: 1.5;
+        }
+        .qa-answer.show {
+            padding: 1rem 1.2rem;
+            max-height: 300px;
+        }
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .mode-card {
+            background: #1a1f2e;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .mode-card:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+        .mode-card .mode-letter {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #34d399;
+            font-family: 'Fira Code', monospace;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .mode-card .mode-name {
+            color: #6EE7B7;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+        }
+        .mode-card .mode-desc {
+            color: #a0afc9;
+            font-size: 0.85rem;
+            line-height: 1.45;
+        }
+        .warning-card {
+            background: #1f1215;
+            border-left: 3px solid #f87171;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            color: #fecaca;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .warning-card i {
+            color: #f87171;
+        }
+        .nav-bar {
+            background: #0b0e16;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #2a2f3f;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        button {
+            background: #1e2a3a;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #334155;
+        }
+        button:hover:not(:disabled) {
+            background: #2d3a4e;
+            transform: scale(0.97);
+            border-color: #10b981;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            font-size: 0.9rem;
+            background: #1a1f2c;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: #a5b4fc;
+        }
+        .indicator-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .dot.active {
+            background: #10b981;
+            width: 22px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.7rem;
+            background: #07090f;
+            color: #8ca3c7;
+        }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div><span class="badge"><i class="fas fa-brackets-curly"></i> WEEK 6 · JSON HANDLING</span></div>
+    <div class="class-title"><i class="fas fa-file-code"></i> Working with JSON in Python</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 hours · json module & real-world data</div>
+    <div class="day-nav-buttons">
+        <a href="day1.html" class="day-nav-btn"><i class="fas fa-arrow-left"></i> Previous</a>
+        <a href="next.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Next →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 13</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers
+    </footer>
+</div>
+
+<script>
+    // ==================== JSON HANDLING SLIDES ====================
+    const slides = [
+        {
+            title: "<i class='fas fa-brackets-curly'></i> What is JSON?",
+            subtitle: "JavaScript Object Notation — the universal data format",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-globe"></i> Definition</h3><p>JSON is a lightweight, <span class="highlight">text-based</span> data interchange format. It's easy for humans to read and write, and easy for machines to parse and generate.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-exchange-alt"></i> Why JSON?</h3><p>✓ APIs return JSON<br>✓ Config files (package.json, .eslintrc)<br>✓ Data storage (NoSQL, logs)<br>✓ Language-independent</p></div>
+                </div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> JSON is a <span class="highlight">string format</span>. Python dictionaries are in-memory objects. They look similar but are not the same!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-code'></i> JSON Syntax & Data Types",
+            subtitle: "Objects, arrays, strings, numbers, booleans, null",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-file-code"></i> JSON Example</h3>
+                        <div class="code-block"><pre>{
+  <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Alice"</span>,
+  <span style="color:#86efac;">"age"</span>: <span style="color:#fbbf24;">30</span>,
+  <span style="color:#86efac;">"is_student"</span>: <span style="color:#fbbf24;">false</span>,
+  <span style="color:#86efac;">"courses"</span>: [<span style="color:#86efac;">"Python"</span>, <span style="color:#86efac;">"SQL"</span>],
+  <span style="color:#86efac;">"address"</span>: <span style="color:#fbbf24;">null</span>
+}</pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-arrows-alt-h"></i> Type Mapping</h3>
+                        <table style="width:100%; color:#e2e8f0; font-size:0.9rem; border-collapse: collapse;">
+                            <tr style="border-bottom:1px solid #334155;"><th style="text-align:left; padding:0.3rem;">JSON</th><th style="text-align:left; padding:0.3rem;">Python</th></tr>
+                            <tr><td style="padding:0.3rem;">object</td><td style="padding:0.3rem;">dict</td></tr>
+                            <tr><td style="padding:0.3rem;">array</td><td style="padding:0.3rem;">list</td></tr>
+                            <tr><td style="padding:0.3rem;">string</td><td style="padding:0.3rem;">str</td></tr>
+                            <tr><td style="padding:0.3rem;">number</td><td style="padding:0.3rem;">int/float</td></tr>
+                            <tr><td style="padding:0.3rem;">true/false</td><td style="padding:0.3rem;">True/False</td></tr>
+                            <tr><td style="padding:0.3rem;">null</td><td style="padding:0.3rem;">None</td></tr>
+                        </table>
+                    </div>
+                </div>
+            `
+        },
+        {
+            title: "<i class='fas fa-box-open'></i> The json Module",
+            subtitle: "load, loads, dump, dumps — the four core functions",
+            content: `
+                <div class="mode-grid">
+                    <div class="mode-card">
+                        <div class="mode-letter">load</div>
+                        <div class="mode-name">File → Python</div>
+                        <div class="mode-desc">Reads JSON from a <strong>file object</strong> and returns a Python object.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">loads</div>
+                        <div class="mode-name">String → Python</div>
+                        <div class="mode-desc">Parses a JSON <strong>string</strong> and returns a Python object. (load + s = string)</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">dump</div>
+                        <div class="mode-name">Python → File</div>
+                        <div class="mode-desc">Writes a Python object as JSON to a <strong>file object</strong>.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">dumps</div>
+                        <div class="mode-name">Python → String</div>
+                        <div class="mode-desc">Converts a Python object to a JSON <strong>string</strong>. (dump + s = string)</div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-brain"></i> <strong>Mnemonic:</strong> the <span class="highlight">'s'</span> stands for <strong>string</strong>. All other functions work with files.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-file-import'></i> Reading JSON from Files",
+            subtitle: "json.load() and accessing nested data",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-code"></i> Basic Read</h3>
+                    <div class="code-block"><pre><span style="color:#fbbf24;">import</span> json
+
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"data.json"</span>) <span style="color:#fbbf24;">as</span> f:
+    data = json.load(f)
+
+<span style="color:#fbbf24;">print</span>(data[<span style="color:#86efac;">"name"</span>])       <span style="color:#7aa9ff;"># Alice</span>
+<span style="color:#fbbf24;">print</span>(data[<span style="color:#86efac;">"courses"</span>][<span style="color:#fbbf24;">0</span>])  <span style="color:#7aa9ff;"># Python</span></pre></div>
+                </div>
+                <div class="warning-card"><i class="fas fa-exclamation-triangle"></i> Always open JSON files with default text mode <span class="highlight">"r"</span> (or specify encoding). Binary mode will break parsing.</div>
+                <div class="insight-card"><i class="fas fa-nested"></i> Access nested values with chained brackets: <span class="highlight">data["users"][0]["email"]</span>. Use <span class="highlight">.get()</span> to avoid KeyError.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-file-export'></i> Writing JSON to Files",
+            subtitle: "json.dump() with formatting options",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-save"></i> Basic Write</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">import</span> json
+
+data = {<span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Bob"</span>, <span style="color:#86efac;">"age"</span>: <span style="color:#fbbf24;">25</span>}
+
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"output.json"</span>, <span style="color:#86efac;">"w"</span>) <span style="color:#fbbf24;">as</span> f:
+    json.dump(data, f, indent=<span style="color:#fbbf24;">4</span>)</pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-magic"></i> Common Parameters</h3>
+                        <ul style="color:#e2e8f0; padding-left:1.2rem;">
+                            <li><span class="highlight">indent=4</span> — pretty print</li>
+                            <li><span class="highlight">sort_keys=True</span> — alphabetical keys</li>
+                            <li><span class="highlight">ensure_ascii=False</span> — keep unicode</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> Use <span class="highlight">json.dumps(data, indent=2)</span> to get a pretty JSON string for printing or debugging.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-shield-alt'></i> Safe Access with .get()",
+            subtitle: "Avoid KeyError — chain .get() for nested JSON",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-times-circle"></i> The Risky Way (Brackets)</h3>
+                        <div class="code-block"><pre>data = {
+  <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Alice"</span>,
+  <span style="color:#86efac;">"school"</span>: {<span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"RSU"</span>, <span style="color:#86efac;">"email"</span>: <span style="color:#86efac;">"info@rsu.edu.ng"</span>}
+}
+
+<span style="color:#7aa9ff;"># If "school" or "email" is missing → KeyError</span>
+email = data[<span style="color:#86efac;">"school"</span>][<span style="color:#86efac;">"email"</span>]
+<span style="color:#fbbf24;">print</span>(email)  <span style="color:#7aa9ff;"># info@rsu.edu.ng</span></pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-check-circle"></i> The Safe Way (.get())</h3>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Chain .get() with {} fallback</span>
+email = data.get(<span style="color:#86efac;">"school"</span>, {}).get(<span style="color:#86efac;">"email"</span>, <span style="color:#86efac;">"N/A"</span>)
+<span style="color:#fbbf24;">print</span>(email)  <span style="color:#7aa9ff;"># info@rsu.edu.ng</span></pre></div>
+                        <p style="font-size:0.85rem;">1. <span class="highlight">data.get("school", {})</span> → returns dict or <span class="highlight">{}</span><br>
+                        2. <span class="highlight">.get("email", "N/A")</span> → returns email or fallback</p>
+                    </div>
+                </div>
+                <div class="warning-card"><i class="fas fa-exclamation-triangle"></i> If the value could be <span class="highlight">None</span>, use <span class="highlight">data.get("school") or {}</span> — the <span class="highlight">or {}</span> converts any falsy value into an empty dict.</div>
+                <div class="insight-card"><i class="fas fa-shield-alt"></i> <strong>Rule:</strong> If you're not 100% sure a key exists, use <span class="highlight">.get()</span>. This is the #1 habit that separates beginner code from production-ready code.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-magic'></i> Formatting JSON Output",
+            subtitle: "indent, sort_keys, ensure_ascii — one example, all three",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-code"></i> The Example</h3>
+                    <div class="code-block"><pre><span style="color:#fbbf24;">import</span> json
+
+student = {
+    <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Chidi"</span>,
+    <span style="color:#86efac;">"age"</span>: <span style="color:#fbbf24;">22</span>,
+    <span style="color:#86efac;">"city"</span>: <span style="color:#86efac;">"Lagos"</span>,
+    <span style="color:#86efac;">"greeting"</span>: <span style="color:#86efac;">"Ẹ káàbọ̀"</span>,  <span style="color:#7aa9ff;"># Yoruba: Welcome</span>
+    <span style="color:#86efac;">"course"</span>: <span style="color:#86efac;">"Python"</span>
+}
+
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"student.json"</span>, <span style="color:#86efac;">"w"</span>) <span style="color:#fbbf24;">as</span> f:
+    json.dump(student, f, indent=<span style="color:#fbbf24;">4</span>, sort_keys=<span style="color:#fbbf24;">True</span>, ensure_ascii=<span style="color:#fbbf24;">False</span>)</pre></div>
+                </div>
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-file-code"></i> Output</h3>
+                        <div class="code-block"><pre>{
+    <span style="color:#86efac;">"age"</span>: <span style="color:#fbbf24;">22</span>,
+    <span style="color:#86efac;">"city"</span>: <span style="color:#86efac;">"Lagos"</span>,
+    <span style="color:#86efac;">"course"</span>: <span style="color:#86efac;">"Python"</span>,
+    <span style="color:#86efac;">"greeting"</span>: <span style="color:#86efac;">"Ẹ káàbọ̀"</span>,
+    <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Chidi"</span>
+}</pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-tags"></i> What Each Did</h3>
+                        <ul style="color:#e2e8f0; padding-left:1.2rem; font-size:0.9rem;">
+                            <li><span class="highlight">indent=4</span> → pretty, readable lines</li>
+                            <li><span class="highlight">sort_keys=True</span> → alphabetical order</li>
+                            <li><span class="highlight">ensure_ascii=False</span> → real characters, no <span class="highlight">\\u...</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-brain"></i> <strong>Memory tip:</strong> <span class="highlight">indent</span> = pretty · <span class="highlight">sort_keys</span> = ordered · <span class="highlight">ensure_ascii=False</span> = human-readable.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-file-alt'></i> Sample JSON Files",
+            subtitle: "Realistic data to practice with",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-user-graduate"></i> students.json</h3>
+                        <div class="code-block" style="max-height:200px; overflow-y:auto;"><pre>{
+  <span style="color:#86efac;">"students"</span>: [
+    { <span style="color:#86efac;">"id"</span>: <span style="color:#fbbf24;">1</span>, <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Alice"</span>, <span style="color:#86efac;">"grade"</span>: <span style="color:#fbbf24;">92</span>, <span style="color:#86efac;">"active"</span>: <span style="color:#fbbf24;">true</span> },
+    { <span style="color:#86efac;">"id"</span>: <span style="color:#fbbf24;">2</span>, <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Bob"</span>, <span style="color:#86efac;">"grade"</span>: <span style="color:#fbbf24;">78</span>, <span style="color:#86efac;">"active"</span>: <span style="color:#fbbf24;">false</span> },
+    { <span style="color:#86efac;">"id"</span>: <span style="color:#fbbf24;">3</span>, <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Charlie"</span>, <span style="color:#86efac;">"grade"</span>: <span style="color:#fbbf24;">85</span>, <span style="color:#86efac;">"active"</span>: <span style="color:#fbbf24;">true</span> }
+  ]
+}</pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-cog"></i> config.json</h3>
+                        <div class="code-block"><pre>{
+  <span style="color:#86efac;">"app_name"</span>: <span style="color:#86efac;">"BackendAPI"</span>,
+  <span style="color:#86efac;">"version"</span>: <span style="color:#fbbf24;">2.1</span>,
+  <span style="color:#86efac;">"debug"</span>: <span style="color:#fbbf24;">false</span>,
+  <span style="color:#86efac;">"database"</span>: {
+    <span style="color:#86efac;">"host"</span>: <span style="color:#86efac;">"localhost"</span>,
+    <span style="color:#86efac;">"port"</span>: <span style="color:#fbbf24;">5432</span>
+  }
+}</pre></div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-download"></i> You can copy these into <span class="highlight">students.json</span> and <span class="highlight">config.json</span> to use in the exercises below.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-tasks'></i> Exercise Sheet 1",
+            subtitle: "Basic parsing and access",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-pencil-alt"></i> Tasks</h3>
+                    <ol style="color:#e2e8f0; padding-left:1.4rem; line-height:2;">
+                        <li>Parse the JSON string <span class="highlight">'{"name": "Zara", "age": 22}'</span> and print the name.</li>
+                        <li>Load <span class="highlight">students.json</span> and print the total number of students.</li>
+                        <li>Print the name of the first student.</li>
+                        <li>Print all student names using a loop.</li>
+                        <li>Print the grade of the student named "Bob".</li>
+                    </ol>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Starter code</span>
+<span style="color:#fbbf24;">import</span> json
+
+<span style="color:#7aa9ff;"># 1. Parse string</span>
+s = <span style="color:#86efac;">'{"name": "Zara", "age": 22}'</span>
+<span style="color:#7aa9ff;"># your code here</span>
+
+<span style="color:#7aa9ff;"># 2. Load file</span>
+<span style="color:#7aa9ff;"># with open("students.json") as f: ...</span></pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-tasks'></i> Exercise Sheet 2",
+            subtitle: "Filtering, modifying, and writing",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-pencil-alt"></i> Tasks</h3>
+                    <ol style="color:#e2e8f0; padding-left:1.4rem; line-height:2;">
+                        <li>Load <span class="highlight">students.json</span> and print only students with grade ≥ 85.</li>
+                        <li>Add a new student <span class="highlight">{ "id": 4, "name": "Diana", "grade": 88, "active": true }</span> to the list.</li>
+                        <li>Save the updated data to <span class="highlight">students_updated.json</span> with indent=2.</li>
+                        <li>Load <span class="highlight">config.json</span> and print the database host and port.</li>
+                        <li>Change <span class="highlight">debug</span> to <span class="highlight">true</span> and save back to <span class="highlight">config.json</span>.</li>
+                    </ol>
+                </div>
+                <div class="warning-card"><i class="fas fa-exclamation-triangle"></i> When writing back, always use <span class="highlight">"w"</span> mode — but be careful, it overwrites the file completely.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-tasks'></i> Exercise Sheet 3",
+            subtitle: "Safe access and formatting practice",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-pencil-alt"></i> Tasks</h3>
+                    <ol style="color:#e2e8f0; padding-left:1.4rem; line-height:2;">
+                        <li>Using the sample object below, get the email with <strong>nested brackets</strong>. Then rewrite it with <strong>chained .get()</strong>.</li>
+                        <li>Delete the <span class="highlight">"school"</span> key and run both versions again — what happens?</li>
+                        <li>Use <span class="highlight">data.get("school") or {}</span> to safely handle a <span class="highlight">None</span> value.</li>
+                        <li>Create a dict with a Yoruba greeting and save it to <span class="highlight">greeting.json</span> with <span class="highlight">indent=2</span> and <span class="highlight">ensure_ascii=False</span>.</li>
+                        <li>Save the same dict with <span class="highlight">sort_keys=True</span> and compare the key order.</li>
+                    </ol>
+                </div>
+                <div class="code-block"><pre>data = {
+  <span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"Alice"</span>,
+  <span style="color:#86efac;">"age"</span>: <span style="color:#fbbf24;">30</span>,
+  <span style="color:#86efac;">"school"</span>: {<span style="color:#86efac;">"name"</span>: <span style="color:#86efac;">"RSU"</span>, <span style="color:#86efac;">"email"</span>: <span style="color:#86efac;">"info@rsu.edu.ng"</span>, <span style="color:#86efac;">"cgpa"</span>: <span style="color:#fbbf24;">4.3</span>}
+}</pre></div>
+            `
+        },
+        {
+            title: "<i class='fas fa-shield-alt'></i> Error Handling",
+            subtitle: "JSONDecodeError, FileNotFoundError, and KeyError",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-bug"></i> Common Errors</h3>
+                        <ul style="color:#e2e8f0; padding-left:1.2rem;">
+                            <li><span class="highlight">json.JSONDecodeError</span> — invalid JSON syntax</li>
+                            <li><span class="highlight">FileNotFoundError</span> — file missing</li>
+                            <li><span class="highlight">KeyError</span> — key not in dict</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Safe Pattern</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">try</span>:
+    <span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"data.json"</span>) <span style="color:#fbbf24;">as</span> f:
+        data = json.load(f)
+    <span style="color:#fbbf24;">print</span>(data.get(<span style="color:#86efac;">"name"</span>, <span style="color:#86efac;">"Unknown"</span>))
+<span style="color:#fbbf24;">except</span> FileNotFoundError:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"File not found"</span>)
+<span style="color:#fbbf24;">except</span> json.JSONDecodeError:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Invalid JSON"</span>)</pre></div>
+                    </div>
+                </div>
+            `
+        },
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test your understanding — click to reveal answers",
+            content: `<div class="qa-section" id="qa-container"></div>`
+        }
+    ];
+
+    // Q&A Data
+    const qaData = [
+        { q: "What does JSON stand for?", a: "JavaScript Object Notation — a lightweight text-based data interchange format." },
+        { q: "What is the difference between json.load() and json.loads()?", a: "json.load() reads from a file object. json.loads() parses a JSON string. The 's' stands for string." },
+        { q: "What is the difference between json.dump() and json.dumps()?", a: "json.dump() writes to a file object. json.dumps() returns a JSON string." },
+        { q: "How do you pretty-print JSON when writing to a file?", a: "Use the indent parameter: json.dump(data, f, indent=4)." },
+        { q: "What does sort_keys=True do?", a: "It sorts the keys of every dictionary in the output alphabetically, making the JSON predictable and easy to diff." },
+        { q: "What does ensure_ascii=False do?", a: "It keeps non-ASCII characters (like Ẹ, é, ñ, 中文) as real characters instead of escaping them to \\uXXXX sequences." },
+        { q: "How do you safely access a nested key that might not exist?", a: "Chain .get() with an empty dict fallback: data.get('school', {}).get('email', 'N/A'). If the value could be None, use data.get('school') or {} before calling .get() again." },
+        { q: "What Python type does a JSON object map to?", a: "A JSON object maps to a Python dictionary (dict)." },
+        { q: "What Python type does a JSON array map to?", a: "A JSON array maps to a Python list." },
+        { q: "What exception is raised for invalid JSON?", a: "json.JSONDecodeError." },
+        { q: "What is the difference between JSON and Python dict syntax?", a: "JSON uses double quotes for keys/strings, lowercase true/false/null, and has no trailing commas. Python dicts use single or double quotes, True/False/None, and allow trailing commas." },
+        { q: "How do you add an item to a JSON array loaded into Python?", a: "Since it's a Python list, use .append() — then write back with json.dump()." },
+        { q: "Why should you use 'with open()' when working with JSON files?", a: "It automatically closes the file, preventing resource leaks and ensuring data is flushed to disk." }
+    ];
+
+    // Rendering logic
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}" role="button" tabindex="0">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            const toggle = function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            };
+            question.addEventListener('click', toggle);
+            question.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle.call(question);
+                }
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">
+                    ${slide.title}
+                </div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">
+                    ${slide.content}
+                </div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        // Knowledge check slide detection via title
+        if (slide.title.includes('Knowledge Check')) renderQA();
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+        // Scroll to top of slide area
+        slideArea.scrollTop = 0;
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        // Ignore arrow keys when typing in inputs/textareas
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

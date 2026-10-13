@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Selenium Web Scraping | Django Backend Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge { background: #3b82f6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .month-badge { background: #8b5cf6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: bold; color: white; margin-left: 0.5rem; }
+        .class-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+        .duration { color: #94a3b8; font-size: 0.85rem; }
+        .day-nav-buttons { display: flex; gap: 0.8rem; }
+        .day-nav-btn {
+            background: #1e293b; border: 1px solid #3b82f6; padding: 0.4rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
+        }
+        .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
+        .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
+        .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
+        .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
+        .slide-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #E0F2FE, #7AA9FF); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.8rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .slide-title i { color: #60a5fa; font-size: 1.8rem; }
+        .slide-sub { color: #a0afc9; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .content-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+        .concept-box { flex: 1; min-width: 250px; background: #1a1f2e; border-radius: 1.5rem; padding: 1.3rem; border: 1px solid #334155; transition: all 0.2s; }
+        .concept-box:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+        .concept-box h3 i { color: #60a5fa; }
+        .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .concept-box ul { margin-left: 1.2rem; }
+        .highlight { color: #fbbf24; font-weight: 600; }
+        .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
+        .code-block { background: #0a0e18; padding: 1rem; border-radius: 1rem; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #cbd5e6; margin: 0.8rem 0; border: 1px solid #334155; }
+        .code-block pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+        .two-column-split { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1rem 0; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem; }
+        .comparison-table th, .comparison-table td { border: 1px solid #334155; padding: 0.6rem; text-align: left; color: #e2e8f0; }
+        .comparison-table th { background: #1e293b; color: #fbbf24; }
+        .qa-section { margin-top: 1.5rem; background: #0f172a; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #334155; }
+        .qa-title { font-size: 1.3rem; font-weight: bold; color: #fbbf24; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .qa-item { background: #131b2e; border-radius: 1rem; margin-bottom: 0.8rem; overflow: hidden; border: 1px solid #2d3a5e; }
+        .qa-question { padding: 1rem 1.2rem; background: #1a2338; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #e2e8f0; transition: background 0.2s; }
+        .qa-question:hover { background: #25334d; }
+        .qa-question i { color: #60a5fa; transition: transform 0.3s; }
+        .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
+        .qa-answer.show { padding: 1rem 1.2rem; max-height: 800px; }
+        .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons { display: flex; gap: 1rem; }
+        button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
+        button:hover:not(:disabled) { background: #2d3a4e; transform: scale(0.97); border-color: #3b82f6; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .slide-counter { font-size: 0.9rem; background: #1a1f2c; padding: 0.4rem 1rem; border-radius: 2rem; color: #a5b4fc; }
+        .indicator-dots { display: flex; gap: 0.5rem; }
+        .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
+        .dot.active { background: #3b82f6; width: 22px; }
+        footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        .inline-code { background: #0a0e18; padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-family: monospace; color: #fbbf24; font-size: 0.85rem; }
+        .warning-box { background: #1a1a2e; border-left: 4px solid #ef4444; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .warning-box i { color: #ef4444; margin-right: 0.5rem; }
+        .tip-box { background: #1a2a1a; border-left: 4px solid #22c55e; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .tip-box i { color: #22c55e; margin-right: 0.5rem; }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+            .two-column-split { flex-direction: column; }
+        }
+        .pill { background: #1a2338; border-radius: 30px; padding: 0.2rem 1rem; font-size: 0.7rem; font-weight: 600; display: inline-block; margin: 0.2rem 0.3rem; }
+        .pill.green { background: #064e3b; color: #6ee7b7; }
+        .pill.blue { background: #1e3a5f; color: #93c5fd; }
+        .pill.red { background: #4c1d1d; color: #fca5a5; }
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+        }
+        .output-box {
+            background: #0d1117;
+            border: 1px solid #2d3a5e;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #7ee787;
+            overflow-x: auto;
+        }
+        .output-box pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+    </style>
+</head>
+<body>
+<div class="class-header">
+    <div>
+        <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 6 · DAY 1</span>
+        <span class="month-badge"><i class="fas fa-calendar-month"></i> MONTH 2 · DYNAMIC SCRAPING</span>
+    </div>
+    <div class="class-title"><i class="fas fa-robot"></i> Selenium Web Scraping</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 Hours · Advanced · Automate real browsers, scrape JavaScript-rendered pages</div>
+    <div class="day-nav-buttons">
+        <a href="day2.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Day 2 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 15</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers · Assignment: Scrape a JavaScript-rendered page
+    </footer>
+</div>
+
+<script>
+    const slides = [
+        // SLIDE 0 — Lesson Overview
+        {
+            title: "<i class='fas fa-chalkboard-user'></i> Lesson Overview",
+            subtitle: "Selenium Web Scraping",
+            content: `<div class="insight-card"><i class="fas fa-robot"></i> Last lesson, we learned BeautifulSoup. But BeautifulSoup has a critical limitation: it <strong>cannot see content loaded by JavaScript</strong>. Today, we learn Selenium — a tool that controls a real browser and sees the page exactly as a human does.</div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-bullseye"></i> By end of class</h3><ul>
+                    <li>✅ Understand what Selenium is and why it exists</li>
+                    <li>✅ Compare Selenium vs BeautifulSoup</li>
+                    <li>✅ Install Selenium (no manual driver downloads!)</li>
+                    <li>✅ Open pages and find elements</li>
+                    <li>✅ Wait for dynamic content properly</li>
+                    <li>✅ Click buttons and scroll pages</li>
+                    <li>✅ Scrape a live JavaScript-rendered page</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-road"></i> Topics Covered</h3><ul>
+                    <li>What is Selenium?</li>
+                    <li>Selenium vs BeautifulSoup</li>
+                    <li>Installation &amp; Selenium Manager</li>
+                    <li>Opening pages &amp; extracting elements</li>
+                    <li>Explicit waits (WebDriverWait)</li>
+                    <li>User interactions (click, scroll)</li>
+                    <li>Headless mode</li>
+                    <li>Real-world scraping example</li>
+                    <li>Best practices &amp; pitfalls</li>
+                </ul></div>
+            </div>`
+        },
+        // SLIDE 1 — What is Selenium?
+        {
+            title: "<i class='fas fa-robot'></i> What is Selenium?",
+            subtitle: "Browser automation — the tool that sees what you see",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-lightbulb"></i> Definition</h3>
+                <p>Selenium is a <span class="highlight">browser automation framework</span>. It controls a real browser (Chrome, Firefox, Edge) programmatically — opening pages, clicking buttons, scrolling, and extracting content <strong>after JavaScript has run</strong>.</p></div>
+                <div class="concept-box"><h3><i class="fas fa-history"></i> Origin</h3>
+                <p>Originally built for <strong>automated testing</strong> of web applications. Developers use it to click through apps and verify they work. Scrapers borrow it for the same power: controlling a real browser.</p></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Key insight:</strong> Selenium doesn't fetch HTML. It <strong>launches a browser</strong>, lets the page fully load (including JavaScript), and then reads the rendered DOM. This is why it can see content that <span class="inline-code">requests</span> cannot.</div>`
+        },
+        // SLIDE 2 — Selenium vs BeautifulSoup
+        {
+            title: "<i class='fas fa-balance-scale'></i> Selenium vs BeautifulSoup",
+            subtitle: "When to use which tool",
+            content: `<div class="comparison-table">
+                <table style="width:100%">
+                    <tr><th>Feature</th><th>BeautifulSoup</th><th>Selenium</th></tr>
+                    <tr><td>JavaScript support</td><td><span class="pill red">No</span></td><td><span class="pill green">Yes</span></td></tr>
+                    <tr><td>Speed</td><td><span class="pill green">Fast</span></td><td><span class="pill red">Slow</span></td></tr>
+                    <tr><td>Resource usage</td><td><span class="pill green">Low</span></td><td><span class="pill red">High</span></td></tr>
+                    <tr><td>Setup complexity</td><td><span class="pill green">Simple</span></td><td><span class="pill blue">Moderate</span></td></tr>
+                    <tr><td>Browser interaction</td><td><span class="pill red">None</span></td><td><span class="pill green">Full</span></td></tr>
+                    <tr><td>Best for</td><td>Static HTML pages</td><td>Dynamic JS pages</td></tr>
+                </table>
+            </div>
+            <div class="two-column-split">
+                <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Use BeautifulSoup when…</h3>
+                <ul><li>The page is server-rendered (plain HTML)</li><li>You need speed and low resource usage</li><li>No clicks or scrolling required</li><li>Content is in <span class="inline-code">response.text</span></li></ul></div>
+                <div class="concept-box"><h3><i class="fas fa-robot"></i> Use Selenium when…</h3>
+                <ul><li>Content loads via JavaScript (React, Vue, Angular)</li><li>You need to click, scroll, or fill forms</li><li>Data appears only after interaction</li><li>You need the fully rendered DOM</li></ul></div>
+            </div>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Golden rule:</strong> Always try <span class="inline-code">requests + BeautifulSoup</span> first. Only reach for Selenium when the data is genuinely hidden by JavaScript.</div>`
+        },
+        // SLIDE 3 — Installation
+        {
+            title: "<i class='fas fa-download'></i> Installing Selenium",
+            subtitle: "Easier than ever — no manual driver downloads",
+            content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Install Selenium</span>
+pip install selenium</pre></div>
+            <div class="concept-box"><h3><i class="fas fa-magic"></i> Selenium Manager (v4.6+)</h3>
+            <p>In older versions, you had to manually download <span class="inline-code">chromedriver.exe</span> and match it to your Chrome version. <span class="highlight">You no longer need to do this.</span> Modern Selenium includes <strong>Selenium Manager</strong>, which automatically detects your browser and downloads the correct driver.</p></div>
+            <div class="code-block"><pre><span style="color:#7aa9ff;"># Verify installation</span>
+<span style="color:#fbbf24;">from</span> selenium <span style="color:#fbbf24;">import</span> webdriver
+
+driver = webdriver.Chrome()  <span style="color:#7aa9ff;"># Selenium Manager handles the driver</span>
+driver.get(<span style="color:#86efac;">"https://example.com"</span>)
+<span style="color:#fbbf24;">print</span>(driver.title)
+driver.quit()</pre></div>
+            <div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>If it fails:</strong> Make sure Chrome (or Firefox) is installed on your system. Selenium Manager needs an actual browser to drive.</div>`
+        },
+        // SLIDE 4 — The Basic Pattern
+        {
+            title: "<i class='fas fa-list-ol'></i> The Basic Selenium Pattern",
+            subtitle: "Open, find, extract, close",
+            content: `<div class="content-grid" style="flex-direction:column;">
+                <div class="concept-box"><h3><span class="step-badge">1</span> Launch the browser</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium <span style="color:#fbbf24;">import</span> webdriver
+
+driver = webdriver.Chrome()</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">2</span> Open the page</h3>
+                <div class="code-block"><pre>driver.get(<span style="color:#86efac;">"https://example.com"</span>)</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">3</span> Find elements</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium.webdriver.common.by <span style="color:#fbbf24;">import</span> By
+
+element = driver.find_element(By.CSS_SELECTOR, <span style="color:#86efac;">"h1"</span>)
+<span style="color:#fbbf24;">print</span>(element.text)</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">4</span> Close the browser</h3>
+                <div class="code-block"><pre>driver.quit()  <span style="color:#7aa9ff;"># always close!</span></pre></div></div>
+            </div>
+            <div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>Never forget <span class="inline-code">driver.quit()</span></strong> — otherwise browser processes stay running in the background and consume memory.</div>`
+        },
+        // SLIDE 5 — Finding Elements
+        {
+            title: "<i class='fas fa-search'></i> Finding Elements in Selenium",
+            subtitle: "By.ID, By.CLASS_NAME, By.CSS_SELECTOR, By.XPATH",
+            content: `<div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium.webdriver.common.by <span style="color:#fbbf24;">import</span> By
+
+<span style="color:#7aa9ff;"># Find ONE element (returns WebElement or raises exception)</span>
+el = driver.find_element(By.ID, <span style="color:#86efac;">"main-title"</span>)
+el = driver.find_element(By.CLASS_NAME, <span style="color:#86efac;">"content-box"</span>)
+el = driver.find_element(By.CSS_SELECTOR, <span style="color:#86efac;">"div.content-box h5"</span>)
+el = driver.find_element(By.XPATH, <span style="color:#86efac;">"//h5[text()='Dedicated Team']"</span>)
+
+<span style="color:#7aa9ff;"># Find MANY elements (returns a list)</span>
+elements = driver.find_elements(By.CLASS_NAME, <span style="color:#86efac;">"content-box"</span>)
+<span style="color:#fbbf24;">for</span> el <span style="color:#fbbf24;">in</span> elements:
+    <span style="color:#fbbf24;">print</span>(el.text)</pre></div>
+            <div class="comparison-table">
+                <table style="width:100%">
+                    <tr><th>Locator</th><th>Use when</th><th>Example</th></tr>
+                    <tr><td><span class="inline-code">By.ID</span></td><td>Element has unique ID</td><td><span class="inline-code">By.ID, "firstHeading"</span></td></tr>
+                    <tr><td><span class="inline-code">By.CLASS_NAME</span></td><td>Multiple elements share class</td><td><span class="inline-code">By.CLASS_NAME, "content-box"</span></td></tr>
+                    <tr><td><span class="inline-code">By.CSS_SELECTOR</span></td><td>Precise, flexible matching</td><td><span class="inline-code">By.CSS_SELECTOR, "div.box > h5"</span></td></tr>
+                    <tr><td><span class="inline-code">By.XPATH</span></td><td>Complex traversal or text matching</td><td><span class="inline-code">By.XPATH, "//h5[text()='Team']"</span></td></tr>
+                </table>
+            </div>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Difference from BeautifulSoup:</strong> Selenium raises <span class="inline-code">NoSuchElementException</span> if <span class="inline-code">find_element</span> fails — it does NOT return <span class="inline-code">None</span> like BeautifulSoup's <span class="inline-code">find()</span>.</div>`
+        },
+        // SLIDE 6 — Waiting for Dynamic Content
+        {
+            title: "<i class='fas fa-clock'></i> Waiting for Dynamic Content",
+            subtitle: "The most important Selenium skill",
+            content: `<div class="insight-card"><i class="fas fa-exclamation-triangle"></i> <strong>The #1 mistake:</strong> Trying to extract elements immediately after <span class="inline-code">driver.get()</span>. JavaScript content may not be loaded yet → <span class="inline-code">NoSuchElementException</span>.</div>
+            <div class="two-column-split">
+                <div class="concept-box"><h3><i class="fas fa-times-circle"></i> Bad: time.sleep()</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">import</span> time
+
+driver.get(url)
+time.sleep(<span style="color:#fbbf24;">5</span>)  <span style="color:#7aa9ff;"># always waits 5s,</span>
+<span style="color:#7aa9ff;"># even if content loaded in 0.5s</span></pre></div>
+                <p>Wastes time. Still fails if content takes longer than 5s.</p></div>
+                <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Good: WebDriverWait</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium.webdriver.support.ui <span style="color:#fbbf24;">import</span> WebDriverWait
+<span style="color:#fbbf24;">from</span> selenium.webdriver.support <span style="color:#fbbf24;">import</span> expected_conditions <span style="color:#fbbf24;">as</span> EC
+
+wait = WebDriverWait(driver, <span style="color:#fbbf24;">10</span>)
+element = wait.until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, <span style="color:#86efac;">".product-list"</span>))
+)</pre></div>
+                <p>Waits up to 10s. Proceeds immediately when the element appears.</p></div>
+            </div>
+            <div class="code-block"><pre><span style="color:#7aa9ff;"># Common expected_conditions</span>
+EC.presence_of_element_located((By.ID, <span style="color:#86efac;">"results"</span>))   <span style="color:#7aa9ff;"># element exists in DOM</span>
+EC.visibility_of_element_located((By.ID, <span style="color:#86efac;">"results"</span>)) <span style="color:#7aa9ff;"># element is visible</span>
+EC.element_to_be_clickable((By.ID, <span style="color:#86efac;">"submit"</span>))      <span style="color:#7aa9ff;"># element is clickable</span>
+EC.title_contains(<span style="color:#86efac;">"Dashboard"</span>)                        <span style="color:#7aa9ff;"># page title changed</span></pre></div>
+            <div class="tip-box"><i class="fas fa-star"></i> <strong>Best practice:</strong> Always use <span class="inline-code">WebDriverWait</span> with <span class="inline-code">expected_conditions</span>. Never use <span class="inline-code">time.sleep()</span> in production scrapers.</div>`
+        },
+        // SLIDE 7 — User Interactions
+        {
+            title: "<i class='fas fa-mouse-pointer'></i> User Interactions",
+            subtitle: "Clicking, typing, and scrolling",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-hand-pointer"></i> Click</h3>
+                <div class="code-block"><pre>button = driver.find_element(By.ID, <span style="color:#86efac;">"load-more"</span>)
+button.click()</pre></div></div>
+                <div class="concept-box"><h3><i class="fas fa-keyboard"></i> Type</h3>
+                <div class="code-block"><pre>search = driver.find_element(By.NAME, <span style="color:#86efac;">"q"</span>)
+search.send_keys(<span style="color:#86efac;">"python scraping"</span>)
+search.submit()</pre></div></div>
+            </div>
+            <div class="concept-box"><h3><i class="fas fa-arrows-alt-v"></i> Scroll (for infinite-scroll pages)</h3>
+            <div class="code-block"><pre><span style="color:#7aa9ff;"># Scroll to the bottom of the page</span>
+driver.execute_script(<span style="color:#86efac;">"window.scrollTo(0, document.body.scrollHeight);"</span>)
+
+<span style="color:#7aa9ff;"># Wait for new content to load</span>
+<span style="color:#fbbf24;">import</span> time
+time.sleep(<span style="color:#fbbf24;">2</span>)
+
+<span style="color:#7aa9ff;"># Now find the newly loaded elements</span>
+items = driver.find_elements(By.CLASS_NAME, <span style="color:#86efac;">"item"</span>)</pre></div>
+            <p><span class="highlight">When to scroll:</span> Pages with infinite scroll or "load more on scroll" behavior. Scroll, wait, then extract — repeat until no new items appear.</p></div>
+            <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Why this matters:</strong> Selenium can do things BeautifulSoup <em>cannot</em> — interact with the page like a real user. This unlocks data hidden behind buttons, forms, and lazy loading.</div>`
+        },
+        // SLIDE 8 — Headless Mode
+        {
+            title: "<i class='fas fa-ghost'></i> Headless Mode",
+            subtitle: "Run the browser invisibly",
+            content: `<div class="concept-box"><h3><i class="fas fa-eye-slash"></i> What is Headless?</h3>
+            <p>Headless mode runs the browser <strong>without a visible window</strong>. The browser still loads pages, runs JavaScript, and renders content — but nothing appears on your screen.</p></div>
+            <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium import webdriver
+<span style="color:#fbbf24;">from</span> selenium.webdriver.chrome.options <span style="color:#fbbf24;">import</span> Options
+
+options = Options()
+options.add_argument(<span style="color:#86efac;">"--headless"</span>)       <span style="color:#7aa9ff;"># invisible mode</span>
+options.add_argument(<span style="color:#86efac;">"--disable-gpu"</span>)   <span style="color:#7aa9ff;"># recommended on Windows</span>
+options.add_argument(<span style="color:#86efac;">"--no-sandbox"</span>)    <span style="color:#7aa9ff;"># needed in some environments</span>
+
+driver = webdriver.Chrome(options=options)
+driver.get(<span style="color:#86efac;">"https://example.com"</span>)
+<span style="color:#fbbf24;">print</span>(driver.title)
+driver.quit()</pre></div>
+            <div class="two-column-split">
+                <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Benefits</h3>
+                <ul><li>Faster execution</li><li>Lower memory usage</li><li>Runs on servers with no display</li><li>Good for scheduled/automated scrapers</li></ul></div>
+                <div class="concept-box"><h3><i class="fas fa-times-circle"></i> Limitations</h3>
+                <ul><li>Some sites detect headless browsers</li><li>Harder to debug (can't watch)</li><li>May behave differently than visible browser</li></ul></div>
+            </div>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Debugging tip:</strong> When developing, leave headless <strong>off</strong> so you can watch the browser do its thing. Turn it on only when the script works.</div>`
+        },
+        // SLIDE 9 — Live Example: Scraping a JS Page
+        {
+            title: "<i class='fas fa-globe'></i> Live Example: Scraping a Dynamic Page",
+            subtitle: "The complete workflow",
+            content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Scenario</h3>
+            <p>Scrape a page where product listings load via JavaScript after the initial page load. The data is <strong>not</strong> in <span class="inline-code">requests.get()</span> — only Selenium can see it.</p></div>
+            <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium import webdriver
+<span style="color:#fbbf24;">from</span> selenium.webdriver.common.by <span style="color:#fbbf24;">import</span> By
+<span style="color:#fbbf24;">from</span> selenium.webdriver.support.ui <span style="color:#fbbf24;">import</span> WebDriverWait
+<span style="color:#fbbf24;">from</span> selenium.webdriver.support <span style="color:#fbbf24;">import</span> expected_conditions <span style="color:#fbbf24;">as</span> EC
+
+driver = webdriver.Chrome()
+driver.get(<span style="color:#86efac;">"https://example.com/products"</span>)
+
+<span style="color:#7aa9ff;"># Wait for the product list to load via JavaScript</span>
+wait = WebDriverWait(driver, <span style="color:#fbbf24;">15</span>)
+wait.until(EC.presence_of_element_located((By.CLASS_NAME, <span style="color:#86efac;">"product-card"</span>)))
+
+<span style="color:#7aa9ff;"># Now extract the data</span>
+products = driver.find_elements(By.CLASS_NAME, <span style="color:#86efac;">"product-card"</span>)
+data = []
+
+<span style="color:#fbbf24;">for</span> p <span style="color:#fbbf24;">in</span> products:
+    name = p.find_element(By.CLASS_NAME, <span style="color:#86efac;">"name"</span>).text
+    price = p.find_element(By.CLASS_NAME, <span style="color:#86efac;">"price"</span>).text
+    data.append({<span style="color:#86efac;">"name"</span>: name, <span style="color:#86efac;">"price"</span>: price})
+
+<span style="color:#fbbf24;">for</span> item <span style="color:#fbbf24;">in</span> data:
+    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"{item['name']}: {item['price']}"</span>)
+
+driver.quit()</pre></div>
+            <div class="output-box"><pre>Product A: $29.99
+Product B: $49.99
+Product C: $19.99</pre></div>
+            <div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Why this works:</strong> Selenium launched a real browser, waited for JavaScript to render the product cards, then extracted them from the fully-loaded DOM.</div>`
+        },
+        // SLIDE 10 — Combining Selenium + BeautifulSoup
+        {
+            title: "<i class='fas fa-blender'></i> Combining Selenium + BeautifulSoup",
+            subtitle: "Best of both worlds",
+            content: `<div class="concept-box"><h3><i class="fas fa-lightbulb"></i> The Hybrid Approach</h3>
+            <p>Use <strong>Selenium</strong> to load the page and render JavaScript. Then hand the final HTML to <strong>BeautifulSoup</strong> for parsing — because BeautifulSoup's parsing API is faster and more pleasant for complex extraction.</p></div>
+            <div class="code-block"><pre><span style="color:#fbbf24;">from</span> selenium <span style="color:#fbbf24;">import</span> webdriver
+<span style="color:#fbbf24;">from</span> bs4 <span style="color:#fbbf24;">import</span> BeautifulSoup
+
+driver = webdriver.Chrome()
+driver.get(<span style="color:#86efac;">"https://example.com/dynamic-page"</span>)
+
+<span style="color:#7aa9ff;"># Wait for content to load (optional but recommended)</span>
+<span style="color:#fbbf24;">import</span> time; time.sleep(<span style="color:#fbbf24;">3</span>)
+
+<span style="color:#7aa9ff;"># Get the rendered HTML</span>
+html = driver.page_source
+driver.quit()
+
+<span style="color:#7aa9ff;"># Parse with BeautifulSoup</span>
+soup = BeautifulSoup(html, <span style="color:#86efac;">"html.parser"</span>)
+items = soup.find_all(<span style="color:#86efac;">"div"</span>, class_=<span style="color:#86efac;">"content-box"</span>)
+
+<span style="color:#fbbf24;">for</span> item <span style="color:#fbbf24;">in</span> items:
+    <span style="color:#fbbf24;">print</span>(item.get_text(strip=<span style="color:#fbbf24;">True</span>)[:<span style="color:#fbbf24;">80</span>])</pre></div>
+            <div class="tip-box"><i class="fas fa-star"></i> <strong>When to use this:</strong> When the page needs JavaScript to load (Selenium), but the actual data extraction is complex (nested tags, multiple attributes) — BeautifulSoup handles that more cleanly than Selenium's <span class="inline-code">find_element</span> chains.</div>`
+        },
+        // SLIDE 11 — Common Pitfalls
+        {
+            title: "<i class='fas fa-bug'></i> Common Pitfalls & Solutions",
+            subtitle: "Debug like a pro",
+            content: `<div class="comparison-table">
+                <table style="width:100%">
+                    <tr><th>Pitfall</th><th>Solution</th></tr>
+                    <tr><td><span class="inline-code">NoSuchElementException</span></td><td>Element not loaded yet → use <span class="inline-code">WebDriverWait</span></td></tr>
+                    <tr><td>Browser window stays open</td><td>Always call <span class="inline-code">driver.quit()</span> in a <span class="inline-code">try/finally</span> block</td></tr>
+                    <tr><td>Element not clickable</td><td>Use <span class="inline-code">EC.element_to_be_clickable</span> before clicking</td></tr>
+                    <tr><td>Stale element reference</td><td>Page refreshed → re-find the element</td></tr>
+                    <tr><td>Slow scraping</td><td>Use <span class="inline-code">--headless</span> mode; don't use <span class="inline-code">time.sleep</span> for everything</td></tr>
+                    <tr><td>Site blocks Selenium</td><td>Some sites detect <span class="inline-code">navigator.webdriver</span> — use <span class="inline-code">undetected-chromedriver</span> (advanced)</td></tr>
+                    <tr><td>Forgetting to close browser</td><td>Wrap in <span class="inline-code">try/finally</span>: <span class="inline-code">finally: driver.quit()</span></td></tr>
+                </table>
+            </div>
+            <div class="insight-card"><i class="fas fa-brain"></i> <strong>Debugging habit:</strong> When something fails, add <span class="inline-code">driver.save_screenshot("error.png")</span> before <span class="inline-code">quit()</span> to see what the browser saw at the moment of failure.</div>`
+        },
+        // SLIDE 12 — Best Practices & Ethics
+        {
+            title: "<i class='fas fa-balance-scale'></i> Best Practices & Ethics",
+            subtitle: "Scrape responsibly with Selenium",
+            content: `<div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>Selenium is powerful — use it responsibly.</strong>
+            <ul style="margin-top:0.6rem; margin-left:1.2rem; color:#e2e8f0; line-height:1.6;">
+                <li>1. <strong>Check robots.txt</strong> — Selenium can access anything a browser can, but that doesn't mean you should</li>
+                <li>2. <strong>Respect rate limits</strong> — add delays between page loads</li>
+                <li>3. <strong>Don't bypass authentication</strong> without permission</li>
+                <li>4. <strong>Don't scrape personal data</strong> — privacy laws apply</li>
+                <li>5. <strong>Use APIs when available</strong> — scraping is a last resort</li>
+            </ul></div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Good Practices</h3>
+                <ul>
+                    <li>✅ Use <span class="inline-code">WebDriverWait</span> instead of <span class="inline-code">time.sleep</span></li>
+                    <li>✅ Always <span class="inline-code">driver.quit()</span></li>
+                    <li>✅ Use headless mode for production</li>
+                    <li>✅ Cache pages during development</li>
+                    <li>✅ Set a realistic User-Agent</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-times-circle"></i> Avoid</h3>
+                <ul>
+                    <li>❌ Scraping logged-in dashboards without permission</li>
+                    <li>❌ Hammering servers with rapid requests</li>
+                    <li>❌ Using Selenium for static pages (use BeautifulSoup)</li>
+                    <li>❌ Leaving browsers running in the background</li>
+                    <li>❌ Ignoring robots.txt</li>
+                </ul></div>
+            </div>
+            <div class="tip-box"><i class="fas fa-info-circle"></i> <strong>Remember:</strong> Selenium opens a full browser — it's heavy. Use it only when necessary. For static pages, <span class="inline-code">requests + BeautifulSoup</span> is 10–100x faster and cheaper.</div>`
+        },
+        // SLIDE 13 — Knowledge Check
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test what you learned today",
+            content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>`
+        },
+        // SLIDE 14 — Assignment
+        {
+            title: "<i class='fas fa-clipboard-list'></i> Assignment",
+            subtitle: "Complete before next class",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-check-double"></i> Required Homework</h3>
+                <ul>
+                    <li>✅ Install Selenium (<span class="inline-code">pip install selenium</span>)</li>
+                    <li>✅ Write a script that opens a page and prints its title</li>
+                    <li>✅ Find all <span class="inline-code">h2</span> elements on a page and print their text</li>
+                    <li>✅ Use <span class="inline-code">WebDriverWait</span> to wait for an element to appear</li>
+                    <li>✅ Scroll to the bottom of a page and extract the last element</li>
+                    <li>✅ Add <span class="inline-code">driver.quit()</span> in a <span class="inline-code">try/finally</span> block</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-star"></i> BONUS Challenges</h3>
+                <ul>
+                    <li>⭐ Run your script in headless mode</li>
+                    <li>⭐ Combine Selenium + BeautifulSoup: load with Selenium, parse with BS4</li>
+                    <li>⭐ Scrape a page that loads content only after clicking a "Load More" button</li>
+                    <li>⭐ Save the extracted data to a CSV file</li>
+                    <li>⭐ Take a screenshot of a page and save it</li>
+                </ul></div>
+            </div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3>
+                <p><strong>Day 2: Working with APIs</strong></p>
+                <ul>
+                    <li>• REST APIs vs Web Scraping</li>
+                    <li>• JSON data format</li>
+                    <li>• Using <span class="inline-code">requests</span> with APIs</li>
+                    <li>• API authentication</li>
+                    <li>• Building a weather app</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-graduation-cap"></i> Instructor's Note</h3>
+                <p>"Selenium is a superpower, but with great power comes great responsibility. Always scrape ethically, respect the sites you use, and prefer APIs when available."</p>
+                <p style="margin-top:0.8rem;">The ability to automate a real browser opens doors to testing, monitoring, and data collection that static scrapers simply cannot touch.</p></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-rocket"></i> <strong>Pro tip:</strong> The combination of Selenium (for dynamic loading) + BeautifulSoup (for parsing) is the most powerful scraping toolkit you can have. Master both.</div>`
+        }
+    ];
+
+    const qaData = [
+        { q: "What is Selenium, and how is it different from BeautifulSoup?", a: "Selenium is a browser automation framework that controls a real browser, executes JavaScript, and reads the fully rendered DOM. BeautifulSoup is an HTML parser that only works with the raw HTML you provide — it cannot execute JavaScript or interact with the page." },
+        { q: "Why can Selenium see content that requests + BeautifulSoup cannot?", a: "Modern websites use JavaScript to load content dynamically. <span class='inline-code'>requests</span> fetches the initial HTML, which often contains only a JavaScript shell. Selenium launches a real browser, lets JavaScript run, and then reads the fully-rendered DOM." },
+        { q: "Do I need to download chromedriver manually?", a: "No. Since Selenium 4.6, <strong>Selenium Manager</strong> automatically downloads the correct driver for your browser. Just install Selenium with pip and it works." },
+        { q: "What is the difference between find_element and find_elements?", a: "<span class='inline-code'>find_element</span> returns a single element (or raises <span class='inline-code'>NoSuchElementException</span> if not found). <span class='inline-code'>find_elements</span> returns a list of all matching elements (empty list if none found)." },
+        { q: "Why should I use WebDriverWait instead of time.sleep?", a: "<span class='inline-code'>time.sleep</span> always waits the full duration, wasting time if content loads faster, and still failing if content takes longer. <span class='inline-code'>WebDriverWait</span> polls the page and proceeds immediately when the condition is met — it's both faster and more reliable." },
+        { q: "What does headless mode do?", a: "Headless mode runs the browser without a visible window. The page still loads and JavaScript still executes, but nothing appears on screen. It's faster and uses less memory — ideal for automated/scheduled scrapers." },
+        { q: "Can I combine Selenium with BeautifulSoup?", a: "Yes! Use Selenium to load the page and render JavaScript, then pass <span class='inline-code'>driver.page_source</span> to BeautifulSoup for parsing. This gives you the best of both: Selenium's dynamic rendering + BeautifulSoup's clean parsing API." },
+        { q: "How do I scroll down a page with Selenium?", a: "Use <span class='inline-code'>driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')</span>. Then wait briefly for new content to load before extracting elements." },
+        { q: "What is the most common mistake when using Selenium?", a: "Trying to extract elements immediately after <span class='inline-code'>driver.get()</span> without waiting. Dynamic content may not be loaded yet, causing <span class='inline-code'>NoSuchElementException</span>. Always use <span class='inline-code'>WebDriverWait</span> with <span class='inline-code'>expected_conditions</span>." },
+        { q: "Why must I call driver.quit()?", a: "<span class='inline-code'>driver.quit()</span> closes the browser and releases system resources. Without it, browser processes stay running in the background, consuming memory and CPU. Wrap it in a <span class='inline-code'>try/finally</span> block to ensure it runs even if an error occurs." },
+        { q: "When should I use Selenium instead of BeautifulSoup?", a: "Use Selenium when: the page requires JavaScript to render content, you need to click/scroll/fill forms, or data appears only after user interaction. Use BeautifulSoup when: the page is server-rendered and the data is in the raw HTML — it's much faster and lighter." }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA(containerId, qaData) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${containerId}-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll(`#${containerId} .qa-question`).forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${containerId}-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">${slide.content}</div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+
+        if (index === 13) {
+            renderQA('qa-container', qaData);
+        }
+
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

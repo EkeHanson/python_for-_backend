@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>File Handling | Python Backend Course</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge {
+            background: #10b981;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        .duration {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .day-nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .day-nav-btn {
+            background: #1e293b;
+            border: 1px solid #10b981;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .day-nav-btn:hover {
+            background: #10b981;
+            transform: scale(0.98);
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2rem;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+        .slide-area {
+            min-height: 600px;
+            background: #0f1119;
+            padding: 2rem;
+        }
+        .slide-card {
+            background: rgba(22, 26, 38, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #D1FAE5, #6EE7B7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-left: 5px solid #10b981;
+            padding-left: 1.2rem;
+        }
+        .slide-title i {
+            background: none;
+            color: #34d399;
+            font-size: 1.8rem;
+        }
+        .slide-sub {
+            color: #a0afc9;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            border-left: 5px solid #10b981;
+            padding-left: 1.2rem;
+        }
+        .content-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .concept-box {
+            flex: 1;
+            min-width: 240px;
+            background: #1a1f2e;
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .concept-box:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+        .concept-box h3 {
+            color: #6EE7B7;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .concept-box h3 i {
+            color: #34d399;
+        }
+        .concept-box p, .concept-box li {
+            color: #e2e8f0;
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+        .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .tag {
+            background: #1e293b;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #b9d0ff;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .insight-card {
+            margin-top: 1.2rem;
+            background: #0f172a;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            color: #e2e8f0;
+            border-left: 3px solid #10b981;
+        }
+        .code-block {
+            background: #0a0e18;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e6;
+            margin: 0.8rem 0;
+            border: 1px solid #334155;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .two-column-split {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .qa-section {
+            margin-top: 1.5rem;
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+        }
+        .qa-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qa-item {
+            background: #131b2e;
+            border-radius: 1rem;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #2d3a5e;
+        }
+        .qa-question {
+            padding: 1rem 1.2rem;
+            background: #1a2338;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #e2e8f0;
+            transition: background 0.2s;
+        }
+        .qa-question:hover {
+            background: #25334d;
+        }
+        .qa-question i {
+            color: #34d399;
+            transition: transform 0.3s;
+        }
+        .qa-answer {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: #0f172a;
+            color: #cbd5e6;
+            line-height: 1.5;
+        }
+        .qa-answer.show {
+            padding: 1rem 1.2rem;
+            max-height: 300px;
+        }
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .mode-card {
+            background: #1a1f2e;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+        .mode-card:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+        .mode-card .mode-letter {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #34d399;
+            font-family: 'Fira Code', monospace;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .mode-card .mode-name {
+            color: #6EE7B7;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+        }
+        .mode-card .mode-desc {
+            color: #a0afc9;
+            font-size: 0.85rem;
+            line-height: 1.45;
+        }
+        .warning-card {
+            background: #1f1215;
+            border-left: 3px solid #f87171;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            color: #fecaca;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .warning-card i {
+            color: #f87171;
+        }
+        .nav-bar {
+            background: #0b0e16;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #2a2f3f;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        button {
+            background: #1e2a3a;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            border: 1px solid #334155;
+        }
+        button:hover:not(:disabled) {
+            background: #2d3a4e;
+            transform: scale(0.97);
+            border-color: #10b981;
+        }
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            font-size: 0.9rem;
+            background: #1a1f2c;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            color: #a5b4fc;
+        }
+        .indicator-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+        .dot.active {
+            background: #10b981;
+            width: 22px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.7rem;
+            background: #07090f;
+            color: #8ca3c7;
+        }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div><span class="badge"><i class="fas fa-folder-open"></i> WEEK 5 · FILE HANDLING</span></div>
+    <div class="class-title"><i class="fas fa-file-code"></i> File Handling in Python</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 hours · I/O & OS Module</div>
+    <div class="day-nav-buttons">
+        <a href="day1.html" class="day-nav-btn"><i class="fas fa-arrow-left"></i> Previous</a>
+        <a href="next.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Next →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 11</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers
+    </footer>
+</div>
+
+<script>
+    // ==================== FILE HANDLING SLIDES ====================
+    const slides = [
+        {
+            title: "<i class='fas fa-folder-open'></i> Introduction to File Handling",
+            subtitle: "Why we need files — persistent data storage",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-database"></i> Why File Handling?</h3><p>Variables live in <span class="highlight">RAM</span> and disappear when the program ends.<br>Files provide <span class="highlight">permanent storage</span> on disk — data survives restarts.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-cogs"></i> Common Use Cases</h3><p>✓ Reading configuration files<br>✓ Saving user data & logs<br>✓ Processing CSV / text data<br>✓ Writing reports & output files</p></div>
+                </div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> Python has a built-in <span class="highlight">open()</span> function — no imports needed for basic file operations!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-door-open'></i> Opening a File",
+            subtitle: "The open() function and its parameters",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-code"></i> Basic Syntax</h3>
+                    <p><span class="highlight">open(filename, mode)</span></p>
+                    <p>The <strong>filename</strong> is the path to your file.<br>The <strong>mode</strong> tells Python what you want to do (read, write, etc.).</p>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Open a file (default mode is "r" for read)</span>
+file_content = open(<span style="color:#86efac;">"app.py"</span>)
+
+<span style="color:#7aa9ff;"># Read its contents</span>
+<span style="color:#fbbf24;">print</span>(file_content.read())
+
+<span style="color:#7aa9ff;"># ALWAYS close the connection when done</span>
+file_content.close()</pre></div>
+                <div class="warning-card"><i class="fas fa-exclamation-triangle"></i> Forgetting to <span class="highlight">close()</span> a file can lock it and leak system resources. Always close, or use the <strong>with</strong> statement (shown later).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-sliders-h'></i> File Modes",
+            subtitle: "Understanding r, a, w, x, t, and b",
+            content: `
+                <div class="mode-grid">
+                    <div class="mode-card">
+                        <div class="mode-letter">r</div>
+                        <div class="mode-name">Read</div>
+                        <div class="mode-desc">Default mode. Opens for reading. <strong>Errors</strong> if file doesn't exist.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">a</div>
+                        <div class="mode-name">Append</div>
+                        <div class="mode-desc">Opens for appending. Creates file if it doesn't exist. Adds to end.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">w</div>
+                        <div class="mode-name">Write</div>
+                        <div class="mode-desc">Opens for writing. Creates file if it doesn't exist. <strong>Overwrites</strong> existing content.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">x</div>
+                        <div class="mode-name">Create</div>
+                        <div class="mode-desc">Creates a new file. <strong>Errors</strong> if the file already exists.</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">t</div>
+                        <div class="mode-name">Text</div>
+                        <div class="mode-desc">Default mode. Treats file as text (UTF-8 characters).</div>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-letter">b</div>
+                        <div class="mode-name">Binary</div>
+                        <div class="mode-desc">Binary mode — for images, audio, video, etc.</div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-layer-group"></i> You can combine modes: <span class="highlight">"rb"</span> (read binary), <span class="highlight">"wt"</span> (write text), <span class="highlight">"a+"</span> (append and read).</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-shield-alt'></i> The 'with' Statement",
+            subtitle: "The safe, Pythonic way to open files",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Why 'with'?</h3><p>Automatically closes the file when the block ends — even if an error occurs.<br>No need to call <span class="highlight">close()</span> manually.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-thumbs-up"></i> Best Practice</h3><p>Always prefer <span class="highlight">with open(...) as f:</span> over manual <span class="highlight">open() / close()</span>.</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Without 'with' (manual close)</span>
+f = open(<span style="color:#86efac;">"app.py"</span>)
+<span style="color:#fbbf24;">print</span>(f.read())
+f.close()
+
+<span style="color:#7aa9ff;"># With 'with' (auto close, cleaner)</span>
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>) <span style="color:#fbbf24;">as</span> f:
+    <span style="color:#fbbf24;">print</span>(f.read())</pre></div>
+                <div class="insight-card"><i class="fas fa-star"></i> The variable after <span class="highlight">as</span> is just a name — you can call it <span class="highlight">f</span>, <span class="highlight">d</span>, <span class="highlight">file</span>, or anything else.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-book-reader'></i> Reading Files",
+            subtitle: "read(), readline(), and iterating line by line",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-file-alt"></i> read(size)</h3><p>Reads the <span class="highlight">entire</span> file, or up to <strong>size</strong> characters if given.</p><div class="code-block" style="margin-top:0.5rem;"><pre><span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>) <span style="color:#fbbf24;">as</span> d:
+    <span style="color:#fbbf24;">print</span>(d.read(<span style="color:#86efac;">10</span>))  <span style="color:#7aa9ff;"># first 10 chars</span></pre></div></div>
+                    <div class="concept-box"><h3><i class="fas fa-list-ol"></i> readline()</h3><p>Reads <span class="highlight">one line</span> at a time. Call repeatedly to get next lines.</p><div class="code-block" style="margin-top:0.5rem;"><pre><span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>) <span style="color:#fbbf24;">as</span> d:
+    <span style="color:#fbbf24;">print</span>(d.readline())
+    <span style="color:#fbbf24;">print</span>(d.readline())</pre></div></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Iterating line by line (most efficient for large files)</span>
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>) <span style="color:#fbbf24;">as</span> d:
+    <span style="color:#fbbf24;">for</span> line <span style="color:#fbbf24;">in</span> d:
+        <span style="color:#fbbf24;">print</span>(line)</pre></div>
+                <div class="insight-card"><i class="fas fa-memory"></i> For large files, <strong>iterate line by line</strong> instead of <span class="highlight">read()</span> — it doesn't load the whole file into memory.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-pen-fancy'></i> Writing to Files",
+            subtitle: "Using 'w' (write) and 'a' (append) modes",
+            content: `
+                <div class="two-column-split">
+                    <div class="concept-box"><h3><i class="fas fa-eraser"></i> 'w' — Write (Overwrites)</h3>
+                        <p>Creates the file if it doesn't exist. <strong>Erases</strong> existing content if it does.</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>, <span style="color:#86efac;">"w"</span>) <span style="color:#fbbf24;">as</span> d:
+    d.write(<span style="color:#86efac;">"Hello, world!"</span>)</pre></div>
+                    </div>
+                    <div class="concept-box"><h3><i class="fas fa-plus-circle"></i> 'a' — Append</h3>
+                        <p>Adds to the <strong>end</strong> of the file. Keeps existing content intact.</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>, <span style="color:#86efac;">"a"</span>) <span style="color:#fbbf24;">as</span> d:
+    d.write(<span style="color:#86efac;">"\\nNew line added"</span>)</pre></div>
+                    </div>
+                </div>
+                <div class="warning-card"><i class="fas fa-exclamation-triangle"></i> Using <span class="highlight">"w"</span> on an existing file <strong>permanently deletes</strong> its content. Use <span class="highlight">"a"</span> if you want to preserve it!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-file-circle-plus'></i> Creating Files",
+            subtitle: "Using the 'x' mode to create new files safely",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-plus"></i> 'x' Mode</h3><p>Creates a <span class="highlight">new file</span> and opens it for writing.<br>Raises an error if the file <strong>already exists</strong> — perfect for preventing accidental overwrites.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-shield"></i> When to Use It</h3><p>✓ Generating fresh output files<br>✓ Saving records you don't want overwritten<br>✓ Anywhere you need a "safe create"</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Creates app1.py and writes to it</span>
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app1.py"</span>, <span style="color:#86efac;">"x"</span>) <span style="color:#fbbf24;">as</span> d:
+    d.write(<span style="color:#86efac;">"This is a good way to write to this file"</span>)</pre></div>
+                <div class="insight-card"><i class="fas fa-info-circle"></i> If you run the code above twice, the second run raises <span class="highlight">FileExistsError</span> — that's the safety feature working!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-terminal'></i> Practical: Read the First Lines",
+            subtitle: "Combine readline() to preview file content",
+            content: `
+                <div class="concept-box"><h3><i class="fas fa-tasks"></i> Task</h3>
+                    <p>Write a program that prints the first 4 lines of a file one by one.</p>
+                </div>
+                <div class="code-block"><pre><span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"app.py"</span>) <span style="color:#fbbf24;">as</span> d:
+    <span style="color:#fbbf24;">print</span>(d.readline())
+    <span style="color:#fbbf24;">print</span>(d.readline())
+    <span style="color:#fbbf24;">print</span>(d.readline())
+    <span style="color:#fbbf24;">print</span>(d.readline())</pre></div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Better approach:</strong> Use a loop with a counter, or <span class="highlight">f.readlines()[:4]</span>. We'll cover more elegant patterns in the next slides.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-trash-alt'></i> Deleting Files",
+            subtitle: "The os module — os.remove() and safety checks",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-file-times"></i> os.remove()</h3><p>Deletes a file. Requires the <span class="highlight">os</span> module import.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-check-double"></i> Always Check First</h3><p>Use <span class="highlight">os.path.exists()</span> before removing — avoids crashes if the file is missing.</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#fbbf24;">import</span> os
+
+<span style="color:#fbbf24;">if</span> os.path.exists(<span style="color:#86efac;">"demo.txt"</span>):
+    os.remove(<span style="color:#86efac;">"demo.txt"</span>)
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"File deleted"</span>)
+<span style="color:#fbbf24;">else</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"File does not exist"</span>)</pre></div>
+                <div class="warning-card"><i class="fas fa-skull-crossbones"></i> <span class="highlight">os.remove()</span> is <strong>permanent</strong> — there's no recycle bin. Double-check your path!</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-folder-minus'></i> Removing Folders",
+            subtitle: "os.rmdir() and how it differs from os.remove()",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-trash"></i> os.rmdir()</h3><p>Removes an <span class="highlight">empty directory</span> (folder).<br>Raises an error if the folder isn't empty.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-ban"></i> Not the Same</h3><p><span class="highlight">os.remove()</span> → files only<br><span class="highlight">os.rmdir()</span> → empty folders only<br>For non-empty folders, use <span class="highlight">shutil.rmtree()</span> (with caution).</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#fbbf24;">import</span> os
+
+<span style="color:#7aa9ff;"># Remove an empty folder</span>
+<span style="color:#fbbf24;">if</span> os.path.exists(<span style="color:#86efac;">"folder_name"</span>):
+    os.rmdir(<span style="color:#86efac;">"folder_name"</span>)</pre></div>
+                <div class="insight-card"><i class="fas fa-shield-alt"></i> Combine with <span class="highlight">os.path.exists()</span> to prevent errors when the folder doesn't exist.</div>
+            `
+        },
+        {
+            title: "<i class='fas fa-search-location'></i> Path Checks with os.path",
+            subtitle: "exists(), isfile(), isdir() — knowing what you're dealing with",
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box"><h3><i class="fas fa-question"></i> os.path.exists(path)</h3><p>Returns <span class="highlight">True</span> if the path exists (file OR folder).</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-file"></i> os.path.isfile(path)</h3><p>Returns <span class="highlight">True</span> only if the path points to a file.</p></div>
+                    <div class="concept-box"><h3><i class="fas fa-folder"></i> os.path.isdir(path)</h3><p>Returns <span class="highlight">True</span> only if the path points to a directory.</p></div>
+                </div>
+                <div class="code-block"><pre><span style="color:#fbbf24;">import</span> os
+
+path = <span style="color:#86efac;">"C:/Users/HP/Desktop/python_for_backend/week 5/file1.py"</span>
+
+<span style="color:#fbbf24;">if</span> os.path.exists(path):
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Yes, the path exists"</span>)
+<span style="color:#fbbf24;">else</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"No, this path does not exist"</span>)
+
+<span style="color:#fbbf24;">if</span> os.path.isfile(path):
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Yes, it is a file"</span>)
+<span style="color:#fbbf24;">else</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"No, it is not a file"</span>)
+
+<span style="color:#fbbf24;">if</span> os.path.isdir(path):
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Yes, it is a folder"</span>)
+<span style="color:#fbbf24;">else</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"No, it is not a folder"</span>)</pre></div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Pro tip:</strong> On Windows, use forward slashes <span class="highlight">/</span> or raw strings <span class="highlight">r"C:\\Users\\..."</span> to avoid escape character issues with backslashes.</div>
+            `
+        }
+    ];
+
+    // Q&A Data
+    const qaData = [
+        { q: "What is the default mode of open() in Python?", a: "'r' — Read mode. Opens the file for reading and raises an error if the file doesn't exist." },
+        { q: "Why should you always close a file after opening it?", a: "Closing releases system resources and ensures any buffered writes are flushed to disk. Failing to close can lock the file or cause data loss." },
+        { q: "What does the 'w' mode do to an existing file?", a: "'w' (Write) OVERWRITES the file — all existing content is permanently erased. If the file doesn't exist, it creates a new one." },
+        { q: "What is the difference between 'w' and 'a' modes?", a: "'w' erases existing content and starts fresh. 'a' (Append) keeps existing content and adds new data at the end." },
+        { q: "What does the 'x' mode do and when is it useful?", a: "'x' creates a new file and raises FileExistsError if the file already exists. Useful for safe creation — you can't accidentally overwrite." },
+        { q: "Why is the 'with' statement preferred for file handling?", a: "It automatically closes the file when the block exits — even if an exception occurs. This avoids resource leaks and is cleaner code." },
+        { q: "What's the difference between read() and readline()?", a: "read() reads the entire file (or N characters). readline() reads one line at a time. For large files, readline() or iterating line-by-line uses less memory." },
+        { q: "How do you delete a file safely in Python?", a: "Use os.remove() but check os.path.exists() first to avoid a FileNotFoundError if the file is missing." },
+        { q: "What is the difference between os.remove() and os.rmdir()?", a: "os.remove() deletes files. os.rmdir() deletes EMPTY folders only — it raises an error if the folder contains anything." },
+        { q: "How do you check whether a path points to a file or a folder?", a: "Use os.path.isfile(path) to check for a file, and os.path.isdir(path) to check for a folder. Both return True/False." },
+        { q: "Why use forward slashes in Windows file paths?", a: "Backslashes \\\\ are escape characters in Python strings. Forward slashes / work on Windows too, or use a raw string r'C:\\\\path'." },
+        { q: "What is text mode (t) vs binary mode (b)?", a: "Text mode ('t', default) handles files as readable text (UTF-8). Binary mode ('b') handles raw bytes — used for images, audio, and other non-text files." }
+    ];
+
+    // Rendering logic
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}" role="button" tabindex="0">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            const toggle = function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            };
+            question.addEventListener('click', toggle);
+            question.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle.call(question);
+                }
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">
+                    ${slide.title}
+                </div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">
+                    ${slide.content}
+                </div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        // Knowledge check slide detection via title
+        if (slide.title.includes('Knowledge Check')) renderQA();
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+        // Scroll to top of slide area
+        slideArea.scrollTop = 0;
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        // Ignore arrow keys when typing in inputs/textareas
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

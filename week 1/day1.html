@@ -7,19 +7,13 @@
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
             min-height: 100vh;
             padding: 1.5rem;
         }
-
         .class-header {
             max-width: 1300px;
             margin: 0 auto 1rem auto;
@@ -45,7 +39,6 @@
             display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
         }
         .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
-
         .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
         .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
         .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
@@ -58,6 +51,7 @@
         .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
         .concept-box h3 i { color: #60a5fa; }
         .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .concept-box ul { margin-left: 1.2rem; }
         .highlight { color: #fbbf24; font-weight: 600; }
         .tag { background: #1e293b; padding: 0.25rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-family: monospace; color: #b9d0ff; display: inline-flex; align-items: center; gap: 0.4rem; }
         .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
@@ -75,6 +69,7 @@
         .qa-question i { color: #60a5fa; transition: transform 0.3s; }
         .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
         .qa-answer.show { padding: 1rem 1.2rem; max-height: 500px; }
+        .qa-answer .code-inline { background: #0a0e18; padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-family: monospace; color: #fbbf24; font-size: 0.85rem; }
         .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
         .nav-buttons { display: flex; gap: 1rem; }
         button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
@@ -85,16 +80,28 @@
         .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
         .dot.active { background: #3b82f6; width: 22px; }
         footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        .inline-code { background: #0a0e18; padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-family: monospace; color: #fbbf24; font-size: 0.85rem; }
+        .warning-box { background: #1a1a2e; border-left: 4px solid #ef4444; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .warning-box i { color: #ef4444; margin-right: 0.5rem; }
+        .tip-box { background: #1a2a1a; border-left: 4px solid #22c55e; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .tip-box i { color: #22c55e; margin-right: 0.5rem; }
         @media (max-width: 700px) {
             .slide-area { padding: 1rem; }
             .slide-title { font-size: 1.4rem; }
             .concept-box { min-width: 100%; }
             .class-header { flex-direction: column; text-align: center; }
+            .two-column-split { flex-direction: column; }
         }
+        .language-badge { display: inline-block; background: #1e293b; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; color: #b9d0ff; margin: 0.2rem 0.3rem; border: 1px solid #334155; }
+        .language-badge.compiled { border-color: #f87171; color: #fca5a5; }
+        .language-badge.interpreted { border-color: #34d399; color: #6ee7b7; }
+        .pill { background: #1a2338; border-radius: 30px; padding: 0.2rem 1rem; font-size: 0.7rem; font-weight: 600; display: inline-block; margin: 0.2rem 0.3rem; }
+        .pill.green { background: #064e3b; color: #6ee7b7; }
+        .pill.blue { background: #1e3a5f; color: #93c5fd; }
+        .pill.red { background: #4c1d1d; color: #fca5a5; }
     </style>
 </head>
 <body>
-
 <div class="class-header">
     <div>
         <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 1 · DAY 1</span>
@@ -113,7 +120,7 @@
         <div class="indicator-dots" id="dotsContainer"></div>
         <div class="nav-buttons">
             <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
-            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 14</span>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 28</span>
             <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
         </div>
     </div>
@@ -124,71 +131,590 @@
 </div>
 
 <script>
-    // ==================== DAY 1 SLIDES (Full Curriculum) ====================
+    // ==================== REDESIGNED SLIDES (28 total) ====================
+    // Day 1: slides 0-13, Day 2: slides 14-27
+    // New slide "Compiled vs Interpreted" inserted at index 4 (after "How Websites Work")
     const slides = [
-        { title: "<i class='fas fa-chalkboard-user'></i> Lesson Overview", subtitle: "Day One: Demystifying Programming", content: `<div class="insight-card"><i class="fas fa-heart"></i> Many students walk in nervous, unsure if they are 'smart enough' to code. Today we demystify programming: what it really is, where Python fits in, and why backend is exciting. Every student leaves with Python installed and their first program running.</div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-bullseye"></i> By end of class</h3><ul><li>✅ Understand what programming is</li><li>✅ Differentiate Frontend vs Backend</li><li>✅ Explain how websites work (high level)</li><li>✅ Install Python 3.x and VS Code</li><li>✅ Run first Python program</li><li>✅ Build a Simple Calculator</li></ul></div><div class="concept-box"><h3><i class="fas fa-road"></i> Topics Covered</h3><ul><li>What is Programming?</li><li>Frontend vs Backend</li><li>How Websites Work (Request/Response)</li><li>Python History & Philosophy</li><li>Python Career Paths</li><li>Python 2 vs Python 3</li><li>Installation & Setup</li></ul></div></div>` },
-        { title: "<i class='fas fa-code'></i> What is Programming?", subtitle: "Instructions that tell a computer what to do", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-lightbulb"></i> Programming = Writing Instructions</h3><p>Computers are powerful but <span class="highlight">completely literal</span> — they do exactly what you tell them. A program is a sequence of instructions written in a language the computer understands.</p></div><div class="concept-box"><h3><i class="fas fa-utensils"></i> Analogy: Recipe</h3><p>A recipe is a program for a human to cook food. A Python script is a program for a computer to process data, respond to requests, or automate tasks.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># This is a program</span>
-<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Future Backend Developer!"</span>)</pre></div><div class="insight-card"><i class="fas fa-brain"></i> Programming is problem-solving. You break big problems into small, precise steps the computer can execute.</div>` },
-        { title: "<i class='fas fa-laptop-code'></i> Frontend vs Backend", subtitle: "The difference between what users see and server logic", content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-paintbrush"></i> Frontend</h3><p><strong>What users see and click</strong><br>HTML, CSS, JavaScript<br>Buttons, layouts, animations<br>Runs in the browser</p><div class="tag"><i class="fas fa-eye"></i> User-facing layer</div></div><div class="concept-box"><h3><i class="fas fa-server"></i> Backend</h3><p><strong>Server logic, data storage, APIs</strong><br>Python, Django, Databases<br>Authentication, business rules<br>Runs on servers</p><div class="tag"><i class="fas fa-cogs"></i> The engine</div></div></div><div class="insight-card"><i class="fas fa-twitter"></i> When you click 'Post Tweet' on Twitter, the backend stores it in a database and sends it to followers. <span class="highlight">This course teaches you to build that backend.</span></div>` },
-        { title: "<i class='fas fa-globe'></i> How Websites Work", subtitle: "Request/Response Cycle, DNS, Servers", content: `<div class="code-block"><pre>1. Type 'google.com' in browser
-2. DNS translates domain → IP address
-3. Browser sends HTTP Request to that IP
-4. Server receives request, processes it
-5. Server queries database (if needed)
-6. Server sends HTTP Response with data
-7. Browser renders response as webpage</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-exchange-alt"></i> Key Terms</h3><p><span class="highlight">DNS:</span> Internet's phonebook<br><span class="highlight">HTTP Request:</span> Ask for data<br><span class="highlight">HTTP Response:</span> Data + status<br><span class="highlight">Server:</span> Computer that responds</p></div><div class="concept-box"><h3><i class="fas fa-database"></i> Where We Fit</h3><p>Backend developers build the server-side logic: APIs, database models, authentication, business rules.</p></div></div>` },
-        { title: "<i class='fab fa-python'></i> What is Python?", subtitle: "History, philosophy, and why it dominates", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-history"></i> History</h3><p>Created by <span class="highlight">Guido van Rossum</span> in 1991. Named after Monty Python. Version 3 is current standard (Python 2 ended 2020).</p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Why Python Dominates</h3><p>✅ Backend Web (Django, FastAPI)<br>✅ Data Science & AI<br>✅ Automation & Scripting<br>✅ DevOps & Cloud<br>✅ Cybersecurity</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># The Zen of Python (excerpts)</span>
-<span style="color:#86efac;"># "Beautiful is better than ugly."</span>
-<span style="color:#86efac;"># "Explicit is better than implicit."</span>
-<span style="color:#86efac;"># "Simple is better than complex."</span>
-<span style="color:#86efac;"># "Readability counts."</span></pre></div><div class="insight-card"><i class="fas fa-building"></i> Used by: Instagram, Spotify, Netflix, Google, Facebook, NASA</div>` },
-        { title: "<i class='fas fa-code-branch'></i> Python 2 vs Python 3", subtitle: "Key differences every developer must know", content: `<div class="comparison-table"><table style="width:100%"><tr><th>Feature</th><th>Python 2</th><th>Python 3</th></tr><tr><td>print</td><td>print "Hello"</td><td>print("Hello")</td></tr><tr><td>Division</td><td>5/2 = 2</td><td>5/2 = 2.5 (true division)</td></tr><tr><td>Input</td><td>raw_input()</td><td>input()</td></tr><tr><td>Unicode</td><td>u"text" needed</td><td>All strings are Unicode</td></tr><tr><td>range()</td><td>Returns list</td><td>Returns iterator (memory efficient)</td></tr><tr><td>Exception</td><td>except Exception, e</td><td>except Exception as e</td></tr><tr><td>Status</td><td>End-of-life Jan 2020</td><td>Actively developed</td></tr></table></div><div class="insight-card"><i class="fas fa-question-circle"></i> <strong>Interview Question:</strong> Which version should you learn today? <span class="highlight">Answer: Python 3.</span> Python 2 is discontinued; modern frameworks (Django, FastAPI, TensorFlow) are built for Python 3.</div>` },
-        { title: "<i class='fas fa-download'></i> Installing Python & VS Code", subtitle: "Step-by-step setup for all operating systems", content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fab fa-windows"></i> Windows</h3><p>1. Visit python.org/downloads<br>2. Download Python 3.12+<br>3. ✅ CHECK "Add Python to PATH"<br>4. Click Install Now</p></div><div class="concept-box"><h3><i class="fab fa-apple"></i> Mac/Linux</h3><p>Mac: brew install python3<br>Linux: sudo apt install python3<br>Or download from python.org</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Verify installation (terminal/cmd)</span>
-python --version
-<span style="color:#86efac;"># Expected: Python 3.12.x</span>
+        // ===== DAY 1 SLIDES =====
+        { 
+            title: "<i class='fas fa-chalkboard-user'></i> Lesson Overview", 
+            subtitle: "Day One: Demystifying Programming", 
+            content: `<div class="insight-card"><i class="fas fa-heart"></i> Many students walk in nervous, unsure if they are 'smart enough' to code. Today we demystify programming: what it really is, where Python fits in, and why backend is exciting. Every student leaves with Python installed and their first program running.</div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-bullseye"></i> By end of class</h3><ul><li>✅ Understand what programming is</li><li>✅ Differentiate Frontend vs Backend</li><li>✅ Explain how websites work (high level)</li><li>✅ Install Python 3.x and VS Code</li><li>✅ Run first Python program</li><li>✅ Build a Simple Calculator</li></ul></div><div class="concept-box"><h3><i class="fas fa-road"></i> Topics Covered</h3><ul><li>What is Programming?</li><li>Frontend vs Backend</li><li>How Websites Work (Request/Response)</li><li>Python History & Philosophy</li><li>Python Career Paths</li><li>Python 2 vs Python 3</li><li>Installation & Setup</li></ul></div></div>` 
+        },
+        { 
+            title: "<i class='fas fa-code'></i> What is Programming?", 
+            subtitle: "Instructions that tell a computer what to do", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-lightbulb"></i> Programming = Writing Instructions</h3><p>Computers are powerful but <span class="highlight">completely literal</span> — they do exactly what you tell them. A program is a sequence of instructions written in a language the computer understands.</p></div><div class="concept-box"><h3><i class="fas fa-utensils"></i> Analogy: Recipe</h3><p>A recipe is a program for a human to cook food. A Python script is a program for a computer to process data, respond to requests, or automate tasks.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># This is a program</span>\n<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Future Backend Developer!"</span>)</pre></div><div class="insight-card"><i class="fas fa-brain"></i> Programming is problem-solving. You break big problems into small, precise steps the computer can execute.</div>` 
+        },
+        { 
+            title: "<i class='fas fa-laptop-code'></i> Frontend vs Backend", 
+            subtitle: "The difference between what users see and server logic", 
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-paintbrush"></i> Frontend</h3><p><strong>What users see and click</strong><br>HTML, CSS, JavaScript<br>Buttons, layouts, animations<br>Runs in the browser</p><div class="tag"><i class="fas fa-eye"></i> User-facing layer</div></div><div class="concept-box"><h3><i class="fas fa-server"></i> Backend</h3><p><strong>Server logic, data storage, APIs</strong><br>Python, Django, Databases<br>Authentication, business rules<br>Runs on servers</p><div class="tag"><i class="fas fa-cogs"></i> The engine</div></div></div><div class="insight-card"><i class="fas fa-twitter"></i> When you click 'Post Tweet' on Twitter, the backend stores it in a database and sends it to followers. <span class="highlight">This course teaches you to build that backend.</span></div>` 
+        },
+        { 
+            title: "<i class='fas fa-globe'></i> How Websites Work", 
+            subtitle: "Request/Response Cycle, DNS, Servers", 
+            content: `<div class="code-block"><pre>1. Type 'google.com' in browser\n2. DNS translates domain → IP address\n3. Browser sends HTTP Request to that IP\n4. Server receives request, processes it\n5. Server queries database (if needed)\n6. Server sends HTTP Response with data\n7. Browser renders response as webpage</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-exchange-alt"></i> Key Terms</h3><p><span class="highlight">DNS:</span> Internet's phonebook<br><span class="highlight">HTTP Request:</span> Ask for data<br><span class="highlight">HTTP Response:</span> Data + status<br><span class="highlight">Server:</span> Computer that responds</p></div><div class="concept-box"><h3><i class="fas fa-database"></i> Where We Fit</h3><p>Backend developers build the server-side logic: APIs, database models, authentication, business rules.</p></div></div>` 
+        },
+        // ===== NEW SLIDE: COMPILED VS INTERPRETED (index 4) =====
+        { 
+            title: "<i class='fas fa-code-branch'></i> Compiled vs Interpreted Languages", 
+            subtitle: "How your code becomes a running program", 
+            content: `
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Analogy:</strong> Compiled = translating an entire book before reading it. Interpreted = translating page-by-page as you read.</div>
+                <div class="two-column-split">
+                    <div class="concept-box" style="border-left: 4px solid #f87171;">
+                        <h3><i class="fas fa-cogs"></i> Compiled</h3>
+                        <p>Source code → Compiler → Machine code (executable file)</p>
+                        <ul>
+                            <li>✅ <span class="highlight">Faster</span> execution</li>
+                            <li>✅ Translation happens once</li>
+                            <li>❌ Slower development cycle (must recompile)</li>
+                            <li>❌ Platform-specific executable</li>
+                        </ul>
+                        <div style="margin-top:0.8rem;">
+                            <span class="language-badge compiled"><i class="fas fa-bolt"></i> C</span>
+                            <span class="language-badge compiled"><i class="fas fa-bolt"></i> C++</span>
+                            <span class="language-badge compiled"><i class="fas fa-bolt"></i> Rust</span>
+                            <span class="language-badge compiled"><i class="fas fa-bolt"></i> Go</span>
+                            <span class="language-badge compiled"><i class="fas fa-bolt"></i> Swift</span>
+                        </div>
+                    </div>
+                    <div class="concept-box" style="border-left: 4px solid #34d399;">
+                        <h3><i class="fas fa-play"></i> Interpreted</h3>
+                        <p>Source code → Interpreter → Executes line-by-line</p>
+                        <ul>
+                            <li>✅ <span class="highlight">Faster</span> development (no compile step)</li>
+                            <li>✅ Highly portable (any OS with interpreter)</li>
+                            <li>❌ Slower execution</li>
+                            <li>❌ Errors found at runtime</li>
+                        </ul>
+                        <div style="margin-top:0.8rem;">
+                            <span class="language-badge interpreted"><i class="fab fa-python"></i> Python</span>
+                            <span class="language-badge interpreted"><i class="fab fa-js"></i> JavaScript</span>
+                            <span class="language-badge interpreted"><i class="fas fa-gem"></i> Ruby</span>
+                            <span class="language-badge interpreted"><i class="fab fa-php"></i> PHP</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-table">
+                    <table style="width:100%">
+                        <tr><th>Feature</th><th>Compiled (C, C++, Rust)</th><th>Interpreted (Python, JS, Ruby)</th></tr>
+                        <tr><td>Translation</td><td>Once, before execution</td><td>Every time, during execution</td></tr>
+                        <tr><td>Output</td><td>Executable file (.exe)</td><td>No file — relies on interpreter</td></tr>
+                        <tr><td>Speed</td><td><span class="pill green">Fast</span></td><td><span class="pill red">Slower</span></td></tr>
+                        <tr><td>Development</td><td><span class="pill red">Slower (recompile)</span></td><td><span class="pill green">Faster (instant run)</span></td></tr>
+                        <tr><td>Portability</td><td><span class="pill red">Low</span></td><td><span class="pill green">High</span></td></tr>
+                    </table>
+                </div>
+                <div class="tip-box"><i class="fas fa-info-circle"></i> <strong>Did you know?</strong> Java and C# are <strong>both</strong> — compiled to bytecode, then interpreted by a VM (which uses JIT compilation).</div>
+            `
+        },
+        { 
+            title: "<i class='fab fa-python'></i> What is Python?", 
+            subtitle: "History, philosophy, and why it dominates", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-history"></i> History</h3><p>Created by <span class="highlight">Guido van Rossum</span> in 1991. Named after Monty Python. Version 3 is current standard (Python 2 ended 2020).</p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Why Python Dominates</h3><p>✅ Backend Web (Django, FastAPI)<br>✅ Data Science & AI<br>✅ Automation & Scripting<br>✅ DevOps & Cloud<br>✅ Cybersecurity</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># The Zen of Python (excerpts)</span>\n<span style="color:#86efac;"># "Beautiful is better than ugly."</span>\n<span style="color:#86efac;"># "Explicit is better than implicit."</span>\n<span style="color:#86efac;"># "Simple is better than complex."</span>\n<span style="color:#86efac;"># "Readability counts."</span></pre></div><div class="insight-card"><i class="fas fa-building"></i> Used by: Instagram, Spotify, Netflix, Google, Facebook, NASA</div>` 
+        },
+        { 
+            title: "<i class='fas fa-code-branch'></i> Python 2 vs Python 3", 
+            subtitle: "Key differences every developer must know", 
+            content: `<div class="comparison-table"><table style="width:100%"><tr><th>Feature</th><th>Python 2</th><th>Python 3</th></tr><tr><td>print</td><td>print "Hello"</td><td>print("Hello")</td></tr><tr><td>Division</td><td>5/2 = 2</td><td>5/2 = 2.5 (true division)</td></tr><tr><td>Input</td><td>raw_input()</td><td>input()</td></tr><tr><td>Unicode</td><td>u"text" needed</td><td>All strings are Unicode</td></tr><tr><td>range()</td><td>Returns list</td><td>Returns iterator (memory efficient)</td></tr><tr><td>Exception</td><td>except Exception, e</td><td>except Exception as e</td></tr><tr><td>Status</td><td>End-of-life Jan 2020</td><td>Actively developed</td></tr></table></div><div class="insight-card"><i class="fas fa-question-circle"></i> <strong>Interview Question:</strong> Which version should you learn today? <span class="highlight">Answer: Python 3.</span> Python 2 is discontinued; modern frameworks (Django, FastAPI, TensorFlow) are built for Python 3.</div>` 
+        },
+        { 
+            title: "<i class='fas fa-download'></i> Installing Python & VS Code", 
+            subtitle: "Step-by-step setup for all operating systems", 
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fab fa-windows"></i> Windows</h3><p>1. Visit python.org/downloads<br>2. Download Python 3.12+<br>3. ✅ CHECK "Add Python to PATH"<br>4. Click Install Now</p></div><div class="concept-box"><h3><i class="fab fa-apple"></i> Mac/Linux</h3><p>Mac: brew install python3<br>Linux: sudo apt install python3<br>Or download from python.org</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Verify installation (terminal/cmd)</span>\npython --version\n<span style="color:#86efac;"># Expected: Python 3.12.x</span>\n\n<span style="color:#7aa9ff;"># VS Code: Download from code.visualstudio.com</span>\n<span style="color:#7aa9ff;"># Install Python extension (ms-python.python)</span></pre></div><div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Pro tip:</strong> Always check "Add Python to PATH" on Windows — saves hours of troubleshooting!</div>` 
+        },
+        { 
+            title: "<i class='fas fa-terminal'></i> Running Python: REPL vs Scripts", 
+            subtitle: "Interactive mode and script mode", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-comment-dots"></i> Interactive Mode (REPL)</h3><p>Type <code>python</code> in terminal → write code line by line → immediate feedback.<br>Exit: <code>exit()</code> or Ctrl+Z (Win) / Ctrl+D (Mac).<br><span class="highlight">Great for testing small snippets.</span></p></div><div class="concept-box"><h3><i class="fas fa-file-code"></i> Script Mode</h3><p>Create a .py file, write code, run: <code>python myfile.py</code><br><span class="highlight">Used for real applications.</span></p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Create hello.py</span>\n<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello from Python!"</span>)\n<span style="color:#7aa9ff;"># Run: python hello.py</span></pre></div>` 
+        },
+        { 
+            title: "<i class='fas fa-calculator'></i> Practical: Simple Calculator", 
+            subtitle: "Hands-on — your first real Python program", 
+            content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Build a Simple Calculator</h3><ul><li>✅ Ask for two numbers using input()</li><li>✅ Ask which operation (+, -, *, /)</li><li>✅ Display result clearly formatted</li><li>✅ Handle division by zero gracefully</li><li>✅ BONUS: Add modulus (%) and exponent (**)</li></ul></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Simple Calculator - starter code</span>\n<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"=== Simple Calculator ==="</span>)\n\nnum1 = float(input(<span style="color:#86efac;">"Enter first number: "</span>))\nnum2 = float(input(<span style="color:#86efac;">"Enter second number: "</span>))\n\naddition = num1 + num2\nsubtraction = num1 - num2\nmultiplication = num1 * num2\n\n<span style="color:#fbbf24;">if</span> num2 != 0:\n    division = num1 / num2\n    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Division: {division}"</span>)\n<span style="color:#fbbf24;">else</span>:\n    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Cannot divide by zero!"</span>)\n\n<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Addition: {addition}"</span>)\n<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Subtraction: {subtraction}"</span>)\n<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Multiplication: {multiplication}"</span>)</pre></div><div class="insight-card"><i class="fas fa-star"></i> <strong>BONUS Challenge:</strong> Add modulus (%) and exponent (**) operations to your calculator!</div>` 
+        },
+        { 
+            title: "<i class='fas fa-briefcase'></i> Python Career Paths", 
+            subtitle: "Where Python can take you", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-server"></i> Backend Developer</h3><p>Build APIs, databases, server logic. Django, FastAPI, Flask. <span class="highlight">High demand, great salaries.</span></p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Data Scientist / AI Engineer</h3><p>Pandas, NumPy, TensorFlow, PyTorch. Analyze data, build ML models.</p></div><div class="concept-box"><h3><i class="fas fa-robot"></i> Automation / DevOps</h3><p>Write scripts to automate tasks, manage cloud infrastructure, CI/CD pipelines.</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> This course prepares you for <span class="highlight">Backend API Development</span> — one of the highest-paying and most in-demand Python careers.</div>` 
+        },
+        { 
+            title: "<i class='fab fa-django'></i> Why Python for Backend?", 
+            subtitle: "Django, FastAPI, Flask ecosystem", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fab fa-django"></i> Django</h3><p>Full-featured framework. Built-in admin, ORM, auth, security. Used by Instagram, Pinterest, Spotify.</p></div><div class="concept-box"><h3><i class="fas fa-bolt"></i> FastAPI</h3><p>Modern, fast for APIs. Automatic OpenAPI docs, async support, type hints.</p></div><div class="concept-box"><h3><i class="fas fa-flask"></i> Flask</h3><p>Minimal, flexible. Great for microservices and learning fundamentals.</p></div></div><div class="insight-card"><i class="fas fa-chart-line"></i> <strong>Our focus:</strong> Django + Django REST Framework (DRF) to build production-grade REST APIs.</div>` 
+        },
+        { 
+            title: "<i class='fas fa-play'></i> Your First Python Program", 
+            subtitle: "Hello World and Variables", 
+            content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Week 1 Day 1 - First Python Program</span>\n<span style="color:#86efac;"># 1. Hello World</span>\n<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Django Backend World!"</span>)\n\n<span style="color:#86efac;"># 2. Variables (preview)</span>\nname = <span style="color:#86efac;">"Alex"</span>\nage = 25\n<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"My name is {name} and I am {age} years old"</span>)</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-cube"></i> What is a Variable?</h3><p>A named container that stores data. <span class="highlight">name = "Alex"</span> stores the string "Alex".</p></div><div class="concept-box"><h3><i class="fas fa-print"></i> print() function</h3><p>Displays output to the console. Your first debugging tool!</p></div></div>` 
+        },
+        { 
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check", 
+            subtitle: "Test what you learned today", 
+            content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>` 
+        },
+        { 
+            title: "<i class='fas fa-clipboard-list'></i> Assignment", 
+            subtitle: "Complete before Day 2", 
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-double"></i> Required Homework</h3><ul><li>✅ Install Python 3.12+</li><li>✅ Install VS Code with Python extension</li><li>✅ Run python --version to verify</li><li>✅ Create calculator.py with the Simple Calculator program</li><li>✅ Add BONUS: modulus (%) and exponent (**) operations</li><li>✅ Run and test your calculator with different inputs</li></ul></div><div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3><p><strong>Day 2: Variables & Data Types</strong><br>Strings, Integers, Floats, Booleans, Type Conversion, and building an Age Calculator.</p><p>Don't skip the assignment — Day 2 builds directly on today's concepts!</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> "The only way to learn programming is by writing code. Type every example yourself!" — Instructor</div>` 
+        },
 
-<span style="color:#7aa9ff;"># VS Code: Download from code.visualstudio.com</span>
-<span style="color:#7aa9ff;"># Install Python extension (ms-python.python)</span></pre></div><div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Pro tip:</strong> Always check "Add Python to PATH" on Windows — saves hours of troubleshooting!</div>` },
-        { title: "<i class='fas fa-terminal'></i> Running Python: REPL vs Scripts", subtitle: "Interactive mode and script mode", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-comment-dots"></i> Interactive Mode (REPL)</h3><p>Type <code>python</code> in terminal → write code line by line → immediate feedback.<br>Exit: <code>exit()</code> or Ctrl+Z (Win) / Ctrl+D (Mac).<br><span class="highlight">Great for testing small snippets.</span></p></div><div class="concept-box"><h3><i class="fas fa-file-code"></i> Script Mode</h3><p>Create a .py file, write code, run: <code>python myfile.py</code><br><span class="highlight">Used for real applications.</span></p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Create hello.py</span>
-<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello from Python!"</span>)
-<span style="color:#7aa9ff;"># Run: python hello.py</span></pre></div>` },
-        { title: "<i class='fas fa-calculator'></i> Practical: Simple Calculator", subtitle: "Hands-on — your first real Python program", content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Build a Simple Calculator</h3><ul><li>✅ Ask for two numbers using input()</li><li>✅ Ask which operation (+, -, *, /)</li><li>✅ Display result clearly formatted</li><li>✅ Handle division by zero gracefully</li><li>✅ BONUS: Add modulus (%) and exponent (**)</li></ul></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Simple Calculator - starter code</span>
-<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"=== Simple Calculator ==="</span>)
+        // ===== DAY 2 SLIDES (14-27) =====
+        { 
+            title: "<i class='fas fa-undo'></i> Day 2: Quick Review", 
+            subtitle: "What we covered on Day 1", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-print"></i> print() Function</h3>
+                        <p>Displays output to the console — your first debugging tool!</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, World!"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Python"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">2</span> + <span style="color:#fbbf24;">2</span>)  <span style="color:#7aa9ff;"># Output: 4</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-laptop-code"></i> Programming Basics</h3>
+                        <ul>
+                            <li>✅ Frontend vs Backend</li>
+                            <li>✅ How websites work (Request/Response)</li>
+                            <li>✅ Compiled vs Interpreted</li>
+                            <li>✅ Python installed and verified</li>
+                            <li>✅ VS Code with Python extension</li>
+                            <li>✅ First program: Hello World</li>
+                            <li>✅ Simple Calculator</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Today:</strong> We dive deep into <span class="highlight">variables</span> — the foundation of EVERY program you'll ever write!</div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-box'></i> What is a Variable?", 
+            subtitle: "Containers for storing data", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-box"></i> Definition</h3>
+                        <p>A <span class="highlight">variable</span> is a container for storing data. Think of it as a labeled box where you put information you want to use later.</p>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Syntax: variable_name = value</span>
+<span style="color:#fbbf24;">name</span> = <span style="color:#86efac;">"Abraham"</span>   <span style="color:#7aa9ff;"># String (text)</span>
+<span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">23</span>            <span style="color:#7aa9ff;"># Integer (whole number)</span>
+<span style="color:#fbbf24;">height</span> = <span style="color:#fbbf24;">5.9</span>         <span style="color:#7aa9ff;"># Float (decimal number)</span>
+<span style="color:#fbbf24;">is_student</span> = <span style="color:#fbbf24;">True</span>    <span style="color:#7aa9ff;"># Boolean (True/False)</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-cube"></i> Multiple Assignment</h3>
+                        <p>Assign multiple variables in one line:</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">name</span>, <span style="color:#fbbf24;">age</span> = <span style="color:#86efac;">"appBrew"</span>, <span style="color:#fbbf24;">18</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">name</span>)  <span style="color:#7aa9ff;"># Output: appBrew</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">age</span>)   <span style="color:#7aa9ff;"># Output: 18</span></pre></div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <i class="fas fa-lightbulb"></i> <strong>Key insight:</strong> The variable name (<span class="inline-code">name</span>) is NOT the data. The data (<span class="inline-code">"Abraham"</span>) is stored in memory. The variable is just a <strong>pointer</strong> or <strong>label</strong> to that memory location.
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-tag'></i> Naming Your Variables", 
+            subtitle: "Rules and conventions every developer must know", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-rules"></i> Naming Rules</h3>
+                        <ul>
+                            <li>✅ Can contain letters, numbers, and underscores (<span class="inline-code">_</span>)</li>
+                            <li>❌ <strong>Cannot</strong> start with a number: <span class="inline-code">1x</span> ❌ → Use <span class="inline-code">x1</span> ✅</li>
+                            <li>❌ <strong>Cannot</strong> use Python keywords: <span class="inline-code">if</span>, <span class="inline-code">else</span>, <span class="inline-code">while</span>, <span class="inline-code">for</span>, <span class="inline-code">True</span>, <span class="inline-code">False</span></li>
+                            <li>❌ <strong>Case-sensitive:</strong> <span class="inline-code">age</span> and <span class="inline-code">Age</span> are NOT the same</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-pen-fancy"></i> Naming Conventions</h3>
+                        <p><span class="highlight">Snake Case</span> (Python standard):</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">my_email_on_google</span> = <span style="color:#86efac;">"official.appBrew@gmail.com"</span></pre></div>
+                        <p><span class="highlight">Camel Case</span> (JavaScript style):</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">bestLgaInRivers</span> = <span style="color:#86efac;">"Andoni"</span></pre></div>
+                        <p><span class="highlight">Pascal Case</span> (Class names):</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">MostPopulousBlackCountry</span> = <span style="color:#86efac;">"Nigeria"</span></pre></div>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Common mistake:</strong> <span class="inline-code">1x = 23</span> causes a <span class="highlight">SyntaxError</span>! Always start variables with a letter or underscore.
+                </div>
+                <div class="tip-box">
+                    <i class="fas fa-check-circle"></i> <strong>Pro tip:</strong> <span class="inline-code">_is_ok = "YES"</span> is valid — underscores can start variable names! Python uses leading underscores for special conventions.
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-database'></i> The 4 Primitive Data Types", 
+            subtitle: "The building blocks of all Python data", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box" style="border-left: 4px solid #fbbf24;">
+                        <h3><i class="fas fa-hashtag"></i> Integers (int)</h3>
+                        <p>Whole numbers — positive or negative</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">12</span>
+<span style="color:#fbbf24;">fav_num</span> = <span style="color:#fbbf24;">7</span>
+<span style="color:#fbbf24;">temperature</span> = <span style="color:#fbbf24;">-5</span></pre></div>
+                    </div>
+                    <div class="concept-box" style="border-left: 4px solid #34d399;">
+                        <h3><i class="fas fa-arrow-down"></i> Floats (float)</h3>
+                        <p>Decimal numbers</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">my_height</span> = <span style="color:#fbbf24;">45.56</span>
+<span style="color:#fbbf24;">weight</span> = <span style="color:#fbbf24;">12.3</span>
+<span style="color:#fbbf24;">pi</span> = <span style="color:#fbbf24;">3.14159</span></pre></div>
+                    </div>
+                    <div class="concept-box" style="border-left: 4px solid #f472b6;">
+                        <h3><i class="fas fa-quote-right"></i> Strings (str)</h3>
+                        <p>Text — use single or double quotes</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">name</span> = <span style="color:#86efac;">"appBrew"</span>
+<span style="color:#fbbf24;">email</span> = <span style="color:#86efac;">'official.appBrew@gmail.com'</span></pre></div>
+                    </div>
+                    <div class="concept-box" style="border-left: 4px solid #a78bfa;">
+                        <h3><i class="fas fa-toggle-on"></i> Booleans (bool)</h3>
+                        <p>True or False — like a light switch</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">is_adult</span> = <span style="color:#fbbf24;">True</span>
+<span style="color:#fbbf24;">is_female</span> = <span style="color:#fbbf24;">False</span></pre></div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-magic"></i> <strong>Dynamic Typing:</strong> Python figures out the type automatically. You can change a variable's type anytime: <span class="inline-code">age = 23</span> (int) then <span class="inline-code">age = "twenty three"</span> (str) — no error!</div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-calculator'></i> Speed of Light Example", 
+            subtitle: "Scientific notation in Python", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-rocket"></i> Speed of Light</h3>
+                        <p>c = 3 × 10⁸ m/s (300,000,000 m/s)</p>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Method 1: Multiplication</span>
+<span style="color:#fbbf24;">speed_of_light</span> = <span style="color:#fbbf24;">3</span> * <span style="color:#fbbf24;">10</span>**<span style="color:#fbbf24;">8</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">speed_of_light</span>)  <span style="color:#7aa9ff;"># 300000000 (int)</span>
 
-num1 = float(input(<span style="color:#86efac;">"Enter first number: "</span>))
-num2 = float(input(<span style="color:#86efac;">"Enter second number: "</span>))
+<span style="color:#7aa9ff;"># Method 2: Scientific notation shorthand</span>
+<span style="color:#fbbf24;">speed_of_light</span> = <span style="color:#fbbf24;">3e8</span>  <span style="color:#7aa9ff;"># 3 × 10⁸</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">speed_of_light</span>)  <span style="color:#7aa9ff;"># 300000000.0 (float)</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-info-circle"></i> Key Difference</h3>
+                        <p><span class="inline-code">3 * 10**8</span> → <span class="highlight">int</span> (whole number)</p>
+                        <p><span class="inline-code">3e8</span> → <span class="highlight">float</span> (decimal number)</p>
+                        <p>Both are valid! Use <span class="inline-code">3 * 10**8</span> if you need an integer, <span class="inline-code">3e8</span> for scientific notation.</p>
+                        <div class="tip-box" style="margin-top: 0.8rem;">
+                            <i class="fas fa-lightbulb"></i> <strong>Real-world use:</strong> Physics calculations, astronomical distances, and financial computations often use scientific notation.
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-print'></i> The print() Function Deep Dive", 
+            subtitle: "Your primary debugging tool", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-code"></i> print() Examples</h3>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Print strings</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, World!"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Python"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Java"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Javascript"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"C"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"C#"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"C++"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Dart"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"PHP"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Ruby"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Fortran"</span>)
 
-addition = num1 + num2
-subtraction = num1 - num2
-multiplication = num1 * num2
+<span style="color:#7aa9ff;"># Print expressions</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"2 + 2"</span>)  <span style="color:#7aa9ff;"># Output: 2 + 2 (string)</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">2</span> + <span style="color:#fbbf24;">2</span>)    <span style="color:#7aa9ff;"># Output: 4 (calculated)</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-info-circle"></i> Important Distinction</h3>
+                        <p><span class="inline-code">print("2 + 2")</span> prints the <span class="highlight">string</span> "2 + 2"</p>
+                        <p><span class="inline-code">print(2 + 2)</span> calculates the <span class="highlight">math</span> first, then prints 4</p>
+                        <div class="warning-box" style="margin-top: 0.8rem;">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Common mistake:</strong> Forgetting quotes changes the behavior entirely!
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-pencil-alt'></i> Your Turn!", 
+            subtitle: "Practice creating variables", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-tasks"></i> Create Variables For:</h3>
+                        <ul>
+                            <li>1. Your best Local Government Area (LGA)</li>
+                            <li>2. Your favorite person</li>
+                            <li>3. The best movie ever made</li>
+                            <li>4. Your favorite number</li>
+                        </ul>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Example solution:</span>
+<span style="color:#fbbf24;">best_lga</span> = <span style="color:#86efac;">"Andoni"</span>
+<span style="color:#fbbf24;">favorite_person</span> = <span style="color:#86efac;">"My Mom"</span>
+<span style="color:#fbbf24;">best_movie</span> = <span style="color:#86efac;">"The Godfather"</span>
+<span style="color:#fbbf24;">favorite_number</span> = <span style="color:#fbbf24;">7</span>
 
-<span style="color:#fbbf24;">if</span> num2 != 0:
-    division = num1 / num2
-    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Division: {division}"</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">best_lga</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">favorite_person</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">best_movie</span>)
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">favorite_number</span>)</pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-comment"></i> Key Takeaway</h3>
+                        <p>Variables make your code <span class="highlight">reusable</span> and <span class="highlight">readable</span>.</p>
+                        <p>Without variables, every value would be hard-coded. With variables, you can change one value and it updates everywhere!</p>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-type'></i> Type Conversion", 
+            subtitle: "Converting between data types", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-arrows-alt-h"></i> Built-in Functions</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">int</span>()  <span style="color:#7aa9ff;"># Convert to integer</span>
+<span style="color:#fbbf24;">float</span>()  <span style="color:#7aa9ff;"># Convert to float</span>
+<span style="color:#fbbf24;">str</span>()  <span style="color:#7aa9ff;"># Convert to string</span>
+<span style="color:#fbbf24;">bool</span>()  <span style="color:#7aa9ff;"># Convert to boolean</span></pre></div>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># Examples</span>
+<span style="color:#fbbf24;">price</span> = <span style="color:#86efac;">"19.99"</span>  <span style="color:#7aa9ff;"># This is a string!</span>
+<span style="color:#fbbf24;">price_float</span> = <span style="color:#fbbf24;">float</span>(<span style="color:#fbbf24;">price</span>)  <span style="color:#7aa9ff;"># Now it's a float</span>
+
+<span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">25</span>  <span style="color:#7aa9ff;"># int</span>
+<span style="color:#fbbf24;">age_str</span> = <span style="color:#fbbf24;">str</span>(<span style="color:#fbbf24;">age</span>)  <span style="color:#7aa9ff;"># Now it's a string</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Common Pitfall</h3>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># This causes a TypeError!</span>
+<span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">25</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"You are "</span> + <span style="color:#fbbf24;">age</span> + <span style="color:#86efac;">" years old"</span>)
+
+<span style="color:#7aa9ff;"># Fix: Convert to string first</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"You are "</span> + <span style="color:#fbbf24;">str</span>(<span style="color:#fbbf24;">age</span>) + <span style="color:#86efac;">" years old"</span>)
+
+<span style="color:#7aa9ff;"># OR use f-strings (best practice!)</span>
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You are {age} years old"</span>)</pre></div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <i class="fas fa-star"></i> <strong>Best practice:</strong> Use <span class="highlight">f-strings</span> for formatting! <span class="inline-code">f"Hello {name}"</span> is cleaner and less error-prone than concatenation.
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-user'></i> User Input with input()", 
+            subtitle: "Making your programs interactive", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-keyboard"></i> input() Function</h3>
+                        <p>Pauses the program and waits for the user to type something.</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">name</span> = <span style="color:#fbbf24;">input</span>(<span style="color:#86efac;">"What is your name? "</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Hello, {name}!"</span>)
+
+<span style="color:#7aa9ff;"># Get a number (remember: input() returns a string!)</span>
+<span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">int</span>(<span style="color:#fbbf24;">input</span>(<span style="color:#86efac;">"Enter your age: "</span>))
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You will be {age + 1} next year!"</span>)</pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-shield-alt"></i> Input Security</h3>
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>CRITICAL:</strong> <span class="inline-code">input()</span> always returns a <span class="highlight">string</span>!
+                            <p style="margin-top:0.5rem;">To get a number, you MUST convert it: <span class="inline-code">int(input("..."))</span> or <span class="inline-code">float(input("..."))</span></p>
+                        </div>
+                        <div class="tip-box" style="margin-top:0.8rem;">
+                            <i class="fas fa-lightbulb"></i> <strong>Pro tip:</strong> Always validate user input. What happens if someone types "twenty" instead of 20? We'll handle error handling in a future lesson!
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-calculator'></i> Practical: Age Calculator", 
+            subtitle: "Hands-on — combine variables, input, and conversion", 
+            content: `
+                <div class="concept-box">
+                    <h3><i class="fas fa-tasks"></i> Build an Age Calculator</h3>
+                    <ul>
+                        <li>✅ Ask user for their birth year</li>
+                        <li>✅ Ask for the current year</li>
+                        <li>✅ Calculate and display their age</li>
+                        <li>✅ Display how old they will be in 10 years</li>
+                        <li>✅ BONUS: Tell them if they are a teenager (13-19)</li>
+                    </ul>
+                </div>
+                <div class="code-block"><pre><span style="color:#7aa9ff;"># Age Calculator</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"=== Age Calculator ==="</span>)
+
+<span style="color:#fbbf24;">birth_year</span> = <span style="color:#fbbf24;">int</span>(<span style="color:#fbbf24;">input</span>(<span style="color:#86efac;">"Enter your birth year: "</span>))
+<span style="color:#fbbf24;">current_year</span> = <span style="color:#fbbf24;">int</span>(<span style="color:#fbbf24;">input</span>(<span style="color:#86efac;">"Enter the current year: "</span>))
+
+<span style="color:#fbbf24;">age</span> = <span style="color:#fbbf24;">current_year</span> - <span style="color:#fbbf24;">birth_year</span>
+<span style="color:#fbbf24;">age_in_10_years</span> = <span style="color:#fbbf24;">age</span> + <span style="color:#fbbf24;">10</span>
+
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"You are {age} years old."</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"In 10 years, you will be {age_in_10_years} years old."</span>)
+
+<span style="color:#7aa9ff;"># BONUS: Check if teenager</span>
+<span style="color:#fbbf24;">if</span> <span style="color:#fbbf24;">13</span> <= <span style="color:#fbbf24;">age</span> <= <span style="color:#fbbf24;">19</span>:
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"You are a teenager!"</span>)
 <span style="color:#fbbf24;">else</span>:
-    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Cannot divide by zero!"</span>)
+    <span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"You are not a teenager."</span>)</pre></div>
+                <div class="insight-card"><i class="fas fa-star"></i> <strong>Challenge:</strong> Add error handling for invalid input (like text instead of numbers)!</div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-memory'></i> Memory & Variables", 
+            subtitle: "How Python stores data in memory", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-ram"></i> Memory Location</h3>
+                        <p>When you create a variable, Python:</p>
+                        <ul>
+                            <li>1. Allocates a space in memory</li>
+                            <li>2. Stores the <span class="highlight">value</span> there</li>
+                            <li>3. Links the <span class="highlight">variable name</span> to that memory address</li>
+                        </ul>
+                        <div class="tip-box" style="margin-top:0.8rem;">
+                            <i class="fas fa-lightbulb"></i> Think of it like a phone contact: the contact name is the variable, and the phone number is the memory address where the data lives.
+                        </div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-sync-alt"></i> Reassignment</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">counter</span> = <span style="color:#fbbf24;">0</span>  <span style="color:#7aa9ff;"># Memory location A</span>
+<span style="color:#fbbf24;">counter</span> = <span style="color:#fbbf24;">counter</span> + <span style="color:#fbbf24;">1</span>  <span style="color:#7aa9ff;"># Python calculates 0+1, stores at memory location B</span>
+<span style="color:#fbbf24;">counter</span> += <span style="color:#fbbf24;">1</span>  <span style="color:#7aa9ff;"># Shorthand for counter = counter + 1</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">counter</span>)  <span style="color:#7aa9ff;"># Output: 2</span></pre></div>
+                        <div class="tip-box" style="margin-top:0.8rem;">
+                            <i class="fas fa-check-circle"></i> <strong>Pro tip:</strong> Use <span class="inline-code">+=</span>, <span class="inline-code">-=</span>, <span class="inline-code">*=</span>, <span class="inline-code">/=</span> for cleaner code!
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-github'></i> Variables in Practice", 
+            subtitle: "Real-world examples from backend development", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-user"></i> User Data</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">user_id</span> = <span style="color:#fbbf24;">1001</span>
+<span style="color:#fbbf24;">username</span> = <span style="color:#86efac;">"alex_dev"</span>
+<span style="color:#fbbf24;">email</span> = <span style="color:#86efac;">"alex@example.com"</span>
+<span style="color:#fbbf24;">is_active</span> = <span style="color:#fbbf24;">True</span>
+<span style="color:#fbbf24;">account_balance</span> = <span style="color:#fbbf24;">1500.50</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-shopping-cart"></i> E-commerce Data</h3>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">product_name</span> = <span style="color:#86efac;">"Laptop"</span>
+<span style="color:#fbbf24;">price</span> = <span style="color:#fbbf24;">999.99</span>
+<span style="color:#fbbf24;">stock_count</span> = <span style="color:#fbbf24;">25</span>
+<span style="color:#fbbf24;">is_in_stock</span> = <span style="color:#fbbf24;">True</span>
+<span style="color:#fbbf24;">discount_percentage</span> = <span style="color:#fbbf24;">0.15</span>  <span style="color:#7aa9ff;"># 15% discount</span></pre></div>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-building"></i> <strong>Real-world:</strong> These variables represent what a Django backend stores in a database. Every API endpoint you build will use variables like these!</div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-swap-alt'></i> Variable Swapping", 
+            subtitle: "Python's elegant solution", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-magic"></i> Pythonic Swap</h3>
+                        <p>Other languages need a temporary variable. Python makes it simple:</p>
+                        <div class="code-block"><pre><span style="color:#fbbf24;">x</span> = <span style="color:#fbbf24;">5</span>
+<span style="color:#fbbf24;">y</span> = <span style="color:#fbbf24;">10</span>
 
-<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Addition: {addition}"</span>)
-<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Subtraction: {subtraction}"</span>)
-<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Multiplication: {multiplication}"</span>)</pre></div><div class="insight-card"><i class="fas fa-star"></i> <strong>BONUS Challenge:</strong> Add modulus (%) and exponent (**) operations to your calculator!</div>` },
-        { title: "<i class='fas fa-briefcase'></i> Python Career Paths", subtitle: "Where Python can take you", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-server"></i> Backend Developer</h3><p>Build APIs, databases, server logic. Django, FastAPI, Flask. <span class="highlight">High demand, great salaries.</span></p></div><div class="concept-box"><h3><i class="fas fa-chart-line"></i> Data Scientist / AI Engineer</h3><p>Pandas, NumPy, TensorFlow, PyTorch. Analyze data, build ML models.</p></div><div class="concept-box"><h3><i class="fas fa-robot"></i> Automation / DevOps</h3><p>Write scripts to automate tasks, manage cloud infrastructure, CI/CD pipelines.</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> This course prepares you for <span class="highlight">Backend API Development</span> — one of the highest-paying and most in-demand Python careers.</div>` },
-        { title: "<i class='fab fa-django'></i> Why Python for Backend?", subtitle: "Django, FastAPI, Flask ecosystem", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fab fa-django"></i> Django</h3><p>Full-featured framework. Built-in admin, ORM, auth, security. Used by Instagram, Pinterest, Spotify.</p></div><div class="concept-box"><h3><i class="fas fa-bolt"></i> FastAPI</h3><p>Modern, fast for APIs. Automatic OpenAPI docs, async support, type hints.</p></div><div class="concept-box"><h3><i class="fas fa-flask"></i> Flask</h3><p>Minimal, flexible. Great for microservices and learning fundamentals.</p></div></div><div class="insight-card"><i class="fas fa-chart-line"></i> <strong>Our focus:</strong> Django + Django REST Framework (DRF) to build production-grade REST APIs.</div>` },
-        { title: "<i class='fas fa-play'></i> Your First Python Program", subtitle: "Hello World and Variables", content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Week 1 Day 1 - First Python Program</span>
-<span style="color:#86efac;"># 1. Hello World</span>
-<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Hello, Django Backend World!"</span>)
+<span style="color:#7aa9ff;"># Swap in one line!</span>
+<span style="color:#fbbf24;">x</span>, <span style="color:#fbbf24;">y</span> = <span style="color:#fbbf24;">y</span>, <span style="color:#fbbf24;">x</span>
 
-<span style="color:#86efac;"># 2. Variables (preview)</span>
-name = <span style="color:#86efac;">"Alex"</span>
-age = 25
-<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"My name is {name} and I am {age} years old"</span>)</pre></div><div class="content-grid"><div class="concept-box"><h3><i class="fas fa-cube"></i> What is a Variable?</h3><p>A named container that stores data. <span class="highlight">name = "Alex"</span> stores the string "Alex".</p></div><div class="concept-box"><h3><i class="fas fa-print"></i> print() function</h3><p>Displays output to the console. Your first debugging tool!</p></div></div>` },
-        { title: "<i class='fas fa-question-circle'></i> Knowledge Check", subtitle: "Test what you learned today", content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>` },
-        { title: "<i class='fas fa-clipboard-list'></i> Assignment", subtitle: "Complete before Day 2", content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-double"></i> Required Homework</h3><ul><li>✅ Install Python 3.12+</li><li>✅ Install VS Code with Python extension</li><li>✅ Run python --version to verify</li><li>✅ Create calculator.py with the Simple Calculator program</li><li>✅ Add BONUS: modulus (%) and exponent (**) operations</li><li>✅ Run and test your calculator with different inputs</li></ul></div><div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3><p><strong>Day 2: Variables & Data Types</strong><br>Strings, Integers, Floats, Booleans, Type Conversion, and building an Age Calculator.</p><p>Don't skip the assignment — Day 2 builds directly on today's concepts!</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> "The only way to learn programming is by writing code. Type every example yourself!" — Instructor</div>` }
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">x</span>)  <span style="color:#7aa9ff;"># Output: 10</span>
+<span style="color:#fbbf24;">print</span>(<span style="color:#fbbf24;">y</span>)  <span style="color:#7aa9ff;"># Output: 5</span></pre></div>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-code"></i> Traditional Way (Other Languages)</h3>
+                        <div class="code-block"><pre><span style="color:#7aa9ff;"># How most languages do it</span>
+<span style="color:#fbbf24;">temp</span> = <span style="color:#fbbf24;">x</span>
+<span style="color:#fbbf24;">x</span> = <span style="color:#fbbf24;">y</span>
+<span style="color:#fbbf24;">y</span> = <span style="color:#fbbf24;">temp</span></pre></div>
+                        <div class="tip-box" style="margin-top:0.8rem;">
+                            <i class="fas fa-heart"></i> <strong>Python loves elegance:</strong> The one-line swap shows Python's philosophy — "Beautiful is better than ugly."
+                        </div>
+                    </div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-question-circle'></i> Day 2 Knowledge Check", 
+            subtitle: "Test what you learned about variables", 
+            content: `
+                <div class="qa-section">
+                    <div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div>
+                    <div id="qa-container-day2"></div>
+                </div>
+            `
+        },
+        { 
+            title: "<i class='fas fa-clipboard-list'></i> Day 2 Assignment", 
+            subtitle: "Complete before Day 3", 
+            content: `
+                <div class="content-grid">
+                    <div class="concept-box">
+                        <h3><i class="fas fa-check-double"></i> Required Homework</h3>
+                        <ul>
+                            <li>✅ Create <span class="inline-code">age_calculator.py</span> with the Age Calculator program</li>
+                            <li>✅ Add BONUS: Tell user if they are a teenager (13-19)</li>
+                            <li>✅ Create <span class="inline-code">variables_practice.py</span> with variables for:</li>
+                            <ul>
+                                <li>• Your full name</li>
+                                <li>• Your age as both int and str</li>
+                                <li>• Your height as a float</li>
+                                <li>• A boolean for whether you can drive</li>
+                            </ul>
+                            <li>✅ Use <span class="inline-code">print()</span> to display all variables</li>
+                            <li>✅ Practice swapping two variables</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3>
+                        <p><strong>Day 3: Strings & String Methods</strong></p>
+                        <ul>
+                            <li>• String concatenation and formatting</li>
+                            <li>• .upper(), .lower(), .title()</li>
+                            <li>• .strip(), .replace(), .split()</li>
+                            <li>• Slicing strings</li>
+                            <li>• Building a greeting generator</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-card"><i class="fas fa-graduation-cap"></i> <strong>Remember:</strong> "The only way to learn programming is by writing code. Type every example yourself!" — Instructor</div>
+            `
+        }
     ];
 
-    // Q&A Data for knowledge check
-    const qaData = [
+    // ===== DAY 1 Q&A DATA (added compiled vs interpreted question) =====
+    const qaDataDay1 = [
         { q: "What is programming?", a: "Programming is writing precise instructions for a computer to follow. Computers are completely literal — they do exactly what you tell them. A program is a sequence of these instructions." },
         { q: "What's the difference between Frontend and Backend?", a: "Frontend = what users see and click (HTML/CSS/JS, runs in browser). Backend = server logic, databases, APIs, authentication (runs on servers). This course teaches backend development." },
+        { q: "What is the difference between compiled and interpreted languages?", a: "Compiled languages (C, C++, Rust) translate the entire code into machine code once before execution — faster but less portable. Interpreted languages (Python, JavaScript, Ruby) translate and execute line-by-line each time — slower but more portable and easier to develop." },
         { q: "What does DNS do?", a: "DNS (Domain Name System) translates human-readable domain names (google.com) into IP addresses (142.250.190.78) that computers use to find each other on the internet." },
         { q: "Why is Python so popular for backend development?", a: "Python is easy to learn, has powerful frameworks like Django and FastAPI, a huge ecosystem of libraries, great community support, and is used by major companies like Instagram and Spotify." },
         { q: "What is the difference between Python 2 and Python 3?", a: "Python 3 has cleaner syntax (print as function, true division), better Unicode support, improved security, and is actively maintained. Python 2 reached end-of-life in January 2020." },
@@ -199,6 +725,22 @@ age = 25
         { q: "What is the assignment for this class?", a: "Build a Simple Calculator that takes two numbers and an operation (+, -, *, /), handles division by zero, and displays results. BONUS: Add modulus (%) and exponent (**)." }
     ];
 
+    // ===== DAY 2 Q&A DATA =====
+    const qaDataDay2 = [
+        { q: "What is a variable in Python?", a: "A variable is a container for storing data. It's like a labeled box that holds information you want to use later in your program." },
+        { q: "What are the 4 primitive data types in Python?", a: "1. int (whole numbers like 5, 23)<br>2. float (decimal numbers like 4.5)<br>3. str (text like 'Hello')<br>4. bool (True or False)" },
+        { q: "Why can't I name my variable 'if'?", a: "Because 'if' is a Python <strong>keyword</strong> — it's reserved for the language's syntax. You cannot use keywords as variable names." },
+        { q: "What's the difference between 'age' and 'Age' in Python?", a: "They are <strong>different variables</strong>! Python is case-sensitive, so 'age' and 'Age' are treated as two separate containers." },
+        { q: "Is '1st_place' a valid variable name?", a: "No! Variables <strong>cannot start with a number</strong>. Use 'first_place' or 'place_1' instead." },
+        { q: "What will 'print(2 + 2)' output? And 'print(\"2 + 2\")'?", a: "print(2 + 2) outputs <strong>4</strong> (math calculation). print(\"2 + 2\") outputs <strong>2 + 2</strong> (the string itself)." },
+        { q: "What is the difference between '3e8' and '3 * 10**8'?", a: "Both calculate 300,000,000. But '3e8' creates a <strong>float</strong> (decimal number), while '3 * 10**8' creates an <strong>integer</strong> (whole number)." },
+        { q: "What naming convention does Python prefer?", a: "Python prefers <strong>snake_case</strong> — all lowercase with underscores between words: 'my_email_address'." },
+        { q: "Can I use an underscore to start a variable name?", a: "Yes! '_is_ok' is a valid variable name. Leading underscores have special meaning in Python but are valid." },
+        { q: "What happens if I assign a new value of a different type to a variable?", a: "Python allows it because it's <strong>dynamically typed</strong>. Example: 'age = 23' (int), then 'age = \"twenty three\"' (str) — no error!" },
+        { q: "What does input() always return?", a: "<span class='inline-code'>input()</span> always returns a <strong>string</strong>. To get a number, you MUST convert it: <span class='inline-code'>int(input(\"...\"))</span> or <span class='inline-code'>float(input(\"...\"))</span>." },
+        { q: "How do you swap two variables in Python?", a: "<span class='inline-code'>x, y = y, x</span> — Python's elegant one-line swap. No temporary variable needed!" }
+    ];
+
     let currentIndex = 0;
     const totalSlides = slides.length;
     const slideArea = document.getElementById('slideArea');
@@ -207,8 +749,8 @@ age = 25
     const counterText = document.getElementById('counterText');
     const dotsContainer = document.getElementById('dotsContainer');
 
-    function renderQA() {
-        const container = document.getElementById('qa-container');
+    function renderQA(containerId, qaData) {
+        const container = document.getElementById(containerId);
         if (!container) return;
         container.innerHTML = '';
         qaData.forEach((item, idx) => {
@@ -219,16 +761,16 @@ age = 25
                     <span><strong>${idx+1}.</strong> ${item.q}</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="qa-answer" id="answer-${idx}">
+                <div class="qa-answer" id="answer-${containerId}-${idx}">
                     <p>${item.a}</p>
                 </div>
             `;
             container.appendChild(qaDiv);
         });
-        document.querySelectorAll('.qa-question').forEach(question => {
+        document.querySelectorAll(`#${containerId} .qa-question`).forEach(question => {
             question.addEventListener('click', function() {
                 const idx = this.getAttribute('data-idx');
-                const answerDiv = document.getElementById(`answer-${idx}`);
+                const answerDiv = document.getElementById(`answer-${containerId}-${idx}`);
                 const icon = this.querySelector('i');
                 answerDiv.classList.toggle('show');
                 icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
@@ -246,7 +788,16 @@ age = 25
             </div>
         `;
         slideArea.innerHTML = html;
-        if (index === 12) renderQA(); // Knowledge check at index 12
+        
+        // Render Day 1 QA (index 12 — after the new slide, original Day 1 QA was at 12)
+        if (index === 13) {
+            renderQA('qa-container', qaDataDay1);
+        }
+        // Render Day 2 QA (index 26 — now at 27)
+        if (index === 27) {
+            renderQA('qa-container-day2', qaDataDay2);
+        }
+        
         counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
         prevBtn.disabled = (index === 0);
         nextBtn.disabled = (index === totalSlides-1);
@@ -262,7 +813,6 @@ age = 25
             dotsContainer.appendChild(dot);
         }
     }
-
     function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
     function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
     function handleKeyDown(e) {

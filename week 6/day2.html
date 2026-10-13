@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Web Scraping with BeautifulSoup | Django Backend Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .class-header {
+            max-width: 1300px;
+            margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge { background: #3b82f6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .month-badge { background: #8b5cf6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: bold; color: white; margin-left: 0.5rem; }
+        .class-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+        .duration { color: #94a3b8; font-size: 0.85rem; }
+        .day-nav-buttons { display: flex; gap: 0.8rem; }
+        .day-nav-btn {
+            background: #1e293b; border: 1px solid #3b82f6; padding: 0.4rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
+        }
+        .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
+        .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
+        .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
+        .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
+        .slide-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #E0F2FE, #7AA9FF); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.8rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .slide-title i { color: #60a5fa; font-size: 1.8rem; }
+        .slide-sub { color: #a0afc9; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .content-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+        .concept-box { flex: 1; min-width: 250px; background: #1a1f2e; border-radius: 1.5rem; padding: 1.3rem; border: 1px solid #334155; transition: all 0.2s; }
+        .concept-box:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+        .concept-box h3 i { color: #60a5fa; }
+        .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .concept-box ul { margin-left: 1.2rem; }
+        .highlight { color: #fbbf24; font-weight: 600; }
+        .tag { background: #1e293b; padding: 0.25rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-family: monospace; color: #b9d0ff; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
+        .code-block { background: #0a0e18; padding: 1rem; border-radius: 1rem; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #cbd5e6; margin: 0.8rem 0; border: 1px solid #334155; }
+        .code-block pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+        .two-column-split { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1rem 0; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem; }
+        .comparison-table th, .comparison-table td { border: 1px solid #334155; padding: 0.6rem; text-align: left; color: #e2e8f0; }
+        .comparison-table th { background: #1e293b; color: #fbbf24; }
+        .qa-section { margin-top: 1.5rem; background: #0f172a; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #334155; }
+        .qa-title { font-size: 1.3rem; font-weight: bold; color: #fbbf24; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .qa-item { background: #131b2e; border-radius: 1rem; margin-bottom: 0.8rem; overflow: hidden; border: 1px solid #2d3a5e; }
+        .qa-question { padding: 1rem 1.2rem; background: #1a2338; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #e2e8f0; transition: background 0.2s; }
+        .qa-question:hover { background: #25334d; }
+        .qa-question i { color: #60a5fa; transition: transform 0.3s; }
+        .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
+        .qa-answer.show { padding: 1rem 1.2rem; max-height: 800px; }
+        .qa-answer .code-inline { background: #0a0e18; padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-family: monospace; color: #fbbf24; font-size: 0.85rem; }
+        .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons { display: flex; gap: 1rem; }
+        button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
+        button:hover:not(:disabled) { background: #2d3a4e; transform: scale(0.97); border-color: #3b82f6; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .slide-counter { font-size: 0.9rem; background: #1a1f2c; padding: 0.4rem 1rem; border-radius: 2rem; color: #a5b4fc; }
+        .indicator-dots { display: flex; gap: 0.5rem; }
+        .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
+        .dot.active { background: #3b82f6; width: 22px; }
+        footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        .inline-code { background: #0a0e18; padding: 0.1rem 0.5rem; border-radius: 0.3rem; font-family: monospace; color: #fbbf24; font-size: 0.85rem; }
+        .warning-box { background: #1a1a2e; border-left: 4px solid #ef4444; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .warning-box i { color: #ef4444; margin-right: 0.5rem; }
+        .tip-box { background: #1a2a1a; border-left: 4px solid #22c55e; padding: 1rem 1.5rem; border-radius: 0.8rem; margin: 1rem 0; }
+        .tip-box i { color: #22c55e; margin-right: 0.5rem; }
+        @media (max-width: 700px) {
+            .slide-area { padding: 1rem; }
+            .slide-title { font-size: 1.4rem; }
+            .concept-box { min-width: 100%; }
+            .class-header { flex-direction: column; text-align: center; }
+            .two-column-split { flex-direction: column; }
+        }
+        .language-badge { display: inline-block; background: #1e293b; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; color: #b9d0ff; margin: 0.2rem 0.3rem; border: 1px solid #334155; }
+        .language-badge.compiled { border-color: #f87171; color: #fca5a5; }
+        .language-badge.interpreted { border-color: #34d399; color: #6ee7b7; }
+        .pill { background: #1a2338; border-radius: 30px; padding: 0.2rem 1rem; font-size: 0.7rem; font-weight: 600; display: inline-block; margin: 0.2rem 0.3rem; }
+        .pill.green { background: #064e3b; color: #6ee7b7; }
+        .pill.blue { background: #1e3a5f; color: #93c5fd; }
+        .pill.red { background: #4c1d1d; color: #fca5a5; }
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+        }
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+            margin-bottom: 0.6rem;
+        }
+        .output-box {
+            background: #0d1117;
+            border: 1px solid #2d3a5e;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: #7ee787;
+            overflow-x: auto;
+        }
+        .output-box pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+        .file-tree {
+            background: #0a0e18;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #cbd5e6;
+            line-height: 1.7;
+            margin: 1rem 0;
+        }
+        .file-tree .folder { color: #7aa9ff; }
+        .file-tree .file { color: #e2e8f0; }
+        .file-tree .comment { color: #6b7280; }
+    </style>
+</head>
+<body>
+<div class="class-header">
+    <div>
+        <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 5 · DAY 1</span>
+        <span class="month-badge"><i class="fas fa-calendar-month"></i> MONTH 2 · INTERMEDIATE PYTHON</span>
+    </div>
+    <div class="class-title"><i class="fas fa-spider"></i> Web Scraping with BeautifulSoup</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 Hours · Intermediate · Parse HTML, extract data, build real-world scrapers</div>
+    <div class="day-nav-buttons">
+        <a href="day2.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Day 2 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 16</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers · Assignment: Build a Wikipedia Scraper
+    </footer>
+</div>
+
+<script>
+    const slides = [
+        // SLIDE 0 — Lesson Overview
+        {
+            title: "<i class='fas fa-chalkboard-user'></i> Lesson Overview",
+            subtitle: "Web Scraping with BeautifulSoup",
+            content: `<div class="insight-card"><i class="fas fa-spider"></i> Today we learn to extract data from websites programmatically. This is one of the most practical skills in Python — used for research, price monitoring, data journalism, and building datasets for AI/ML models.</div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-bullseye"></i> By end of class</h3><ul>
+                    <li>✅ Understand what web scraping is</li>
+                    <li>✅ Install and import BeautifulSoup</li>
+                    <li>✅ Parse HTML with <span class="inline-code">requests</span> + <span class="inline-code">bs4</span></li>
+                    <li>✅ Find elements by tag, class, and ID</li>
+                    <li>✅ Extract text and attributes</li>
+                    <li>✅ Scrape a real Wikipedia table</li>
+                    <li>✅ Save results to CSV</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-road"></i> Topics Covered</h3><ul>
+                    <li>What is Web Scraping?</li>
+                    <li>Ethics &amp; Legal Considerations</li>
+                    <li>HTML Structure Review</li>
+                    <li>Installing BeautifulSoup</li>
+                    <li>Fetching Pages with requests</li>
+                    <li>Parsing with BeautifulSoup</li>
+                    <li>Finding Elements (find, find_all)</li>
+                    <li>Navigating the Parse Tree</li>
+                    <li>Real-World Scraper Project</li>
+                </ul></div>
+            </div>`
+        },
+        // SLIDE 1 — What is Web Scraping?
+        {
+            title: "<i class='fas fa-spider'></i> What is Web Scraping?",
+            subtitle: "Extracting data from websites automatically",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-lightbulb"></i> Definition</h3>
+                <p>Web scraping is the process of <span class="highlight">automatically extracting data from websites</span>. Instead of copying and pasting information manually, you write a program that does it for you.</p></div>
+                <div class="concept-box"><h3><i class="fas fa-utensils"></i> Analogy</h3>
+                <p>Imagine you need the prices of 1,000 products from an online store. Copying each one manually would take days. A web scraper does it in minutes.</p></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Real-world uses:</strong> Price comparison, job listing aggregation, news monitoring, sentiment analysis, academic research, and building datasets for machine learning.</div>`
+        },
+        // SLIDE 2 — Ethics & Legal
+        {
+            title: "<i class='fas fa-balance-scale'></i> Ethics & Legal Considerations",
+            subtitle: "Scrape responsibly — this is not optional",
+            content: `<div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>Before scraping any website, always check:</strong>
+            <ul style="margin-top:0.6rem; margin-left:1.2rem; color:#e2e8f0; line-height:1.6;">
+                <li>1. <strong>robots.txt</strong> — e.g., <span class="inline-code">https://en.wikipedia.org/robots.txt</span></li>
+                <li>2. <strong>Terms of Service</strong> — some sites explicitly prohibit scraping</li>
+                <li>3. <strong>Rate limits</strong> — don't hammer the server with requests</li>
+                <li>4. <strong>Personal data</strong> — GDPR and privacy laws apply</li>
+            </ul></div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-check-circle"></i> Best Practices</h3><ul>
+                    <li>✅ Set a descriptive User-Agent</li>
+                    <li>✅ Add delays between requests</li>
+                    <li>✅ Cache pages during development</li>
+                    <li>✅ Prefer official APIs when available</li>
+                    <li>✅ Respect copyright and licenses</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-code"></i> Good User-Agent</h3>
+                <div class="code-block"><pre>headers = {
+    "User-Agent": "MyTeachingBot/1.0 (educational)"
+}</pre></div>
+                <p>This tells the server who you are and why you're scraping.</p></div>
+            </div>
+            <div class="tip-box"><i class="fas fa-info-circle"></i> <strong>Wikipedia</strong> is a great site to practice on — it's open, well-structured, and allows scraping with proper attribution (CC BY-SA 4.0).</div>`
+        },
+        // SLIDE 3 — HTML Structure Review
+        {
+            title: "<i class='fas fa-code'></i> HTML Structure Review",
+            subtitle: "Understanding the DOM before you scrape",
+            content: `<div class="code-block"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1 id="main-title"&gt;Welcome&lt;/h1&gt;
+    &lt;div class="content"&gt;
+      &lt;p class="intro"&gt;Hello, world!&lt;/p&gt;
+      &lt;a href="https://example.com"&gt;Visit&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre></div>
+            <div class="comparison-table">
+                <table style="width:100%">
+                    <tr><th>Term</th><th>Meaning</th><th>Example</th></tr>
+                    <tr><td><span class="highlight">Tag</span></td><td>Element name</td><td><span class="inline-code">h1</span>, <span class="inline-code">p</span>, <span class="inline-code">div</span></td></tr>
+                    <tr><td><span class="highlight">Attribute</span></td><td>Extra info on a tag</td><td><span class="inline-code">class="intro"</span>, <span class="inline-code">id="main"</span></td></tr>
+                    <tr><td><span class="highlight">Class</span></td><td>Reusable label (many elements)</td><td><span class="inline-code">class="content"</span></td></tr>
+                    <tr><td><span class="highlight">ID</span></td><td>Unique label (one element)</td><td><span class="inline-code">id="main-title"</span></td></tr>
+                    <tr><td><span class="highlight">Text</span></td><td>Content between tags</td><td><span class="inline-code">"Hello, world!"</span></td></tr>
+                </table>
+            </div>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Pro tip:</strong> Before scraping, right-click on the page in your browser and choose <strong>"Inspect"</strong> to see the HTML structure. This is your map!</div>`
+        },
+        // SLIDE 4 — Installing BeautifulSoup
+        {
+            title: "<i class='fas fa-download'></i> Installing BeautifulSoup",
+            subtitle: "Setting up your scraping toolkit",
+            content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Install in your terminal</span>
+pip install requests beautifulsoup4
+
+<span style="color:#7aa9ff;"># Optional: better HTML parser (faster, more robust)</span>
+pip install lxml</pre></div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-cube"></i> requests</h3>
+                <p>Fetches web pages — handles HTTP requests, headers, sessions, and responses.</p></div>
+                <div class="concept-box"><h3><i class="fas fa-utensils"></i> BeautifulSoup (bs4)</h3>
+                <p>Parses HTML/XML — navigates the parse tree, finds elements, extracts text and attributes.</p></div>
+            </div>
+            <div class="code-block"><pre><span style="color:#7aa9ff;"># Verify installation</span>
+<span style="color:#fbbf24;">import</span> requests
+<span style="color:#fbbf24;">from</span> bs4 <span style="color:#fbbf24;">import</span> BeautifulSoup
+
+<span style="color:#fbbf24;">print</span>(<span style="color:#86efac;">"Setup complete!"</span>)</pre></div>
+            <div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Why both?</strong> <span class="inline-code">requests</span> gets the HTML, <span class="inline-code">BeautifulSoup</span> understands it.</div>`
+        },
+        // SLIDE 5 — The 4-Step Recipe
+        {
+            title: "<i class='fas fa-list-ol'></i> The 4-Step Scraping Recipe",
+            subtitle: "A universal pattern for any scraping task",
+            content: `<div class="content-grid" style="flex-direction:column;">
+                <div class="concept-box"><h3><span class="step-badge">1</span> Fetch the page</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">import</span> requests
+
+url = <span style="color:#86efac;">"https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue"</span>
+response = requests.get(url, headers={<span style="color:#86efac;">"User-Agent"</span>: <span style="color:#86efac;">"MyBot/1.0"</span>})</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">2</span> Parse the HTML</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">from</span> bs4 <span style="color:#fbbf24;">import</span> BeautifulSoup
+
+soup = BeautifulSoup(response.text, <span style="color:#86efac;">"html.parser"</span>)</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">3</span> Find the data</h3>
+                <div class="code-block"><pre>tables = soup.find_all(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+for table in tables:
+    rows = table.find_all(<span style="color:#86efac;">"tr"</span>)</pre></div></div>
+                <div class="concept-box"><h3><span class="step-badge">4</span> Extract and store</h3>
+                <div class="code-block"><pre><span style="color:#fbbf24;">for</span> row <span style="color:#fbbf24;">in</span> rows:
+    cells = row.find_all(<span style="color:#86efac;">"td"</span>)
+    data = [cell.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> cell <span style="color:#fbbf24;">in</span> cells]</pre></div></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-key"></i> <strong>Remember this pattern</strong> — it works for almost every scraping task. Fetch → Parse → Find → Extract.</div>`
+        },
+        // SLIDE 6 — Finding Elements
+        {
+            title: "<i class='fas fa-search'></i> Finding Elements",
+            subtitle: "find(), find_all(), and CSS selectors",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-crosshairs"></i> find()</h3>
+                <p>Returns the <strong>first</strong> matching element (or <span class="inline-code">None</span>).</p>
+                <div class="code-block"><pre>title = soup.find(<span style="color:#86efac;">"h1"</span>)
+first_table = soup.find(<span style="color:#86efac;">"table"</span>)</pre></div></div>
+                <div class="concept-box"><h3><i class="fas fa-list"></i> find_all()</h3>
+                <p>Returns a <strong>list</strong> of all matching elements.</p>
+                <div class="code-block"><pre>all_tables = soup.find_all(<span style="color:#86efac;">"table"</span>)
+all_links = soup.find_all(<span style="color:#86efac;">"a"</span>)</pre></div></div>
+            </div>
+            <div class="code-block"><pre><span style="color:#7aa9ff;"># Find by class (note the underscore: class_)</span>
+tables = soup.find_all(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+
+<span style="color:#7aa9ff;"># Find by ID</span>
+header = soup.find(id=<span style="color:#86efac;">"firstHeading"</span>)
+
+<span style="color:#7aa9ff;"># Find by attribute</span>
+links = soup.find_all(<span style="color:#86efac;">"a"</span>, href=<span style="color:#fbbf24;">True</span>)</pre></div>
+            <div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>Common mistake:</strong> <span class="inline-code">class</span> is a Python keyword — use <span class="inline-code">class_</span> with an underscore in BeautifulSoup!</div>`
+        },
+        // SLIDE 7 — Extracting Text & Attributes
+        {
+            title: "<i class='fas fa-cut'></i> Extracting Text & Attributes",
+            subtitle: "Getting the actual data out of elements",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-font"></i> Getting Text</h3>
+                <div class="code-block"><pre>h1 = soup.find(<span style="color:#86efac;">"h1"</span>)
+
+<span style="color:#7aa9ff;"># With whitespace</span>
+<span style="color:#fbbf24;">print</span>(h1.text)
+<span style="color:#fbbf24;">print</span>(h1.get_text())
+
+<span style="color:#7aa9ff;"># Cleaned up (strip whitespace)</span>
+<span style="color:#fbbf24;">print</span>(h1.get_text(strip=<span style="color:#fbbf24;">True</span>))</pre></div></div>
+                <div class="concept-box"><h3><i class="fas fa-link"></i> Getting Attributes</h3>
+                <div class="code-block"><pre>link = soup.find(<span style="color:#86efac;">"a"</span>)
+
+<span style="color:#7aa9ff;"># Access like a dictionary</span>
+<span style="color:#fbbf24;">print</span>(link[<span style="color:#86efac;">"href"</span>])
+<span style="color:#fbbf24;">print</span>(link.get(<span style="color:#86efac;">"href"</span>))  <span style="color:#7aa9ff;"># safer (returns None)</span>
+
+<span style="color:#7aa9ff;"># Get all attributes</span>
+<span style="color:#fbbf24;">print</span>(link.attrs)</pre></div></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-lightbulb"></i> <strong>Always use <span class="inline-code">strip=True</span></strong> when extracting text — it removes leading/trailing whitespace and newlines that would otherwise pollute your data.</div>`
+        },
+        // SLIDE 8 — Real Example: Wikipedia Table
+        {
+            title: "<i class='fas fa-wikipedia-w'></i> Real Example: Wikipedia Table",
+            subtitle: "Scrape the largest tech companies by revenue",
+            content: `<div class="concept-box"><h3><i class="fas fa-globe"></i> Target Page</h3>
+            <p><span class="inline-code">https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue</span></p>
+            <p>This page has multiple <span class="inline-code">wikitable</span> tables — perfect for practice!</p></div>
+            <div class="code-block"><pre><span style="color:#fbbf24;">import</span> requests
+<span style="color:#fbbf24;">from</span> bs4 <span style="color:#fbbf24;">import</span> BeautifulSoup
+
+url = <span style="color:#86efac;">"https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue"</span>
+response = requests.get(url, headers={<span style="color:#86efac;">"User-Agent"</span>: <span style="color:#86efac;">"TeachingBot/1.0"</span>})
+soup = BeautifulSoup(response.text, <span style="color:#86efac;">"html.parser"</span>)
+
+<span style="color:#7aa9ff;"># Find all wikitable tables</span>
+tables = soup.find_all(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+<span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"Found {len(tables)} tables"</span>)</pre></div>
+            <div class="output-box"><pre>Found 8 tables</pre></div>
+            <div class="tip-box"><i class="fas fa-check-circle"></i> <strong>Tip:</strong> Use <span class="inline-code">h2.find_next("table")</span> to get the table immediately after a section heading.</div>`
+        },
+        // SLIDE 9 — Extracting the 2025 Table
+        {
+            title: "<i class='fas fa-table'></i> Extracting the 2025 Table",
+            subtitle: "Headers, rows, and cells",
+            content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Find the 2025 section heading, then its table</span>
+h2 = soup.find(<span style="color:#86efac;">"h2"</span>, id=<span style="color:#86efac;">"2025_list"</span>)
+table = h2.find_next(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+
+<span style="color:#7aa9ff;"># Extract headers from thead</span>
+headers = [th.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> th <span style="color:#fbbf24;">in</span> table.find(<span style="color:#86efac;">"thead"</span>).find_all(<span style="color:#86efac;">"th"</span>)]
+<span style="color:#fbbf24;">print</span>(headers)
+
+<span style="color:#7aa9ff;"># Extract rows from tbody</span>
+rows = table.find(<span style="color:#86efac;">"tbody"</span>).find_all(<span style="color:#86efac;">"tr"</span>)
+<span style="color:#fbbf24;">for</span> row <span style="color:#fbbf24;">in</span> rows:
+    cells = row.find_all([<span style="color:#86efac;">"td"</span>, <span style="color:#86efac;">"th"</span>])
+    <span style="color:#fbbf24;">if</span> len(cells) &lt; <span style="color:#fbbf24;">3</span>:
+        <span style="color:#fbbf24;">continue</span>
+    data = [cell.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> cell <span style="color:#fbbf24;">in</span> cells]
+    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"{data[0]:&lt;22} {data[1]:&gt;10}"</span>)</pre></div>
+            <div class="output-box"><pre>['Company', 'Revenue ($B) USD', 'Profit ($B) USD', 'Employees', 'Country (origin)', 'Headquarters']
+Amazon                 $637.9
+Apple                  $416.0
+Alphabet               $350.0
+Microsoft              $281.7
+Samsung Electronics    $220.3</pre></div>
+            <div class="insight-card"><i class="fas fa-check-circle"></i> <strong>Always check <span class="inline-code">len(cells)</span></strong> before accessing — some rows may be malformed or contain nested tables.</div>`
+        },
+        // SLIDE 10 — Pandas Integration
+        {
+            title: "<i class='fas fa-chart-bar'></i> Converting to Pandas DataFrame",
+            subtitle: "The real-world workflow",
+            content: `<div class="code-block"><pre><span style="color:#fbbf24;">import</span> requests
+<span style="color:#fbbf24;">import</span> pandas <span style="color:#fbbf24;">as</span> pd
+<span style="color:#fbbf24;">from</span> bs4 <span style="color:#fbbf24;">import</span> BeautifulSoup
+
+url = <span style="color:#86efac;">"https://en.wikipedia.org/wiki/List_of_largest_technology_companies_by_revenue"</span>
+response = requests.get(url, headers={<span style="color:#86efac;">"User-Agent"</span>: <span style="color:#86efac;">"TeachingBot/1.0"</span>})
+soup = BeautifulSoup(response.text, <span style="color:#86efac;">"html.parser"</span>)
+
+h2 = soup.find(<span style="color:#86efac;">"h2"</span>, id=<span style="color:#86efac;">"2025_list"</span>)
+table = h2.find_next(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+
+headers = [th.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> th <span style="color:#fbbf24;">in</span> table.find(<span style="color:#86efac;">"thead"</span>).find_all(<span style="color:#86efac;">"th"</span>)]
+data = []
+<span style="color:#fbbf24;">for</span> row <span style="color:#fbbf24;">in</span> table.find(<span style="color:#86efac;">"tbody"</span>).find_all(<span style="color:#86efac;">"tr"</span>):
+    cells = row.find_all([<span style="color:#86efac;">"td"</span>, <span style="color:#86efac;">"th"</span>])
+    <span style="color:#fbbf24;">if</span> len(cells) == len(headers):
+        data.append([c.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> c <span style="color:#fbbf24;">in</span> cells])
+
+df = pd.DataFrame(data, columns=headers)
+<span style="color:#fbbf24;">print</span>(df.head(<span style="color:#fbbf24;">10</span>))</pre></div>
+            <div class="tip-box"><i class="fas fa-star"></i> <strong>Clean the revenue column:</strong> <span class="inline-code">df["Revenue_num"] = df["Revenue ($B) USD"].str.replace(r"[$,]", "", regex=True).astype(float)</span></div>`
+        },
+        // SLIDE 11 — Comparing Multiple Years
+        {
+            title: "<i class='fas fa-chart-line'></i> Comparing Multiple Years",
+            subtitle: "A great capstone exercise",
+            content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Challenge</h3>
+            <p>The page has tables for <span class="highlight">2025, 2023, 2021, 2020, 2019, and 2018</span>. Write a function that extracts a company's revenue across all years.</p></div>
+            <div class="code-block"><pre><span style="color:#fbbf24;">def</span> parse_table(table):
+    headers = [th.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> th <span style="color:#fbbf24;">in</span> table.find(<span style="color:#86efac;">"thead"</span>).find_all(<span style="color:#86efac;">"th"</span>)]
+    rows = []
+    <span style="color:#fbbf24;">for</span> tr <span style="color:#fbbf24;">in</span> table.find(<span style="color:#86efac;">"tbody"</span>).find_all(<span style="color:#86efac;">"tr"</span>):
+        cells = tr.find_all([<span style="color:#86efac;">"td"</span>, <span style="color:#86efac;">"th"</span>])
+        <span style="color:#fbbf24;">if</span> len(cells) != len(headers):
+            <span style="color:#fbbf24;">continue</span>
+        rows.append([c.get_text(strip=<span style="color:#fbbf24;">True</span>) <span style="color:#fbbf24;">for</span> c <span style="color:#fbbf24;">in</span> cells])
+    <span style="color:#fbbf24;">return</span> pd.DataFrame(rows, columns=headers)
+
+years = [<span style="color:#86efac;">"2025_list"</span>, <span style="color:#86efac;">"2023_list"</span>, <span style="color:#86efac;">"2021_list"</span>, <span style="color:#86efac;">"2020_list"</span>, <span style="color:#86efac;">"2019_list"</span>, <span style="color:#86efac;">"2018_list"</span>]
+all_data = {}
+
+<span style="color:#fbbf24;">for</span> year <span style="color:#fbbf24;">in</span> years:
+    h2 = soup.find(<span style="color:#86efac;">"h2"</span>, id=year)
+    <span style="color:#fbbf24;">if</span> <span style="color:#fbbf24;">not</span> h2: <span style="color:#fbbf24;">continue</span>
+    table = h2.find_next(<span style="color:#86efac;">"table"</span>, class_=<span style="color:#86efac;">"wikitable"</span>)
+    all_data[year] = parse_table(table)
+    <span style="color:#fbbf24;">print</span>(f<span style="color:#86efac;">"{year}: {all_data[year].shape[0]} rows"</span>)</pre></div>
+            <div class="warning-box"><i class="fas fa-exclamation-triangle"></i> <strong>Schema evolution:</strong> The 2025 table has different columns than 2021! Always check <span class="inline-code">df.columns</span> before assuming a structure.</div>`
+        },
+        // SLIDE 12 — Saving to CSV
+        {
+            title: "<i class='fas fa-save'></i> Saving Results to CSV",
+            subtitle: "Persist your scraped data",
+            content: `<div class="code-block"><pre><span style="color:#7aa9ff;"># Save DataFrame to CSV</span>
+df.to_csv(<span style="color:#86efac;">"tech_companies_2025.csv"</span>, index=<span style="color:#fbbf24;">False</span>)
+
+<span style="color:#7aa9ff;"># Or save without pandas</span>
+<span style="color:#fbbf24;">import</span> csv
+
+<span style="color:#fbbf24;">with</span> open(<span style="color:#86efac;">"companies.csv"</span>, <span style="color:#86efac;">"w"</span>, newline=<span style="color:#86efac;">""</span>, encoding=<span style="color:#86efac;">"utf-8"</span>) <span style="color:#fbbf24;">as</span> f:
+    writer = csv.writer(f)
+    writer.writerow(headers)
+    writer.writerows(data)</pre></div>
+            <div class="file-tree">
+                <span class="folder">📁 project/</span><br>
+                &nbsp;&nbsp;<span class="file">📄 scrape.py</span><br>
+                &nbsp;&nbsp;<span class="file">📄 tech_companies_2025.csv</span> <span class="comment">← output</span>
+            </div>
+            <div class="tip-box"><i class="fas fa-check-circle"></i> <strong>Always use <span class="inline-code">encoding="utf-8"</span></strong> when saving — it handles international characters correctly.</div>`
+        },
+        // SLIDE 13 — Common Pitfalls
+        {
+            title: "<i class='fas fa-bug'></i> Common Pitfalls & Solutions",
+            subtitle: "Debug like a pro",
+            content: `<div class="comparison-table">
+                <table style="width:100%">
+                    <tr><th>Pitfall</th><th>Solution</th></tr>
+                    <tr><td><span class="inline-code">find_all("table")</span> returns nested tables</td><td>Use <span class="inline-code">class_="wikitable"</span> or scope to a section</td></tr>
+                    <tr><td>Empty/None cells cause crashes</td><td>Check <span class="inline-code">if cell:</span> before <span class="inline-code">.get_text()</span></td></tr>
+                    <tr><td><span class="inline-code">get_text()</span> returns whitespace</td><td>Use <span class="inline-code">get_text(strip=True)</span></td></tr>
+                    <tr><td>Numbers are strings</td><td>Clean with <span class="inline-code">.str.replace()</span> then <span class="inline-code">.astype(float)</span></td></tr>
+                    <tr><td>Headers in <span class="inline-code">thead</span>, data in <span class="inline-code">tbody</span></td><td>Parse each separately</td></tr>
+                    <tr><td><span class="inline-code">find()</span> returns <span class="inline-code">None</span></td><td>Guard with <span class="inline-code">if element:</span> or <span class="inline-code">required=True</span></td></tr>
+                    <tr><td><span class="inline-code">class</span> is a Python keyword</td><td>Use <span class="inline-code">class_</span> (with underscore)</td></tr>
+                    <tr><td>Site blocks your request</td><td>Set a User-Agent header</td></tr>
+                </table>
+            </div>
+            <div class="insight-card"><i class="fas fa-brain"></i> <strong>Golden rule:</strong> Web scraping is 80% understanding the HTML structure and 20% writing Python. Always inspect the page first!</div>`
+        },
+        // SLIDE 14 — Knowledge Check
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test what you learned today",
+            content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>`
+        },
+        // SLIDE 15 — Assignment
+        {
+            title: "<i class='fas fa-clipboard-list'></i> Assignment",
+            subtitle: "Complete before next class",
+            content: `<div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-check-double"></i> Required Homework</h3>
+                <ul>
+                    <li>✅ Install <span class="inline-code">requests</span> and <span class="inline-code">beautifulsoup4</span></li>
+                    <li>✅ Scrape the 2025 table from the Wikipedia page</li>
+                    <li>✅ Extract all columns: Company, Revenue, Profit, Employees, Country, HQ</li>
+                    <li>✅ Convert to a Pandas DataFrame</li>
+                    <li>✅ Clean the Revenue column to numeric values</li>
+                    <li>✅ Save to CSV as <span class="inline-code">tech_companies_2025.csv</span></li>
+                    <li>✅ Find the top 5 companies by revenue</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-star"></i> BONUS Challenges</h3>
+                <ul>
+                    <li>⭐ Scrape <strong>all</strong> year tables (2018–2025)</li>
+                    <li>⭐ Compare Apple's revenue across all years</li>
+                    <li>⭐ Which country has the most companies in the top 20?</li>
+                    <li>⭐ Compute revenue per employee for each company</li>
+                    <li>⭐ Write a function <span class="inline-code">get_company_revenue(soup, name, year)</span></li>
+                </ul></div>
+            </div>
+            <div class="content-grid">
+                <div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3>
+                <p><strong>Day 2: Working with APIs</strong></p>
+                <ul>
+                    <li>• REST APIs vs Web Scraping</li>
+                    <li>• JSON data format</li>
+                    <li>• Using the <span class="inline-code">requests</span> library with APIs</li>
+                    <li>• API authentication (keys, tokens)</li>
+                    <li>• Building a weather app with a public API</li>
+                </ul></div>
+                <div class="concept-box"><h3><i class="fas fa-graduation-cap"></i> Instructor's Note</h3>
+                <p>"Web scraping is a superpower. But with great power comes great responsibility — always scrape ethically and respect the sites you use."</p>
+                <p style="margin-top:0.8rem;">The skills you learn today will be useful for the rest of your career — from data science to backend development.</p></div>
+            </div>
+            <div class="insight-card"><i class="fas fa-rocket"></i> <strong>Pro tip:</strong> Bookmark the Wikipedia page — we'll use it again in future lessons when we learn about databases and Django models!</div>`
+        }
+    ];
+
+    const qaData = [
+        { q: "What is web scraping?", a: "Web scraping is the process of automatically extracting data from websites using a program. Instead of copying information manually, you write code that fetches pages, parses the HTML, and extracts the data you need." },
+        { q: "What is the difference between requests and BeautifulSoup?", a: "<span class='inline-code'>requests</span> fetches the web page (makes the HTTP request and returns the HTML). <span class='inline-code'>BeautifulSoup</span> parses that HTML and lets you navigate/find/extract elements. You need both." },
+        { q: "Why do we use class_ instead of class in BeautifulSoup?", a: "Because <span class='inline-code'>class</span> is a reserved keyword in Python. BeautifulSoup uses <span class='inline-code'>class_</span> with a trailing underscore to avoid the conflict." },
+        { q: "What does get_text(strip=True) do?", a: "It extracts all the text inside an element and removes leading/trailing whitespace and newlines. Without <span class='inline-code'>strip=True</span>, you'd get lots of extra spaces and line breaks." },
+        { q: "How do you find all elements with a specific class?", a: "<span class='inline-code'>soup.find_all('div', class_='my-class')</span> — pass the tag name as the first argument and the class as a keyword argument." },
+        { q: "What is the difference between find() and find_all()?", a: "<span class='inline-code'>find()</span> returns the first matching element (or None). <span class='inline-code'>find_all()</span> returns a list of all matching elements." },
+        { q: "Why is it important to check robots.txt before scraping?", a: "robots.txt tells you which parts of a site the owner allows bots to access. Ignoring it can get you blocked, and in some cases, has legal consequences." },
+        { q: "How do you extract an attribute like href from a link?", a: "Two ways: <span class='inline-code'>link['href']</span> (raises KeyError if missing) or <span class='inline-code'>link.get('href')</span> (returns None if missing — safer)." },
+        { q: "What is the 4-step scraping recipe?", a: "1. Fetch the page with <span class='inline-code'>requests.get()</span>. 2. Parse with <span class='inline-code'>BeautifulSoup()</span>. 3. Find elements with <span class='inline-code'>find()</span>/<span class='inline-code'>find_all()</span>. 4. Extract text/attributes and store the data." },
+        { q: "How do you convert scraped data to a Pandas DataFrame?", a: "Collect rows as a list of lists (or list of dicts), then call <span class='inline-code'>pd.DataFrame(data, columns=headers)</span>. You can then use all Pandas methods for analysis." },
+        { q: "What does the User-Agent header do?", a: "It identifies your bot to the server. Many sites block requests with no User-Agent or with the default Python one. Setting a descriptive User-Agent is both polite and practical." },
+        { q: "What should you do if a table has different columns across years?", a: "Check <span class='inline-code'>df.columns</span> for each table and handle schema differences explicitly. You might need to rename columns, select a common subset, or process each year separately." }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA(containerId, qaData) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${containerId}-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll(`#${containerId} .qa-question`).forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${containerId}-${idx}`);
+                const icon = this.querySelector('i');
+                answerDiv.classList.toggle('show');
+                icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">${slide.content}</div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        
+        // Render Q&A on the Knowledge Check slide (index 14)
+        if (index === 14) {
+            renderQA('qa-container', qaData);
+        }
+        
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>

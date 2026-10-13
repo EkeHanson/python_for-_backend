@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Fundamentals Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px 50px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            color: #2c3e70;
+            font-size: 28px;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .toggle-all-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .toggle-btn.secondary {
+            background: #e67e22;
+        }
+
+        .toggle-btn.secondary:hover {
+            background: #d35400;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
+        }
+
+        .toggle-btn.success {
+            background: #27ae60;
+        }
+
+        .toggle-btn.success:hover {
+            background: #229954;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+        }
+
+        .section {
+            background: #fafbfc;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+        }
+
+        .section h2 {
+            color: #2c3e70;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .marks {
+            background: #3498db;
+            color: white;
+            font-size: 13px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .question {
+            margin-bottom: 18px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8ecf1;
+        }
+
+        .question p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .question .options {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .answer-box {
+            background: #eaf7e1;
+            border-left: 4px solid #27ae60;
+            padding: 12px 18px;
+            margin-top: 10px;
+            border-radius: 4px;
+            display: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .answer-box code {
+            background: #d5e8d0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .question .toggle-answer {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 5px 16px;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .question .toggle-answer:hover {
+            background: #1e8449;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: #1e8449;
+            font-size: 14px;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .inline-code {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .true-false-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .true-false-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 15px;
+            }
+        }
+
+        .bonus {
+            border-left-color: #e67e22;
+        }
+
+        .bonus h2 .marks {
+            background: #e67e22;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .checkbox-label {
+            display: inline-block;
+            margin-left: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📘 Python Fundamentals Test</h1>
+        <div class="subtitle">
+            <strong>Name:</strong> ______________________ &nbsp;&nbsp;&nbsp;
+            <strong>Date:</strong> __________________
+        </div>
+
+        <div class="toggle-all-container">
+            <button class="toggle-btn" onclick="toggleAllAnswers(true)">✅ Show All Answers</button>
+            <button class="toggle-btn secondary" onclick="toggleAllAnswers(false)">❌ Hide All Answers</button>
+            <button class="toggle-btn success" onclick="toggleAllQuestions()">🔄 Toggle All</button>
+        </div>
+
+        <!-- ==================== PART A ==================== -->
+        <div class="section">
+            <h2>Part A: Multiple Choice Questions <span class="marks">10 marks</span></h2>
+            <p><em>Circle the correct answer.</em></p>
+
+            <div class="question" id="q1">
+                <p><strong>1.</strong> What is the correct way to import the math module in Python?</p>
+                <div class="options">
+                    a) <code>include math</code><br>
+                    b) <code>import math</code><br>
+                    c) <code>using math</code><br>
+                    d) <code>math.import</code>
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a1')">Show Answer</button>
+                <div id="a1" class="answer-box"><strong>Answer: b) import math</strong></div>
+            </div>
+
+            <div class="question" id="q2">
+                <p><strong>2.</strong> What will <code>round(14.678)</code> return?</p>
+                <div class="options">
+                    a) 14.7<br>
+                    b) 15<br>
+                    c) 14<br>
+                    d) 14.68
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a2')">Show Answer</button>
+                <div id="a2" class="answer-box"><strong>Answer: b) 15</strong> (rounds to nearest integer)</div>
+            </div>
+
+            <div class="question" id="q3">
+                <p><strong>3.</strong> Which function returns the absolute value of a number?</p>
+                <div class="options">
+                    a) <code>abs()</code><br>
+                    b) <code>absolute()</code><br>
+                    c) <code>math.abs()</code><br>
+                    d) <code>value.abs()</code>
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a3')">Show Answer</button>
+                <div id="a3" class="answer-box"><strong>Answer: a) abs()</strong></div>
+            </div>
+
+            <div class="question" id="q4">
+                <p><strong>4.</strong> What does <code>math.ceil(4.2)</code> do?</p>
+                <div class="options">
+                    a) Rounds down to 4<br>
+                    b) Rounds up to 5<br>
+                    c) Rounds to the nearest integer<br>
+                    d) Returns 4.2
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a4')">Show Answer</button>
+                <div id="a4" class="answer-box"><strong>Answer: b) Rounds up to 5</strong></div>
+            </div>
+
+            <div class="question" id="q5">
+                <p><strong>5.</strong> What will be the output of <code>len("Python")</code>?</p>
+                <div class="options">
+                    a) 5<br>
+                    b) 6<br>
+                    c) 7<br>
+                    d) 4
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a5')">Show Answer</button>
+                <div id="a5" class="answer-box"><strong>Answer: b) 6</strong></div>
+            </div>
+
+            <div class="question" id="q6">
+                <p><strong>6.</strong> Which method converts a string to uppercase?</p>
+                <div class="options">
+                    a) <code>upper()</code><br>
+                    b) <code>toUpper()</code><br>
+                    c) <code>uppercase()</code><br>
+                    d) <code>UPPER()</code>
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a6')">Show Answer</button>
+                <div id="a6" class="answer-box"><strong>Answer: a) upper()</strong></div>
+            </div>
+
+            <div class="question" id="q7">
+                <p><strong>7.</strong> What is type casting?</p>
+                <div class="options">
+                    a) Changing a variable name<br>
+                    b) Converting one data type to another<br>
+                    c) Importing a module<br>
+                    d) Creating a new variable
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a7')">Show Answer</button>
+                <div id="a7" class="answer-box"><strong>Answer: b) Converting one data type to another</strong></div>
+            </div>
+
+            <div class="question" id="q8">
+                <p><strong>8.</strong> What does <code>math.floor(4.9)</code> return?</p>
+                <div class="options">
+                    a) 5<br>
+                    b) 4<br>
+                    c) 4.9<br>
+                    d) 5.0
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a8')">Show Answer</button>
+                <div id="a8" class="answer-box"><strong>Answer: b) 4</strong></div>
+            </div>
+
+            <div class="question" id="q9">
+                <p><strong>9.</strong> What will <code>"hello".capitalize()</code> return?</p>
+                <div class="options">
+                    a) "HELLO"<br>
+                    b) "Hello"<br>
+                    c) "hello"<br>
+                    d) "H"
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a9')">Show Answer</button>
+                <div id="a9" class="answer-box"><strong>Answer: b) "Hello"</strong></div>
+            </div>
+
+            <div class="question" id="q10">
+                <p><strong>10.</strong> What is the output of <code>"abc"[1:3]</code>?</p>
+                <div class="options">
+                    a) "ab"<br>
+                    b) "bc"<br>
+                    c) "abc"<br>
+                    d) "b"
+                </div>
+                <button class="toggle-answer" onclick="toggleAnswer('a10')">Show Answer</button>
+                <div id="a10" class="answer-box"><strong>Answer: b) "bc"</strong> (index 1 to 2)</div>
+            </div>
+        </div>
+
+        <!-- ==================== PART B ==================== -->
+        <div class="section">
+            <h2>Part B: True or False <span class="marks">5 marks</span></h2>
+            <p><em>Write T for True or F for False.</em></p>
+
+            <div class="true-false-grid">
+                <div class="question" id="q11">
+                    <p><strong>1.</strong> <code>math.sqrt(64)</code> returns 8.</p>
+                    <button class="toggle-answer" onclick="toggleAnswer('a11')">Show Answer</button>
+                    <div id="a11" class="answer-box"><strong>Answer: T (True)</strong> — √64 = 8</div>
+                </div>
+
+                <div class="question" id="q12">
+                    <p><strong>2.</strong> <code>int("12.5")</code> is valid and returns 12.5.</p>
+                    <button class="toggle-answer" onclick="toggleAnswer('a12')">Show Answer</button>
+                    <div id="a12" class="answer-box"><strong>Answer: F (False)</strong> — <code>int("12.5")</code> raises a ValueError. Use <code>float("12.5")</code> instead.</div>
+                </div>
+
+                <div class="question" id="q13">
+                    <p><strong>3.</strong> The <code>replace()</code> method modifies the original string.</p>
+                    <button class="toggle-answer" onclick="toggleAnswer('a13')">Show Answer</button>
+                    <div id="a13" class="answer-box"><strong>Answer: F (False)</strong> — Strings are immutable; <code>replace()</code> returns a new string.</div>
+                </div>
+
+                <div class="question" id="q14">
+                    <p><strong>4.</strong> A Python module is a <code>.py</code> file containing Python code.</p>
+                    <button class="toggle-answer" onclick="toggleAnswer('a14')">Show Answer</button>
+                    <div id="a14" class="answer-box"><strong>Answer: T (True)</strong></div>
+                </div>
+
+                <div class="question" id="q15">
+                    <p><strong>5.</strong> <code>"Hello"[0]</code> returns "H".</p>
+                    <button class="toggle-answer" onclick="toggleAnswer('a15')">Show Answer</button>
+                    <div id="a15" class="answer-box"><strong>Answer: T (True)</strong> — Index 0 gives the first character.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PART C ==================== -->
+        <div class="section">
+            <h2>Part C: Fill in the Blanks <span class="marks">5 marks</span></h2>
+
+            <div class="question" id="q16">
+                <p><strong>1.</strong> To find the square root of a number, use: <code>math._______()</code></p>
+                <button class="toggle-answer" onclick="toggleAnswer('a16')">Show Answer</button>
+                <div id="a16" class="answer-box"><strong>Answer: sqrt</strong> — <code>math.sqrt()</code></div>
+            </div>
+
+            <div class="question" id="q17">
+                <p><strong>2.</strong> <code>"Python Programming".find("Pro")</code> returns _______</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a17')">Show Answer</button>
+                <div id="a17" class="answer-box"><strong>Answer: 0</strong> — "Pro" starts at index 0</div>
+            </div>
+
+            <div class="question" id="q18">
+                <p><strong>3.</strong> The method to convert a string to lowercase is <code>_______()</code></p>
+                <button class="toggle-answer" onclick="toggleAnswer('a18')">Show Answer</button>
+                <div id="a18" class="answer-box"><strong>Answer: lower</strong> — <code>lower()</code></div>
+            </div>
+
+            <div class="question" id="q19">
+                <p><strong>4.</strong> <code>len("Data")</code> returns _______</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a19')">Show Answer</button>
+                <div id="a19" class="answer-box"><strong>Answer: 4</strong></div>
+            </div>
+
+            <div class="question" id="q20">
+                <p><strong>5.</strong> To extract the domain from a URL like "www.google.com", you can use string _______</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a20')">Show Answer</button>
+                <div id="a20" class="answer-box"><strong>Answer: slicing</strong> — e.g., <code>url[4:-4]</code> or <code>url[4:].replace(".com", "")</code></div>
+            </div>
+        </div>
+
+        <!-- ==================== PART D ==================== -->
+        <div class="section">
+            <h2>Part D: Code Writing <span class="marks">30 marks</span></h2>
+
+            <div class="question" id="q21">
+                <p><strong>Question 1: Temperature Converter</strong> <span style="color:#7f8c8d;">(5 marks)</span></p>
+                <p>Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Takes a temperature in Celsius as input from the user</li>
+                    <li>Converts it to Fahrenheit using the formula: <code>F = (C × 9/5) + 32</code></li>
+                    <li>Displays the result</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a21')">Show Answer</button>
+                <div id="a21" class="answer-box"><strong>Solution:</strong>
+<code>celsius = float(input("Enter temperature in Celsius: "))
+fahrenheit = (celsius * 9/5) + 32
+print(f"{celsius}°C is equal to {fahrenheit}°F")</code></div>
+            </div>
+
+            <div class="question" id="q22">
+                <p><strong>Question 2: Name Formatter</strong> <span style="color:#7f8c8d;">(5 marks)</span></p>
+                <p>Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Asks the user for their first name and last name</li>
+                    <li>Capitalizes the first letter of each name</li>
+                    <li>Prints the formatted full name</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a22')">Show Answer</button>
+                <div id="a22" class="answer-box"><strong>Solution:</strong>
+<code>first_name = input("Enter your first name: ")
+last_name = input("Enter your last name: ")
+first_name = first_name.lower().capitalize()
+last_name = last_name.lower().capitalize()
+print(f"Your full name is: {first_name} {last_name}")</code></div>
+            </div>
+
+            <div class="question" id="q23">
+                <p><strong>Question 3: URL Domain Extractor</strong> <span style="color:#7f8c8d;">(5 marks)</span></p>
+                <p>Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Takes a URL as input (e.g., "www.google.com")</li>
+                    <li>Extracts and prints only the domain name (e.g., "google")</li>
+                    <li>Hint: Use string slicing</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a23')">Show Answer</button>
+                <div id="a23" class="answer-box"><strong>Solution:</strong>
+<code>url = input("Enter your company URL: ")
+domain = url[4:-4]
+print(f"The domain name is: {domain}")</code></div>
+            </div>
+
+            <div class="question" id="q24">
+                <p><strong>Question 4: Data Type Converter</strong> <span style="color:#7f8c8d;">(5 marks)</span></p>
+                <p>Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Takes a number as a string input</li>
+                    <li>Converts it to an integer</li>
+                    <li>Prints the type of the variable before and after conversion</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a24')">Show Answer</button>
+                <div id="a24" class="answer-box"><strong>Solution:</strong>
+<code>num_str = input("Enter a number: ")
+print(f"Before conversion: {type(num_str)}")
+num_int = int(num_str)
+print(f"After conversion: {type(num_int)}")
+print(f"The number is: {num_int}")</code></div>
+            </div>
+
+            <div class="question" id="q25">
+                <p><strong>Question 5: Right-Angle Triangle Hypotenuse</strong> <span style="color:#7f8c8d;">(10 marks)</span></p>
+                <p>Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Takes the lengths of the opposite and adjacent sides as input</li>
+                    <li>Calculates the length of the hypotenuse using the Pythagorean theorem: <code>c = √(a² + b²)</code></li>
+                    <li>Uses the math module</li>
+                    <li>Displays the result with a descriptive message</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a25')">Show Answer</button>
+                <div id="a25" class="answer-box"><strong>Solution:</strong>
+<code>import math
+
+opposite = float(input("Enter the length of the opposite side: "))
+adjacent = float(input("Enter the length of the adjacent side: "))
+
+hypotenuse = math.sqrt((opposite ** 2) + (adjacent ** 2))
+
+print(f"The length of the hypotenuse is: {hypotenuse}")</code></div>
+            </div>
+        </div>
+
+        <!-- ==================== PART E ==================== -->
+        <div class="section">
+            <h2>Part E: Debugging <span class="marks">10 marks</span></h2>
+
+            <div class="question" id="q26">
+                <p><strong>Code 1:</strong></p>
+                <div class="code-block">height = input("Enter height: ")
+height = int
+print(height + 10)</div>
+                <p><strong>What's wrong? Fix it below:</strong></p>
+                <button class="toggle-answer" onclick="toggleAnswer('a26')">Show Answer</button>
+                <div id="a26" class="answer-box"><strong>Fix:</strong>
+<code>height = input("Enter height: ")
+height = int(height)  # Missing parentheses
+print(height + 10)</code></div>
+            </div>
+
+            <div class="question" id="q27">
+                <p><strong>Code 2:</strong></p>
+                <div class="code-block">name = "John Doe"
+print(name.capatalize())
+print(name[0:3)</div>
+                <p><strong>What's wrong? Fix it below:</strong></p>
+                <button class="toggle-answer" onclick="toggleAnswer('a27')">Show Answer</button>
+                <div id="a27" class="answer-box"><strong>Fix:</strong>
+<code>name = "John Doe"
+print(name.capitalize())  # Method name misspelled
+print(name[0:3])  # Missing closing bracket</code></div>
+            </div>
+
+            <div class="question" id="q28">
+                <p><strong>Code 3:</strong></p>
+                <div class="code-block">import math
+a = input("Enter side a: ")
+b = input("Enter side b: ")
+c = math.sqrt(a**2 + b**2)
+print(c)</div>
+                <p><strong>What's wrong? Fix it below:</strong></p>
+                <button class="toggle-answer" onclick="toggleAnswer('a28')">Show Answer</button>
+                <div id="a28" class="answer-box"><strong>Fix:</strong>
+<code>import math
+a = float(input("Enter side a: "))  # Convert to number
+b = float(input("Enter side b: "))  # Convert to number
+c = math.sqrt(a**2 + b**2)
+print(c)</code></div>
+            </div>
+        </div>
+
+        <!-- ==================== PART F ==================== -->
+        <div class="section">
+            <h2>Part F: Short Answer <span class="marks">10 marks</span></h2>
+
+            <div class="question" id="q29">
+                <p><strong>1.</strong> What is the difference between <code>math.floor()</code> and <code>math.ceil()</code>?</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a29')">Show Answer</button>
+                <div id="a29" class="answer-box"><strong>Answer:</strong>
+<code>math.floor()</code> rounds a number <strong>down</strong> to the nearest integer.
+<code>math.ceil()</code> rounds a number <strong>up</strong> to the nearest integer.
+
+Example:
+<code>math.floor(4.9)</code> → 4
+<code>math.ceil(4.1)</code> → 5</div>
+            </div>
+
+            <div class="question" id="q30">
+                <p><strong>2.</strong> Explain what type casting is and give two examples.</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a30')">Show Answer</button>
+                <div id="a30" class="answer-box"><strong>Answer:</strong>
+Type casting is converting a value from one data type to another.
+
+Examples:
+1. <code>int("123")</code> → converts string to integer (123)
+2. <code>str(456)</code> → converts integer to string ("456")</div>
+            </div>
+
+            <div class="question" id="q31">
+                <p><strong>3.</strong> What is the difference between <code>print()</code> and <code>input()</code>?</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a31')">Show Answer</button>
+                <div id="a31" class="answer-box"><strong>Answer:</strong>
+<code>print()</code> is used to <strong>display</strong> output to the console.
+<code>input()</code> is used to <strong>receive</strong> input from the user and always returns a string.</div>
+            </div>
+
+            <div class="question" id="q32">
+                <p><strong>4.</strong> What is string indexing? Provide an example.</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a32')">Show Answer</button>
+                <div id="a32" class="answer-box"><strong>Answer:</strong>
+String indexing is accessing individual characters in a string using their position (index), starting from 0.
+
+Example:
+<code>name = "Python"</code>
+<code>name[0]</code> → "P"
+<code>name[3]</code> → "h"</div>
+            </div>
+
+            <div class="question" id="q33">
+                <p><strong>5.</strong> What is a docstring and how is it written?</p>
+                <button class="toggle-answer" onclick="toggleAnswer('a33')">Show Answer</button>
+                <div id="a33" class="answer-box"><strong>Answer:</strong>
+A docstring is a multi-line string used to document code. It's written using triple quotes (<code>"""</code> or <code>'''</code>).
+
+Example:
+<code>""" This is a docstring
+    It can span multiple lines
+    Used for documentation """</code></div>
+            </div>
+        </div>
+
+        <!-- ==================== BONUS ==================== -->
+        <div class="section bonus">
+            <h2>⭐ Bonus Question <span class="marks">5 marks</span></h2>
+            <div class="question" id="q34">
+                <p><strong>Bonus:</strong> Write a program that:</p>
+                <ul style="margin-left:20px; line-height:1.8;">
+                    <li>Asks the user for a sentence</li>
+                    <li>Counts and displays how many characters are in the sentence</li>
+                    <li>Displays the sentence in ALL CAPS</li>
+                    <li>Displays the sentence in all lowercase</li>
+                    <li>Shows the first 5 characters of the sentence</li>
+                </ul>
+                <button class="toggle-answer" onclick="toggleAnswer('a34')">Show Answer</button>
+                <div id="a34" class="answer-box"><strong>Solution:</strong>
+<code>sentence = input("Enter a sentence: ")
+print(f"Character count: {len(sentence)}")
+print(f"Uppercase: {sentence.upper()}")
+print(f"Lowercase: {sentence.lower()}")
+print(f"First 5 characters: {sentence[:5]}")</code></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Total Marks: _____ / 75</strong> (80 with bonus)<br>
+            Good luck! 🍀
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(answerId) {
+            const el = document.getElementById(answerId);
+            el.classList.toggle('show');
+            const btn = el.previousElementSibling;
+            if (el.classList.contains('show')) {
+                btn.textContent = 'Hide Answer';
+            } else {
+                btn.textContent = 'Show Answer';
+            }
+        }
+
+        function toggleAllAnswers(show) {
+            const allAnswers = document.querySelectorAll('.answer-box');
+            const allButtons = document.querySelectorAll('.toggle-answer');
+            
+            allAnswers.forEach(ans => {
+                if (show) {
+                    ans.classList.add('show');
+                } else {
+                    ans.classList.remove('show');
+                }
+            });
+            
+            allButtons.forEach(btn => {
+                if (show) {
+                    btn.textContent = 'Hide Answer';
+                } else {
+                    btn.textContent = 'Show Answer';
+                }
+            });
+        }
+
+        function toggleAllQuestions() {
+            const allAnswers = document.querySelectorAll('.answer-box');
+            const allButtons = document.querySelectorAll('.toggle-answer');
+            
+            // Check if all are shown
+            const allShown = Array.from(allAnswers).every(ans => ans.classList.contains('show'));
+            
+            allAnswers.forEach(ans => {
+                if (allShown) {
+                    ans.classList.remove('show');
+                } else {
+                    ans.classList.add('show');
+                }
+            });
+            
+            allButtons.forEach(btn => {
+                if (allShown) {
+                    btn.textContent = 'Show Answer';
+                } else {
+                    btn.textContent = 'Hide Answer';
+                }
+            });
+        }
+
+        // Optional: Keyboard shortcut - press 'A' to toggle all
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'a' || e.key === 'A') {
+                if (e.ctrlKey || e.metaKey) return;
+                toggleAllQuestions();
+            }
+        });
+    </script>
+</body>
+</html>

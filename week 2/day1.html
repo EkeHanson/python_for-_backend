@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Day 1 - Loops (while/for) | Python Backend Course</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .class-header {
+            max-width: 1300px; margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+            border: 1px solid #334155; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge { background: #3b82f6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .month-badge { background: #8b5cf6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: bold; color: white; margin-left: 0.5rem; }
+        .class-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+        .duration { color: #94a3b8; font-size: 0.85rem; }
+        .day-nav-buttons { display: flex; gap: 0.8rem; }
+        .day-nav-btn {
+            background: #1e293b; border: 1px solid #3b82f6; padding: 0.4rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
+        }
+        .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
+        .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
+        .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
+        .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
+        .slide-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #E0F2FE, #7AA9FF); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.8rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .slide-title i { color: #60a5fa; font-size: 1.8rem; }
+        .slide-sub { color: #a0afc9; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .content-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+        .concept-box { flex: 1; min-width: 240px; background: #1a1f2e; border-radius: 1.5rem; padding: 1.3rem; border: 1px solid #334155; transition: all 0.2s; }
+        .concept-box:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+        .concept-box h3 i { color: #60a5fa; }
+        .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .concept-box ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+        .highlight { color: #fbbf24; font-weight: 600; }
+        .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
+        .code-block { background: #0a0e18; padding: 1rem; border-radius: 1rem; overflow-x: auto; font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.85rem; color: #cbd5e6; margin: 0.8rem 0; border: 1px solid #334155; }
+        .code-block pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: inherit; }
+        .two-column-split { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1rem 0; }
+        .qa-section { margin-top: 1.5rem; background: #0f172a; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #334155; }
+        .qa-title { font-size: 1.3rem; font-weight: bold; color: #fbbf24; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .qa-item { background: #131b2e; border-radius: 1rem; margin-bottom: 0.8rem; overflow: hidden; border: 1px solid #2d3a5e; }
+        .qa-question { padding: 1rem 1.2rem; background: #1a2338; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #e2e8f0; transition: background 0.2s; }
+        .qa-question:hover { background: #25334d; }
+        .qa-question i { color: #60a5fa; transition: transform 0.3s; }
+        .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
+        .qa-answer.show { padding: 1rem 1.2rem; max-height: 400px; }
+        .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons { display: flex; gap: 1rem; }
+        button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
+        button:hover:not(:disabled) { background: #2d3a4e; transform: scale(0.97); border-color: #3b82f6; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .slide-counter { font-size: 0.9rem; background: #1a1f2c; padding: 0.4rem 1rem; border-radius: 2rem; color: #a5b4fc; }
+        .indicator-dots { display: flex; gap: 0.5rem; }
+        .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
+        .dot.active { background: #3b82f6; width: 22px; }
+        footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        @media (max-width: 700px) { .slide-area { padding: 1rem; } .slide-title { font-size: 1.4rem; } .concept-box { min-width: 100%; } .class-header { flex-direction: column; text-align: center; } }
+    </style>
+</head>
+<body>
+
+<div class="class-header">
+    <div>
+        <span class="badge"><i class="fas fa-calendar-alt"></i> WEEK 2 · DAY 1</span>
+        <span class="month-badge"><i class="fas fa-calendar-month"></i> MONTH 1 · PYTHON FUNDAMENTALS</span>
+    </div>
+    <div class="class-title"><i class="fas fa-sync-alt"></i> Loops: while & for</div>
+    <div class="duration"><i class="far fa-clock"></i> 3 hours · Repetition & Iteration</div>
+    <div class="day-nav-buttons">
+        <a href="../week1/day3.html" class="day-nav-btn"><i class="fas fa-arrow-left"></i> Week 1</a>
+        <a href="day2.html" class="day-nav-btn"><i class="fas fa-arrow-right"></i> Day 2 →</a>
+    </div>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-area" id="slideArea"></div>
+    <div class="nav-bar">
+        <div class="indicator-dots" id="dotsContainer"></div>
+        <div class="nav-buttons">
+            <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+            <span class="slide-counter" id="counterText"><i class="far fa-file-alt"></i> 1 / 13</span>
+            <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-arrow-left"></i> <i class="fas fa-arrow-right"></i> Navigate with arrow keys · 
+        <i class="fas fa-question-circle"></i> Click questions to reveal answers
+    </footer>
+</div>
+
+<script>
+    const slides = [
+        {
+            title: "<i class='fas fa-sync-alt'></i> What are Loops?",
+            subtitle: "Repeating code without writing it twice",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-question-circle"></i> Why Loops?</h3><p>Loops let you execute a block of code <span class="highlight">multiple times</span> without repeating yourself.</p><p>Instead of writing 100 print() statements, write one loop.</p></div><div class="concept-box"><h3><i class="fas fa-code-branch"></i> Two Types in Python</h3><p><span class="highlight">while</span> loop — runs while a condition is True<br><span class="highlight">for</span> loop — iterates over a sequence (list, string, range)</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Without a loop (bad)</span>
+print("Item 1")
+print("Item 2")
+print("Item 3")
+<span style="color:#7aa9ff;"># ... 97 more times? No!</span>
+
+<span style="color:#7aa9ff;"># With a for loop (good)</span>
+for i in range(1, 101):
+    print(f"Item {i}")</pre></div><div class="insight-card"><i class="fas fa-lightbulb"></i> Loops are the foundation of automation — they let computers do the repetitive work.</div>`
+        },
+        {
+            title: "<i class='fas fa-arrow-rotate-left'></i> The while Loop",
+            subtitle: "Repeat while a condition is True",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-diagram-project"></i> while Syntax</h3><div class="code-block"><pre>while condition:
+    # code to repeat
+    # update condition</pre></div><p>Checks condition <span class="highlight">before</span> each iteration.</p></div><div class="concept-box"><h3><i class="fas fa-exclamation-triangle"></i> Infinite Loop Warning</h3><p>If condition never becomes False, the loop runs <span class="highlight">forever</span>!</p><p>Always ensure the condition will eventually be False.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Simple while loop</span>
+count = 1
+while count <= 5:
+    print(f"Count: {count}")
+    count += 1  <span style="color:#86efac;"># ← CRITICAL: update the condition!</span>
+
+<span style="color:#7aa9ff;"># Output: Count: 1, Count: 2, ... Count: 5</span></pre></div><div class="insight-card"><i class="fas fa-exclamation-triangle"></i> <strong>Common bug:</strong> Forgetting to update the loop variable causes infinite loops! Press Ctrl+C to stop.</div>`
+        },
+        {
+            title: "<i class='fas fa-list'></i> The for Loop",
+            subtitle: "Iterate over sequences",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-diagram-project"></i> for Syntax</h3><div class="code-block"><pre>for variable in sequence:
+    # code to repeat</pre></div><p>Automatically iterates through each item.</p></div><div class="concept-box"><h3><i class="fas fa-list-ul"></i> Iterable Types</h3><p>Strings: <span class="highlight">"Hello"</span><br>Lists: <span class="highlight">[1, 2, 3]</span><br>Tuples: <span class="highlight">(1, 2, 3)</span><br>range(): <span class="highlight">range(5)</span></p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># For loop with a list</span>
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(f"I like {fruit}")
+
+<span style="color:#7aa9ff;"># For loop with a string</span>
+for char in "Python":
+    print(char)  <span style="color:#86efac;"># P, y, t, h, o, n</span></pre></div>`
+        },
+        {
+            title: "<i class='fas fa-sliders-h'></i> The range() Function",
+            subtitle: "Generate sequences of numbers",
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-hashtag"></i> range(stop)</h3><div class="code-block"><pre>for i in range(5):
+    print(i)
+<span style="color:#86efac;"># 0, 1, 2, 3, 4</span></pre></div></div><div class="concept-box"><h3><i class="fas fa-arrows-alt-h"></i> range(start, stop, step)</h3><div class="code-block"><pre>for i in range(2, 10, 2):
+    print(i)
+<span style="color:#86efac;"># 2, 4, 6, 8</span></pre></div></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># range() variations</span>
+range(5)        <span style="color:#86efac;"># 0, 1, 2, 3, 4</span>
+range(1, 6)     <span style="color:#86efac;"># 1, 2, 3, 4, 5</span>
+range(0, 10, 2) <span style="color:#86efac;"># 0, 2, 4, 6, 8</span>
+range(5, 0, -1) <span style="color:#86efac;"># 5, 4, 3, 2, 1 (reverse!)</span></pre></div><div class="insight-card"><i class="fas fa-lightbulb"></i> range() is memory-efficient — it generates numbers on the fly, not storing them all at once.</div>`
+        },
+        {
+            title: "<i class='fas fa-code-branch'></i> break Statement",
+            subtitle: "Exit the loop immediately",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-stop-circle"></i> What break does</h3><p><span class="highlight">break</span> terminates the loop entirely, regardless of the condition.</p><p>Useful for: searching, early exit on error, finding first match.</p></div><div class="concept-box"><h3><i class="fas fa-search"></i> Common Use Case</h3><p>Searching through data and stopping when you find what you need.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Break example — find first even number</span>
+numbers = [1, 3, 5, 7, 8, 9, 11]
+for num in numbers:
+    if num % 2 == 0:
+        print(f"Found even: {num}")
+        break  <span style="color:#86efac;"># Stop searching after finding 8</span>
+
+<span style="color:#7aa9ff;"># While loop with break</span>
+while True:
+    user_input = input("Type 'quit' to exit: ")
+    if user_input == "quit":
+        print("Goodbye!")
+        break</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-forward'></i> continue Statement",
+            subtitle: "Skip the current iteration",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-skip-forward"></i> What continue does</h3><p><span class="highlight">continue</span> skips the rest of the current iteration and moves to the next one.</p><p>Useful for: filtering, skipping invalid data.</p></div><div class="concept-box"><h3><i class="fas fa-filter"></i> break vs continue</h3><p><span class="highlight">break</span> = exit the loop entirely<br><span class="highlight">continue</span> = skip to next iteration</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Continue example — skip even numbers</span>
+for i in range(1, 11):
+    if i % 2 == 0:
+        continue  <span style="color:#86efac;"># Skip even numbers</span>
+    print(i)  <span style="color:#86efac;"># Only prints odd: 1, 3, 5, 7, 9</span>
+
+<span style="color:#7aa9ff;"># Practical: skip empty strings</span>
+names = ["Alice", "", "Bob", "", "Charlie"]
+for name in names:
+    if name == "":
+        continue
+    print(f"Hello, {name}!")</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-layer-group'></i> Nested Loops",
+            subtitle: "Loops inside loops",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-diagram-project"></i> How Nested Loops Work</h3><p>For each iteration of the <span class="highlight">outer loop</span>, the <span class="highlight">inner loop</span> runs completely.</p><p>Total iterations = outer × inner</p></div><div class="concept-box"><h3><i class="fas fa-table"></i> Common Uses</h3><p>Multiplication tables<br>Grid/matrix operations<br>Comparing items in lists</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Multiplication table (1 to 3)</span>
+for i in range(1, 4):      <span style="color:#86efac;"># Outer loop</span>
+    for j in range(1, 4):  <span style="color:#86efac;"># Inner loop</span>
+        print(f"{i} × {j} = {i*j}")
+    print("---")  <span style="color:#86efac;"># After each outer iteration</span>
+
+<span style="color:#7aa9ff;"># Output:</span>
+<span style="color:#86efac;"># 1 × 1 = 1, 1 × 2 = 2, 1 × 3 = 3, ---</span>
+<span style="color:#86efac;"># 2 × 1 = 2, 2 × 2 = 4, 2 × 3 = 6, ---</span>
+<span style="color:#86efac;"># 3 × 1 = 3, 3 × 2 = 6, 3 × 3 = 9, ---</span></pre></div>`
+        },
+        {
+            title: "<i class='fas fa-code'></i> else with Loops",
+            subtitle: "Execute code when loop completes normally",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-circle"></i> else Clause</h3><p>The <span class="highlight">else</span> block runs when the loop finishes <span class="highlight">without</span> hitting a break.</p><p>If break is triggered, else does NOT run.</p></div><div class="concept-box"><h3><i class="fas fa-search"></i> Practical Pattern</h3><p>Search for an item — if found, break. If not found, else runs.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># For-else example</span>
+numbers = [1, 3, 5, 7, 9]
+for num in numbers:
+    if num % 2 == 0:
+        print(f"Found even: {num}")
+        break
+else:
+    print("No even numbers found!")  <span style="color:#86efac;"># ← This runs!</span>
+
+<span style="color:#7aa9ff;"># While-else example</span>
+count = 1
+while count <= 3:
+    print(count)
+    count += 1
+else:
+    print("Loop completed without break")</pre></div><div class="insight-card"><i class="fas fa-lightbulb"></i> The else clause is unique to Python — most languages don't have this feature!</div>`
+        },
+        {
+            title: "<i class='fas fa-calculator'></i> Practical: Sum Calculator",
+            subtitle: "Add numbers until user types 'done'",
+            content: `<div class="concept-box"><h3><i class="fas fa-tasks"></i> Build a Sum Calculator</h3><ul><li>✓ Keep asking for numbers</li><li>✓ Add each number to a running total</li><li>✓ Type 'done' to exit and show total</li><li>✓ Handle invalid input gracefully</li></ul></div><div class="code-block"><pre><span style="color:#7aa9ff;"># Sum Calculator — using while loop</span>
+total = 0
+count = 0
+
+while True:
+    user_input = input("Enter a number (or 'done'): ")
+    if user_input.lower() == 'done':
+        break
+    try:
+        num = float(user_input)
+        total += num
+        count += 1
+        print(f"Running total: {total}")
+    except ValueError:
+        print("Invalid input! Please enter a number.")
+
+print(f"\nFinal total: {total}")
+print(f"Numbers entered: {count}")
+print(f"Average: {total / count if count > 0 else 0}")</pre></div><div class="insight-card"><i class="fas fa-star"></i> <strong>Challenge:</strong> Add a feature to show the minimum and maximum numbers entered.</div>`
+        },
+        {
+            title: "<i class='fas fa-list-ol'></i> Practical: FizzBuzz",
+            subtitle: "The classic coding interview problem",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-tasks"></i> FizzBuzz Rules</h3><p>Print numbers 1 to 100, but:</p><ul><li>If divisible by 3 → print "Fizz"</li><li>If divisible by 5 → print "Buzz"</li><li>If divisible by both → print "FizzBuzz"</li><li>Otherwise → print the number</li></ul></div><div class="concept-box"><h3><i class="fas fa-briefcase"></i> Why It Matters</h3><p>FizzBuzz is a common interview question to test basic programming logic. It combines loops, conditionals, and modulo.</p></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># FizzBuzz solution</span>
+for num in range(1, 101):
+    if num % 3 == 0 and num % 5 == 0:
+        print("FizzBuzz")
+    elif num % 3 == 0:
+        print("Fizz")
+    elif num % 5 == 0:
+        print("Buzz")
+    else:
+        print(num)
+
+<span style="color:#7aa9ff;"># Bonus: One-liner version</span>
+<span style="color:#7aa9ff;"># for i in range(1,101): print("Fizz"*(i%3==0)+"Buzz"*(i%5==0) or i)</span></pre></div>`
+        },
+        {
+            title: "<i class='fas fa-chart-line'></i> Loop Performance & Best Practices",
+            subtitle: "Write efficient, readable loops",
+            content: `<div class="two-column-split"><div class="concept-box"><h3><i class="fas fa-check-circle"></i> Best Practices</h3><ul><li>✅ Use for loops when iterating over sequences</li><li>✅ Use while loops when condition-based</li><li>✅ Keep loop bodies short and focused</li><li>✅ Use meaningful variable names</li><li>✅ Avoid modifying the iterable while looping</li></ul></div><div class="concept-box"><h3><i class="fas fa-exclamation-triangle"></i> Common Mistakes</h3><ul><li>❌ Infinite loops (forget to update condition)</li><li>❌ Off-by-one errors (range boundaries)</li><li>❌ Modifying list while iterating</li><li>❌ Using == instead of = in while condition</li></ul></div></div><div class="code-block"><pre><span style="color:#7aa9ff;"># ❌ Bad: modifying list while iterating</span>
+numbers = [1, 2, 3, 4, 5]
+for num in numbers:
+    if num % 2 == 0:
+        numbers.remove(num)  <span style="color:#86efac;"># Dangerous!</span>
+
+<span style="color:#7aa9ff;"># ✅ Good: create a new list</span>
+numbers = [1, 2, 3, 4, 5]
+even_numbers = [num for num in numbers if num % 2 == 0]</pre></div>`
+        },
+        {
+            title: "<i class='fas fa-question-circle'></i> Knowledge Check",
+            subtitle: "Test your understanding of loops",
+            content: `<div class="qa-section"><div class="qa-title"><i class="fas fa-question-circle"></i> Toggle Questions (click to reveal answers)</div><div id="qa-container"></div></div>`
+        },
+        {
+            title: "<i class='fas fa-clipboard-list'></i> Assignment & Next Steps",
+            subtitle: "Complete before Day 2",
+            content: `<div class="content-grid"><div class="concept-box"><h3><i class="fas fa-check-double"></i> Homework Tasks</h3><ul><li>✅ Build the Sum Calculator with input validation</li><li>✅ Complete FizzBuzz (1 to 100)</li><li>✅ Write a program that prints a multiplication table (1-10)</li><li>✅ Create a number guessing game (while loop)</li><li>✅ Write a loop that finds all prime numbers up to 100</li></ul></div><div class="concept-box"><h3><i class="fas fa-calendar-day"></i> Next Class Preview</h3><p><strong>Day 2: Lists & Dictionaries</strong><br>Creating, accessing, modifying lists and dictionaries. List methods, dictionary operations, and building a Contact Book app.</p></div></div><div class="insight-card"><i class="fas fa-graduation-cap"></i> "Loops turn a computer into a tireless worker — it never gets bored repeating tasks!"</div>`
+        }
+    ];
+
+    const qaData = [
+        { q: "What is the difference between a while loop and a for loop?", a: "A while loop runs while a condition is True (condition-based). A for loop iterates over a sequence (item-based). Use for when you know what to iterate over, while when you're waiting for a condition." },
+        { q: "What does the range() function do?", a: "range() generates a sequence of numbers. range(5) → 0,1,2,3,4. range(2,10,2) → 2,4,6,8. It's memory-efficient because it generates numbers on the fly." },
+        { q: "What is the difference between break and continue?", a: "break exits the loop entirely. continue skips the current iteration and moves to the next one." },
+        { q: "What happens if you forget to update the loop variable in a while loop?", a: "The condition never becomes False, creating an infinite loop. The program will run forever until you force-stop it (Ctrl+C)." },
+        { q: "When does the else clause of a loop execute?", a: "The else clause runs when the loop completes normally (without hitting a break statement). If break is triggered, else does NOT run." },
+        { q: "How do nested loops work?", a: "For each iteration of the outer loop, the inner loop runs completely. Total iterations = outer count × inner count." },
+        { q: "What is FizzBuzz and why is it famous?", a: "FizzBuzz prints numbers 1-100, replacing multiples of 3 with 'Fizz', multiples of 5 with 'Buzz', and multiples of both with 'FizzBuzz'. It's a classic interview question to test basic programming logic." },
+        { q: "What is an off-by-one error in loops?", a: "An off-by-one error occurs when a loop iterates one time too many or one time too few. Example: using range(5) when you meant range(1,6) to get 1-5." },
+        { q: "Why should you avoid modifying a list while iterating over it?", a: "Modifying a list during iteration can cause unexpected behavior — items shift positions, some get skipped, and you might get IndexError. Create a new list instead." },
+        { q: "What is the output of: for i in range(3): print(i)", a: "0, 1, 2. range(3) generates 0, 1, 2 (stops before 3)." }
+    ];
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideArea = document.getElementById('slideArea');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counterText = document.getElementById('counterText');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    function renderQA() {
+        const container = document.getElementById('qa-container');
+        if (!container) return;
+        container.innerHTML = '';
+        qaData.forEach((item, idx) => {
+            const qaDiv = document.createElement('div');
+            qaDiv.className = 'qa-item';
+            qaDiv.innerHTML = `
+                <div class="qa-question" data-idx="${idx}">
+                    <span><strong>${idx+1}.</strong> ${item.q}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="qa-answer" id="answer-${idx}">
+                    <p>${item.a}</p>
+                </div>
+            `;
+            container.appendChild(qaDiv);
+        });
+        document.querySelectorAll('.qa-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const idx = this.getAttribute('data-idx');
+                const answerDiv = document.getElementById(`answer-${idx}`);
+                const icon = this.querySelector('i');
+                if (answerDiv) {
+                    answerDiv.classList.toggle('show');
+                    if (icon) icon.style.transform = answerDiv.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    }
+
+    function renderSlide(index) {
+        const slide = slides[index];
+        const html = `
+            <div class="slide-card">
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-sub"><i class="fas fa-angle-right"></i> ${slide.subtitle}</div>
+                <div class="slide-content">${slide.content}</div>
+            </div>
+        `;
+        slideArea.innerHTML = html;
+        if (index === 11) renderQA();
+        counterText.innerHTML = `<i class="far fa-file-alt"></i> ${index+1} / ${totalSlides}`;
+        if (prevBtn) prevBtn.disabled = (index === 0);
+        if (nextBtn) nextBtn.disabled = (index === totalSlides-1);
+        updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIndex) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function nextSlide() { if (currentIndex < totalSlides - 1) { currentIndex++; renderSlide(currentIndex); } }
+    function prevSlide() { if (currentIndex > 0) { currentIndex--; renderSlide(currentIndex); } }
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    window.addEventListener('keydown', handleKeyDown);
+    renderSlide(0);
+</script>
+</body>
+</html>
+

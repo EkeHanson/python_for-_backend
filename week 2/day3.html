@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Day 3 - Error Handling (try/except) | Python Backend Course</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0c15 0%, #111827 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .class-header {
+            max-width: 1300px; margin: 0 auto 1rem auto;
+            background: linear-gradient(95deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 1.5rem; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+            border: 1px solid #334155; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        .badge { background: #3b82f6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .month-badge { background: #8b5cf6; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.7rem; font-weight: bold; color: white; margin-left: 0.5rem; }
+        .class-title { font-size: 1.3rem; font-weight: 600; color: #e2e8f0; }
+        .duration { color: #94a3b8; font-size: 0.85rem; }
+        .day-nav-buttons { display: flex; gap: 0.8rem; }
+        .day-nav-btn {
+            background: #1e293b; border: 1px solid #3b82f6; padding: 0.4rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem; text-decoration: none;
+        }
+        .day-nav-btn:hover { background: #3b82f6; transform: scale(0.98); }
+        .presentation-container { max-width: 1300px; margin: 0 auto; background: rgba(255,255,255,0.03); border-radius: 2rem; backdrop-filter: blur(2px); overflow: hidden; }
+        .slide-area { min-height: 600px; background: #0f1119; padding: 2rem; }
+        .slide-card { background: rgba(22, 26, 38, 0.98); border-radius: 2rem; padding: 2rem 2.2rem; border: 1px solid rgba(72, 187, 255, 0.3); }
+        .slide-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #E0F2FE, #7AA9FF); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.8rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .slide-title i { color: #60a5fa; font-size: 1.8rem; }
+        .slide-sub { color: #a0afc9; margin-bottom: 1.5rem; font-size: 0.95rem; border-left: 5px solid #3b82f6; padding-left: 1.2rem; }
+        .content-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+        .concept-box { flex: 1; min-width: 240px; background: #1a1f2e; border-radius: 1.5rem; padding: 1.3rem; border: 1px solid #334155; transition: all 0.2s; }
+        .concept-box:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .concept-box h3 { color: #7aa9ff; font-size: 1.3rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+        .concept-box h3 i { color: #60a5fa; }
+        .concept-box p, .concept-box li { color: #e2e8f0; line-height: 1.55; font-size: 0.95rem; }
+        .concept-box ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+        .highlight { color: #fbbf24; font-weight: 600; }
+        .insight-card { margin-top: 1.2rem; background: #0f172a; padding: 0.9rem 1.2rem; border-radius: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; color: #e2e8f0; border-left: 3px solid #3b82f6; }
+        .code-block { background: #0a0e18; padding: 1rem; border-radius: 1rem; overflow-x: auto; font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.85rem; color: #cbd5e6; margin: 0.8rem 0; border: 1px solid #334155; }
+        .code-block pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: inherit; }
+        .two-column-split { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1rem 0; }
+        .qa-section { margin-top: 1.5rem; background: #0f172a; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #334155; }
+        .qa-title { font-size: 1.3rem; font-weight: bold; color: #fbbf24; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .qa-item { background: #131b2e; border-radius: 1rem; margin-bottom: 0.8rem; overflow: hidden; border: 1px solid #2d3a5e; }
+        .qa-question { padding: 1rem 1.2rem; background: #1a2338; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #e2e8f0; transition: background 0.2s; }
+        .qa-question:hover { background: #25334d; }
+        .qa-question i { color: #60a5fa; transition: transform 0.3s; }
+        .qa-answer { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; background: #0f172a; color: #cbd5e6; line-height: 1.5; }
+        .qa-answer.show { padding: 1rem 1.2rem; max-height: 400px; }
+        .nav-bar { background: #0b0e16; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2a2f3f; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons { display: flex; gap: 1rem; }
+        button { background: #1e2a3a; border: none; font-size: 1rem; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 2rem; color: #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; border: 1px solid #334155; }
+        button:hover:not(:disabled) { background: #2d3a4e; transform: scale(0.97); border-color: #3b82f6; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .slide-counter { font-size: 0.9rem; background: #1a1f2c; padding: 0.4rem 1rem; border-radius: 2rem; color: #a5b4fc; }
+        .indicator-dots { display: flex; gap: 0.5rem; }
+        .dot { width: 8px; height: 8px; background: #334155; border-radius: 10px; transition: 0.2s; }
+        .dot.active { background: #3b82f6; width: 22px; }
+        footer { font-size: 0.7rem; text-align: center; padding: 0.7rem; background: #07090f; color: #8ca3c7; }
+        @media (max-width: 700px) { .slide-area { padding: 1rem; } .slide-title { font-size

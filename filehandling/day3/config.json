@@ -1,0 +1,9 @@
+{
+  "app_name": "BackendAPI",
+  "version": 2.1,
+  "debug": false,
+  "database": {
+    "host": "localhost",
+    "port": 5432
+  }
+}
